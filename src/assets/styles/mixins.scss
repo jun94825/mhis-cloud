@@ -1,0 +1,27 @@
+@mixin bg-center($url) {
+  background-image: url($url);
+  background-position: center;
+  background-size: cover;
+}
+
+@mixin ps-abs($top, $left) {
+  position: absolute;
+  top: $top;
+  left: $left;
+}
+
+@mixin mhis-button($color) {
+  color: #fff;
+  border-color: $color;
+  background-color: $color;
+
+  &:hover {
+    border-color: transparent;
+    background-color: rgba($color: $color, $alpha: 0.75);
+  }
+
+  &:focus {
+    border-color: transparent;
+    background-color: rgba($color: $color, $alpha: 0.75);
+  }
+}

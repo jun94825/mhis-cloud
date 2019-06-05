@@ -1,0 +1,31 @@
+@import '../variables.scss';
+@import '../mixins.scss';
+@import '../functions.scss';
+
+.header {
+  height: 17.5vh;
+  flex-direction: column;
+  background-color: $primary;
+
+  > p {
+    color: #fff;
+    font-size: 1.125rem;
+    margin-top: 0.5rem;
+  }
+}
+
+.main {
+  padding: 2rem;
+  height: 82.5vh;
+  @include bg-center('../assets/images/login-bg.jpg');
+
+  a {
+    font-size: 0.875rem;
+    text-decoration: none;
+    color: $primary-light;
+  }
+}
+
+.mhis-primary {
+  @include mhis-button($primary);
+}

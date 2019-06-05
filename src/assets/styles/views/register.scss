@@ -1,0 +1,28 @@
+@import '../variables.scss';
+@import '../mixins.scss';
+@import '../functions.scss';
+
+.reg-bg {
+  height: 100vh;
+  position: relative;
+  @include bg-center('../assets/images/register-bg.png');
+
+  .advmeds-logo {
+    @include ps-abs(1.5rem, 3rem);
+  }
+
+  .form-bg {
+    padding: 1.5rem;
+    border-radius: 1rem;
+    background-color: rgba(255, 255, 255, 0.75);
+
+    .form-header {
+      flex-direction: column;
+
+      > p {
+        font-size: 1.125rem;
+        color: $primary-light;
+      }
+    }
+  }
+}
