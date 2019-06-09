@@ -1,8 +1,7 @@
-@import '../variables.scss';
-@import '../mixins.scss';
+@import '../helpers.scss';
 
 .header {
-  height: 6vh;
+  height: 5vh;
   background-color: $primary;
   box-shadow: 0 0.1875rem 0.1875rem rgba(0, 0, 0, 0.5);
 

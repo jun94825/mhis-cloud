@@ -1,0 +1,71 @@
+/****************** 
+ ***  Variables ***
+ ******************/
+
+$primary: #002e5e;
+$primary-dark: #001938;
+$primary-light: #0b7dd1;
+
+/***************
+ ***  Mixins ***
+ ***************/
+
+@mixin bg-center($url) {
+  background-image: url($url);
+  background-position: center;
+  background-size: cover;
+}
+
+@mixin ps-abs($top, $left) {
+  position: absolute;
+  top: $top;
+  left: $left;
+}
+
+@mixin mhis-button($color) {
+  color: #fff;
+  border-color: $color;
+  background-color: $color;
+
+  &:hover {
+    border-color: transparent;
+    background-color: rgba($color: $color, $alpha: 0.75);
+  }
+
+  &:focus {
+    border-color: transparent;
+    background-color: rgba($color: $color, $alpha: 0.75);
+  }
+}
+
+/****************** 
+ ***  Functions ***
+ ******************/
+
+.w-80 {
+  width: 5rem; // login, register
+}
+
+.w-250 {
+  width: 15.625rem; // login, register
+}
+
+.mt-16 {
+  margin-top: 1rem; // register
+}
+
+.mt-40 {
+  margin-top: 2.5rem; // register
+}
+
+.mb-0 {
+  margin-bottom: 0; // login, register
+}
+
+.mb-8 {
+  margin-bottom: 0.5rem; // register
+}
+
+.mb-20 {
+  margin-bottom: 1.25rem; // login
+}

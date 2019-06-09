@@ -13,7 +13,7 @@
           </el-select>
         </el-form-item>
         <el-form-item class="mb-20">
-          <el-input v-model="data.userName" placeholder="帳號" class="w-250"></el-input>
+          <el-input v-model="data.userName" :placeholder="$t('Account')" class="w-250"></el-input>
         </el-form-item>
         <el-form-item class="mb-20">
           <el-input v-model="data.password" placeholder="密碼" class="w-250"></el-input>

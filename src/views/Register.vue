@@ -24,7 +24,7 @@
               <el-option label="GMT+10" value="10"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="醫院編號" class="mb-8" prop="hospitalNo">
+          <el-form-item :label="$t('HospitalNo')" class="mb-8" prop="hospitalNo">
             <el-input v-model="data.hospitalNo" class="w-250"></el-input>
           </el-form-item>
           <el-form-item label="醫院名稱" class="mb-8" prop="hospitalName">
@@ -54,8 +54,9 @@
 export default {
   data() {
     const validateHospitalNo = (rule, value, callback) => {
+      const errorMessage = this.lang === 'tw' ? '請輸入醫院編號' : 'Please Input the Hospital Number';
       if (value === '') {
-        callback(new Error('請輸入醫院編號'));
+        callback(new Error(errorMessage));
       } else if (this.data.hospitalNo !== '') {
         callback();
       }
@@ -124,6 +125,9 @@ export default {
         ],
       },
     };
+  },
+  computed: {
+    lang() { return this.$store.state.lang; },
   },
   methods: {
     submitForm(formName) {
