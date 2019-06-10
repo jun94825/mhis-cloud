@@ -23,7 +23,7 @@
 export default {
   methods: {
     switchCollapse() {
-      this.$store.commit('SWITCH_COLLAPSE');
+      this.$store.commit('COLLAPSE');
     },
     signOut() {
       this.$router.push({ name: '登入' });

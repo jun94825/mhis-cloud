@@ -19,6 +19,13 @@ export default new Router({
       name: '註冊成功',
       path: '/success',
       component: () => import('./views/Success.vue'),
+      beforeEnter: (to, from, next) => {
+        if (from.path === '/register' && to.query.key) {
+          next();
+        } else {
+          next({ name: '登入' });
+        }
+      },
     },
     {
       name: '系統',

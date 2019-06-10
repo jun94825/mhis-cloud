@@ -15,7 +15,8 @@
 .main {
   padding: 2rem;
   height: 82.5vh;
-  @include bg-center('../assets/images/login-bg.jpg');
+  background-position: center;
+  background-size: cover;
 
   a {
     font-size: 0.875rem;
