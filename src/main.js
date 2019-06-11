@@ -8,6 +8,9 @@ import 'element-ui/lib/theme-chalk/index.css';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
 
+/* Google Maps */
+import * as VueGoogleMaps from 'vue2-google-maps';
+
 /* i18n */
 import i18n from './i18n';
 
@@ -19,6 +22,13 @@ Vue.use(ElementUI);
 
 Vue.use(VueAxios, axios);
 axios.defaults.headers.post['Content-Type'] = 'application/json-patch+json';
+
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: 'AIzaSyDoBtzTdfpxeyLuRcefJjV8mJvb5foxupw',
+    libraries: 'places',
+  },
+});
 
 Vue.config.productionTip = false;
 

@@ -125,6 +125,7 @@ export default {
         captcha: '',
         key: '',
       },
+      captchaUrl: '',
       rules: {
         hospitalNo: [
           { required: true, trigger: 'blur', validator: validateHospitalNo },
@@ -142,7 +143,6 @@ export default {
           { required: true, trigger: 'blur', validator: validateCaptcha },
         ],
       },
-      captchaUrl: '',
     };
   },
   computed: {
@@ -179,6 +179,7 @@ export default {
     changeLanguage() {
       this.$store.commit('LANGUAGE', this.data.local.substr(3, 2));
       localStorage.setItem('language', this.data.local.substr(3, 2));
+      this.submitForm('data');
     },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {

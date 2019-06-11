@@ -1,7 +1,7 @@
 @import '../helpers.scss';
 
 .reg-bg {
-  height: 100vh;
+  height: 100%;
   position: relative;
   @include bg-center('../assets/images/register-bg.png');
 

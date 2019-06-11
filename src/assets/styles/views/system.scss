@@ -1,5 +1,7 @@
+@import '../helpers.scss';
+
 .sidebar {
-  min-height: 95vh;
+  min-height: calc(100vh - 4rem);
   background-color: #333;
 }
 

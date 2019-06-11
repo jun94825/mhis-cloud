@@ -4,6 +4,12 @@
   box-sizing: border-box;
 }
 
+html,
+body,
+#app {
+  height: 100% !important;
+}
+
 body {
   margin: 0 !important;
   font-family: 'Noto Sans TC', sans-serif !important;
@@ -11,4 +17,8 @@ body {
 
 p {
   margin: 0;
+}
+
+.el-loading-spinner {
+  top: calc(100vh / 2);
 }

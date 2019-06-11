@@ -1,14 +1,14 @@
-/****************** 
- ***  Variables ***
- ******************/
+/********************* 
+ ***   Variables   ***
+ *********************/
 
 $primary: #002e5e;
 $primary-dark: #001938;
 $primary-light: #0b7dd1;
 
-/***************
- ***  Mixins ***
- ***************/
+/******************
+ ***   Mixins   ***
+ ******************/
 
 @mixin bg-center($url) {
   background-image: url($url);
@@ -38,9 +38,9 @@ $primary-light: #0b7dd1;
   }
 }
 
-/****************** 
- ***  Functions ***
- ******************/
+/********************* 
+ ***   Functions   ***
+ *********************/
 
 .w-90 {
   width: 5.625rem; // login, register
@@ -48,6 +48,10 @@ $primary-light: #0b7dd1;
 
 .w-250 {
   width: 15.625rem; // login, register
+}
+
+.h-100 {
+  height: 100%; // login
 }
 
 .mt-16 {
@@ -68,4 +72,8 @@ $primary-light: #0b7dd1;
 
 .mb-20 {
   margin-bottom: 1.25rem; // login
+}
+
+.d-none {
+  display: none; // setting
 }

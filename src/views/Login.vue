@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="h-100">
     <el-row type="flex" align="middle" justify="center" class="header">
       <img src="../assets/images/mhis-white.png" alt>
       <p>{{ info.hosptialName }}</p>
@@ -104,6 +104,9 @@ export default {
     domain() {
       return this.$store.state.domain;
     },
+    language() {
+      return this.$store.state.language;
+    },
   },
   methods: {
     randomNumber() {
@@ -134,6 +137,7 @@ export default {
     changeLanguage() {
       this.$store.commit('LANGUAGE', this.local.substr(3, 2));
       localStorage.setItem('language', this.local.substr(3, 2));
+      this.submitForm('data');
     },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
