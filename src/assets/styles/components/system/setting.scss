@@ -20,11 +20,11 @@
   border-bottom: 0.125rem #e2e2e2 solid;
   background-color: #fff;
 
-  > p {
+  > a {
     color: #777;
-    cursor: pointer;
     font-size: 0.875rem;
     margin-right: 1.5rem;
+    text-decoration: none;
 
     &:hover {
       color: $primary-light;
@@ -35,13 +35,13 @@
 .main {
   background-color: #f5f5f5;
   padding: 0 1.5rem 1.5rem 1.5rem;
+  position: relative;
 
   > p {
     margin: 1.5rem 0 0.5rem 0;
   }
 
   .main-item {
-    // width: 100%;
     background-color: #fff;
     border: 0.125rem #e2e2e2 solid;
 
@@ -59,10 +59,28 @@
         font-size: 0.875rem;
       }
 
-      .row-img {
+      .single-img-area {
         width: 31.25rem;
         height: 15.625rem;
         margin-left: 10rem;
+
+        > img {
+          @include size(100%, 100%);
+        }
+
+        .remove {
+          @include ps-abs(0, 0);
+          @include size(100%, 100%);
+          background-color: rgba(0, 0, 0, 0.75);
+
+          > i {
+            @include ps-abs(50%, 50%);
+            cursor: pointer;
+            color: #fff;
+            font-size: 2rem;
+            transform: translate(-50%, -50%);
+          }
+        }
       }
 
       .row-time-picker {
@@ -73,19 +91,46 @@
       .row-input {
         width: 20rem;
       }
+
+      .gmap-area {
+        @include size(40rem, 20rem);
+        margin-left: 10rem;
+      }
     }
+  }
+
+  .el-icon-upload2 {
+    cursor: pointer;
+    position: fixed;
+    right: 2.5rem;
+    bottom: 2.5rem;
+    font-size: 2.5rem;
+    color: $primary;
+    font-weight: bold;
   }
 }
 
 .multiple-img {
-  width: 9.375rem;
-  height: 9.375rem;
-  margin-right: 1rem;
-  border-radius: 0.5rem;
-}
+  @include size(9.375rem, 9.375rem);
+  margin-right: 1.5rem;
 
-.gmap-area {
-  width: 40rem;
-  height: 20rem;
-  margin-left: 10rem;
+  > img {
+    @include size(100%, 100%);
+    border-radius: 0.5rem;
+  }
+
+  .remove {
+    @include ps-abs(0, 0);
+    @include size(100%, 100%);
+    background-color: rgba(0, 0, 0, 0.75);
+    border-radius: 0.5rem;
+
+    > i {
+      @include ps-abs(50%, 50%);
+      cursor: pointer;
+      color: #fff;
+      font-size: 2rem;
+      transform: translate(-50%, -50%);
+    }
+  }
 }

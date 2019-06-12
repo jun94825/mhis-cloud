@@ -10,6 +10,11 @@ $primary-light: #0b7dd1;
  ***   Mixins   ***
  ******************/
 
+@mixin size($w, $h) {
+  width: $w;
+  height: $h;
+}
+
 @mixin bg-center($url) {
   background-image: url($url);
   background-position: center;
@@ -76,4 +81,8 @@ $primary-light: #0b7dd1;
 
 .d-none {
   display: none; // setting
+}
+
+.p-rel {
+  position: relative;
 }

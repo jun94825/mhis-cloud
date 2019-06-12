@@ -5,12 +5,12 @@
       <el-button type="primary" size="small">儲存變更</el-button>
     </el-row>
     <el-row type="flex" align="middle" class="slide">
-      <p>基本設定</p>
-      <p>郵件設定</p>
-      <p>醫院簡介</p>
+      <a href="javascript:;" @click="scroll(0)">基本設定</a>
+      <a href="javascript:;" @click="scroll(1)">郵件設定</a>
+      <a href="javascript:;" @click="scroll(2)">醫院簡介</a>
     </el-row>
     <el-row class="main" v-if="JSON.stringify(data) !== '{}'">
-      <p>基本設定</p>
+      <p class="mark">基本設定</p>
       <div class="main-item">
         <div class="item-row">
           <p class="row-p">指紋機</p>
@@ -19,36 +19,64 @@
         <div class="item-row">
           <p class="row-p">背景圖</p>
           <label class="el-button el-button--primary el-button--small">
-            <input type="file" size="small" class="d-none" @change="uploadFile">
+            <input type="file" size="small" class="d-none" @change="singleFile">
             選擇檔案
           </label>
         </div>
-        <div class="item-row" v-if="src !== ''">
-          <img :src="src" class="row-img">
+        <div class="item-row" v-if="data.backgroundImage.value !== null">
+          <div
+            class="single-img-area p-rel"
+            @mouseenter="switchDeleteBg('bgImg')"
+            @mouseleave="switchDeleteBg('bgImg')"
+          >
+            <img :src="data.backgroundImage.value.url" alt>
+            <div id="bgImg" class="remove" style="display: none;">
+              <i class="el-icon-delete" @click="removeLocalImg('backgroundImage')"></i>
+            </div>
+          </div>
         </div>
         <div class="item-row">
           <p class="row-p">官方橫幅圖</p>
           <label class="el-button el-button--primary el-button--small">
-            <input type="file" size="small" class="d-none" @change="uploadFile">
+            <input type="file" size="small" class="d-none" @change="singleFile">
             選擇檔案
           </label>
         </div>
-        <div class="item-row" v-if="src !== ''">
-          <img :src="src" class="row-img">
+        <div class="item-row" v-if="data.officialBannerImg.value !== null">
+          <div
+            class="single-img-area p-rel"
+            @mouseenter="switchDeleteBg('obImg')"
+            @mouseleave="switchDeleteBg('obImg')"
+          >
+            <img :src="data.officialBannerImg.value.url" alt>
+            <div id="obImg" class="remove" style="display: none;">
+              <i class="el-icon-delete" @click="removeLocalImg('officialBannerImg')"></i>
+            </div>
+          </div>
         </div>
         <div class="item-row">
           <p class="row-p mb-auto">官網商標</p>
-          <img :src="item" class="multiple-img" v-for="(item, index) in temp" :key="index" alt>
-          <label class="el-upload el-upload--picture-card">
-            <input type="file" size="small" class="d-none" @change="uploadFiles" multiple>
-            <i class="el-icon-plus"></i>
+          <label class="el-button el-button--primary el-button--small">
+            <input type="file" size="small" class="d-none">
+            選擇檔案
           </label>
         </div>
         <div class="item-row">
           <p class="row-p mb-auto">贊助商</p>
-          <img :src="item" class="multiple-img" v-for="(item, index) in temp" :key="index" alt>
+          <div v-for="(item, index) in data.partners.values" :key="index">
+            <div
+              class="multiple-img p-rel"
+              @mouseenter="switchDeleteBg(item.id)"
+              @mouseleave="switchDeleteBg(item.id)"
+            >
+              <img :src="item.url" alt>
+              <div :id="item.id" class="remove" style="display: none;">
+                <i class="el-icon-delete" @click="removeLocalImg('partners', index)"></i>
+              </div>
+            </div>
+          </div>
           <label class="el-upload el-upload--picture-card">
-            <input type="file" size="small" class="d-none" @change="uploadFiles" multiple>
+            <input type="file" size="small" class="d-none" @change="multipleFiles" multiple>
             <i class="el-icon-plus"></i>
           </label>
         </div>
@@ -101,7 +129,7 @@
           ></el-time-select>
         </div>
       </div>
-      <p>郵件設定</p>
+      <p class="mark">郵件設定</p>
       <div class="main-item">
         <div class="item-row">
           <p class="row-p">登入帳號</p>
@@ -128,7 +156,7 @@
           <el-input class="row-input" v-model="data.mailContactBccMail.value"></el-input>
         </div>
       </div>
-      <p>醫院簡介</p>
+      <p class="mark">醫院簡介</p>
       <div class="main-item">
         <div class="item-row">
           <p class="row-p">醫院編號</p>
@@ -178,13 +206,28 @@
         </div>
         <div class="item-row">
           <p class="row-p mb-auto">醫院環境</p>
-          <img :src="item" class="multiple-img" v-for="(item, index) in temp" :key="index" alt>
+          <div v-for="(item, index) in data.hospitalEnvironmentPhotos.values" :key="index">
+            <div
+              class="multiple-img p-rel"
+              @mouseenter="switchDeleteBg(item.id)"
+              @mouseleave="switchDeleteBg(item.id)"
+            >
+              <img :src="item.url" alt>
+              <div :id="item.id" class="remove" style="display: none;">
+                <i
+                  class="el-icon-delete"
+                  @click="removeLocalImg('hospitalEnvironmentPhotos', index)"
+                ></i>
+              </div>
+            </div>
+          </div>
           <label class="el-upload el-upload--picture-card">
-            <input type="file" size="small" class="d-none" @change="uploadFiles" multiple>
+            <input type="file" size="small" class="d-none" @change="multipleFiles" multiple>
             <i class="el-icon-plus"></i>
           </label>
         </div>
       </div>
+      <i class="el-icon-upload2" @click="scroll('goTop')"></i>
     </el-row>
   </div>
 </template>
@@ -196,17 +239,19 @@ export default {
       data: {},
       src: '',
       temp: [],
+      /* Time Picker */
       pickerSetting: {
         start: '00:00',
         step: '00:15',
         end: '23:45',
       },
+      /* Scroll */
+      scrollY: null,
       /* Google Maps */
       places: [],
       markers: [],
       currentPlace: null,
       center: { lat: 45.5, lng: -73.5 },
-      /* Google Maps */
     };
   },
   computed: {
@@ -224,16 +269,20 @@ export default {
         this.$store.commit('LOADING', false);
       });
     },
-    uploadFile() {
+    /* Image */
+    singleFile() {
       const { files } = window.event.target;
       const fileReader = new FileReader();
       fileReader.addEventListener('load', () => {
         this.src = fileReader.result;
       });
       fileReader.readAsDataURL(files[0]);
+      const data = new FormData();
+      data.append('uploadedFiles', files[0]);
+      this.upload('backgroundImage', data);
       window.event.target.value = '';
     },
-    uploadFiles() {
+    multipleFiles() {
       const { files } = window.event.target;
       for (let i = 0; i < files.length; i += 1) {
         const fileReader = new FileReader();
@@ -243,6 +292,48 @@ export default {
         fileReader.readAsDataURL(files[i]);
       }
       window.event.target.value = '';
+    },
+    upload(key, data) {
+      const api = `http://${this.domain}.upis.info/Api/Setting/Upload/${key}`;
+      this.$http.post(api, data).then((res) => {
+        if (res.data.success === true) {
+          this.getList();
+        }
+      });
+    },
+    /* 切換顯示垃圾桶的半透明背景 */
+    switchDeleteBg(id) {
+      const t = document.getElementById(id);
+      if (t.style.display === 'none') {
+        t.style.display = 'block';
+      } else {
+        t.style.display = 'none';
+      }
+    },
+    /* 刪除緩存的圖片 */
+    removeLocalImg(key, index) {
+      if (index === undefined) {
+        this.data[key].value = null;
+      } else {
+        this.data[key].values.splice(index, 1);
+      }
+    },
+    /* Scroll */
+    scroll(index) {
+      const marks = document.getElementsByClassName('mark');
+      if (index === 'goTop') {
+        this.scrollY = -48;
+      } else {
+        this.scrollY = marks[index].offsetTop + 205;
+      }
+    },
+    render() {
+      if (this.scrollY !== null) {
+        const move = (this.scrollY - window.scrollY) * 0.05;
+        window.scrollTo(0, window.scrollY + move);
+        if (Math.abs(this.scrollY - window.scrollY) < 50) this.scrollY = null;
+      }
+      requestAnimationFrame(this.render);
     },
     /* Google Maps */
     setPlace(place) {
@@ -272,7 +363,6 @@ export default {
         vm.data.lng.value = marker.lng;
       }
     },
-    /* Google Maps */
   },
   created() {
     const token = localStorage.getItem('cookie');
@@ -280,6 +370,7 @@ export default {
     this.$store.commit('DOMAIN');
     this.getList();
     this.geolocate();
+    this.render();
   },
 };
 </script>
