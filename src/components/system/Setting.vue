@@ -2,7 +2,7 @@
   <div>
     <el-row type="flex" align="middle" justify="space-between" class="title">
       <p>系統設定</p>
-      <el-button type="primary" size="small">儲存變更</el-button>
+      <el-button type="primary" size="small" @click="saveEdit">儲存變更</el-button>
     </el-row>
     <el-row type="flex" align="middle" class="slide">
       <a href="javascript:;" @click="scroll(0)">基本設定</a>
@@ -19,7 +19,7 @@
         <div class="item-row">
           <p class="row-p">背景圖</p>
           <label class="el-button el-button--primary el-button--small">
-            <input type="file" size="small" class="d-none" @change="singleFile">
+            <input type="file" size="small" class="d-none" @change="singleFile('backgroundImage')">
             選擇檔案
           </label>
         </div>
@@ -38,7 +38,12 @@
         <div class="item-row">
           <p class="row-p">官方橫幅圖</p>
           <label class="el-button el-button--primary el-button--small">
-            <input type="file" size="small" class="d-none" @change="singleFile">
+            <input
+              type="file"
+              size="small"
+              class="d-none"
+              @change="singleFile('officialBannerImg')"
+            >
             選擇檔案
           </label>
         </div>
@@ -76,7 +81,13 @@
             </div>
           </div>
           <label class="el-upload el-upload--picture-card">
-            <input type="file" size="small" class="d-none" @change="multipleFiles" multiple>
+            <input
+              type="file"
+              size="small"
+              class="d-none"
+              @change="multipleFiles('partners')"
+              multiple
+            >
             <i class="el-icon-plus"></i>
           </label>
         </div>
@@ -89,6 +100,7 @@
             placeholder="起始時間"
             v-model="data.morningShiftStart.value"
           ></el-time-select>
+          <p style="margin-left: 1rem;">至</p>
           <el-time-select
             class="row-time-picker"
             :picker-options="pickerSetting"
@@ -105,6 +117,7 @@
             placeholder="起始時間"
             v-model="data.afternoonShiftStart.value"
           ></el-time-select>
+          <p style="margin-left: 1rem;">至</p>
           <el-time-select
             class="row-time-picker"
             :picker-options="pickerSetting"
@@ -121,6 +134,7 @@
             placeholder="起始時間"
             v-model="data.eveningShiftStart.value"
           ></el-time-select>
+          <p style="margin-left: 1rem;">至</p>
           <el-time-select
             class="row-time-picker"
             :picker-options="pickerSetting"
@@ -173,7 +187,10 @@
         <!-- Google Maps -->
         <div class="item-row">
           <p class="row-p">醫院地址</p>
-          <label>
+          <p>{{ data.hospitalAddress.value }}</p>
+        </div>
+        <div class="item-row">
+          <label class="ml-160">
             <gmap-autocomplete
               class="row-input el-input__inner"
               @place_changed="setPlace"
@@ -222,7 +239,13 @@
             </div>
           </div>
           <label class="el-upload el-upload--picture-card">
-            <input type="file" size="small" class="d-none" @change="multipleFiles" multiple>
+            <input
+              type="file"
+              size="small"
+              class="d-none"
+              @change="multipleFiles('hospitalEnvironmentPhotos')"
+              multiple
+            >
             <i class="el-icon-plus"></i>
           </label>
         </div>
@@ -239,6 +262,10 @@ export default {
       data: {},
       src: '',
       temp: [],
+      /* About Images */
+      backgroundImage: {},
+      officialBannerImg: {},
+      partners: [],
       /* Time Picker */
       pickerSetting: {
         start: '00:00',
@@ -260,36 +287,100 @@ export default {
     },
   },
   methods: {
-    getList() {
+    getList(bol = false) {
       const api = `http://${this.domain}.upis.info/Api/Setting/List`;
       this.$store.commit('LOADING', true);
-      this.$http.get(api).then((res) => {
-        const r = res.data.content;
-        this.data = r;
-        this.$store.commit('LOADING', false);
+      this.$http.get(api)
+        .then((res) => {
+          const r = res.data.content;
+          this.data = r;
+          this.center.lat = r.lat.value;
+          this.center.lng = r.lng.value;
+          this.$store.commit('LOADING', false);
+          if (bol) {
+            this.$message({
+              type: 'success',
+              center: true,
+              message: '儲存成功',
+            });
+          }
+        })
+        .catch(() => {
+          this.$store.commit('LOADING', false);
+          this.$router.push({ name: '登入' });
+          this.$message({
+            type: 'warning',
+            center: true,
+            message: '離線逾時，請重新登入',
+          });
+        });
+    },
+    saveEdit() {
+      const api = `http://${this.domain}.upis.info/Api/Setting/Edit`;
+      this.$store.commit('LOADING', true);
+      const single = ['backgroundImage', 'officialBannerImg'];
+      single.forEach((val) => {
+        if (this[val].data) {
+          this.upload(val, this[val].data);
+        }
+        // if (this.data[val].value && this.data[val].value.data) {
+        //   this.upload(val, this.data[val].value.data);
+        // }
+        if (this[val].id) {
+          this.remove(this[val].id);
+          this[val].id = '';
+        }
+      });
+      const multiple = ['partners'];
+      multiple.forEach((val) => {
+        if (this[val] !== '') {
+          this[val].forEach((v) => {
+            this.remove(v);
+          });
+        }
+      });
+      const data = {};
+      const notRequire = ['backgroundImage', 'hospitalEnvironmentPhotos', 'hospitalNo', 'hospitalTimeZone', 'officialBannerImg', 'officialLogoImg', 'partners'];
+      notRequire.forEach((item) => {
+        delete this.data[item];
+      });
+      const require = Object.keys(this.data);
+      require.forEach((item) => {
+        data[item] = this.data[item].value;
+      });
+      const dataJS = JSON.stringify(data);
+      this.$http.post(api, dataJS).then((res) => {
+        if (res.data.success === true) {
+          this.getList(true);
+        }
       });
     },
-    /* Image */
-    singleFile() {
+    /* About Images */
+    singleFile(target) {
       const { files } = window.event.target;
-      const fileReader = new FileReader();
-      fileReader.addEventListener('load', () => {
-        this.src = fileReader.result;
+      const fr = new FileReader();
+      const fd = new FormData();
+      fd.append('uploadedFiles', files[0]);
+      fr.addEventListener('load', () => {
+        this.data[target].value = {
+          id: `${this.randomNumber()}`, mimeType: '', url: fr.result,
+        };
+        this[target].data = fd;
       });
-      fileReader.readAsDataURL(files[0]);
-      const data = new FormData();
-      data.append('uploadedFiles', files[0]);
-      this.upload('backgroundImage', data);
+      fr.readAsDataURL(files[0]);
       window.event.target.value = '';
     },
-    multipleFiles() {
+    multipleFiles(target) {
       const { files } = window.event.target;
       for (let i = 0; i < files.length; i += 1) {
-        const fileReader = new FileReader();
-        fileReader.addEventListener('load', () => {
-          this.temp.push(fileReader.result);
+        const fr = new FileReader();
+        this[target].push(files[i]); // demo
+        fr.addEventListener('load', () => {
+          this.data[target].values.push({
+            id: `${this.randomNumber()}`, mimeType: '', url: fr.result,
+          });
         });
-        fileReader.readAsDataURL(files[i]);
+        fr.readAsDataURL(files[i]);
       }
       window.event.target.value = '';
     },
@@ -298,6 +389,18 @@ export default {
       this.$http.post(api, data).then((res) => {
         if (res.data.success === true) {
           this.getList();
+        }
+      });
+    },
+    remove(id) {
+      const api = `http://${this.domain}.upis.info/Api/Setting/Remove`;
+      const data = {
+        ids: [id],
+      };
+      const dataJS = JSON.stringify(data);
+      this.$http.post(api, dataJS).then((res) => {
+        if (res.data.success === true) {
+          // this.getList();
         }
       });
     },
@@ -313,10 +416,21 @@ export default {
     /* 刪除緩存的圖片 */
     removeLocalImg(key, index) {
       if (index === undefined) {
+        this[key] = this.data[key].value.id;
         this.data[key].value = null;
       } else {
+        this[key].push(this.data[key].values[index].id);
         this.data[key].values.splice(index, 1);
       }
+    },
+    randomNumber() {
+      const list = [];
+      for (let i = 0; i < 8; i += 1) {
+        list.push(Math.floor(Math.random() * 10));
+      }
+      const randomResult = list.join('');
+      this.data.key = randomResult;
+      return randomResult;
     },
     /* Scroll */
     scroll(index) {
