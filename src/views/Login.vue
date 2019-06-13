@@ -5,7 +5,13 @@
       <p>{{ info.hosptialName }}</p>
     </el-row>
     <el-row type="flex" justify="center" class="main" :style="{ backgroundImage: `url(${bgUrl})` }">
-      <el-form ref="data" :model="data" :rules="rules" @keyup.enter.native="submitForm('data')">
+      <el-form
+        ref="data"
+        status-icon
+        :model="data"
+        :rules="rules"
+        @keyup.enter.native="submitForm('data')"
+      >
         <el-form-item class="mb-20">
           <el-select v-model="local" class="w-250" @change="changeLanguage">
             <el-option label="繁體中文" value="zh-tw"></el-option>

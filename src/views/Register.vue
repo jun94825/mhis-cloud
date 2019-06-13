@@ -7,7 +7,13 @@
         <p>{{ $t('Register') }}</p>
       </el-row>
       <el-row type="flex" align="middle" justify="center">
-        <el-form ref="data" :model="data" :rules="rules" @keyup.enter.native="submitForm('data')">
+        <el-form
+          ref="data"
+          status-icon
+          :model="data"
+          :rules="rules"
+          @keyup.enter.native="submitForm('data')"
+        >
           <el-form-item :label="$t('Language')" class="mb-8">
             <el-select v-model="data.local" class="w-250" @change="changeLanguage">
               <el-option label="繁體中文" value="zh-tw"></el-option>

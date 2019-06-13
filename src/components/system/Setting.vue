@@ -2,7 +2,7 @@
   <div>
     <el-row type="flex" align="middle" justify="space-between" class="title">
       <p>系統設定</p>
-      <el-button type="primary" size="small" @click="saveEdit">儲存變更</el-button>
+      <el-button type="primary" size="small" @click="checkRmove">儲存變更</el-button>
     </el-row>
     <el-row type="flex" align="middle" class="slide">
       <a href="javascript:;" @click="scroll(0)">基本設定</a>
@@ -256,6 +256,8 @@
 </template>
 
 <script>
+import { setTimeout } from 'timers';
+
 export default {
   data() {
     return {
@@ -263,8 +265,14 @@ export default {
       src: '',
       temp: [],
       /* About Images */
-      backgroundImage: {},
-      officialBannerImg: {},
+      backgroundImage: {
+        id: '',
+        data: null,
+      },
+      officialBannerImg: {
+        id: '',
+        data: null,
+      },
       partners: [],
       /* Time Picker */
       pickerSetting: {
@@ -292,17 +300,19 @@ export default {
       this.$store.commit('LOADING', true);
       this.$http.get(api)
         .then((res) => {
-          const r = res.data.content;
-          this.data = r;
-          this.center.lat = r.lat.value;
-          this.center.lng = r.lng.value;
-          this.$store.commit('LOADING', false);
-          if (bol) {
-            this.$message({
-              type: 'success',
-              center: true,
-              message: '儲存成功',
-            });
+          if (res.data.success === true) {
+            const r = res.data.content;
+            this.data = r;
+            this.center.lat = r.lat.value;
+            this.center.lng = r.lng.value;
+            this.$store.commit('LOADING', false);
+            if (bol) {
+              this.$message({
+                type: 'success',
+                center: true,
+                message: '儲存成功',
+              });
+            }
           }
         })
         .catch(() => {
@@ -315,30 +325,63 @@ export default {
           });
         });
     },
+    /* About Images */
+    singleFile(target) {
+      const { files } = window.event.target;
+      const fr = new FileReader();
+      const fd = new FormData();
+      fd.append('uploadedFiles', files[0]);
+      fr.addEventListener('load', () => {
+        this.data[target].value = {
+          id: `${this.randomNumber()}`,
+          mimeType: '',
+          url: fr.result,
+        };
+        this[target].data = fd;
+      });
+      fr.readAsDataURL(files[0]);
+      window.event.target.value = '';
+    },
+    multipleFiles(target) {
+      const { files } = window.event.target;
+      for (let i = 0; i < files.length; i += 1) {
+        const fr = new FileReader();
+        this[target].push(files[i]); // test
+        fr.addEventListener('load', () => {
+          this.data[target].values.push({
+            id: `${this.randomNumber()}`,
+            mimeType: '',
+            url: fr.result,
+          });
+        });
+        fr.readAsDataURL(files[i]);
+      }
+      window.event.target.value = '';
+    },
     saveEdit() {
       const api = `http://${this.domain}.upis.info/Api/Setting/Edit`;
       this.$store.commit('LOADING', true);
-      const single = ['backgroundImage', 'officialBannerImg'];
-      single.forEach((val) => {
-        if (this[val].data) {
-          this.upload(val, this[val].data);
-        }
-        // if (this.data[val].value && this.data[val].value.data) {
-        //   this.upload(val, this.data[val].value.data);
-        // }
-        if (this[val].id) {
-          this.remove(this[val].id);
-          this[val].id = '';
-        }
-      });
-      const multiple = ['partners'];
-      multiple.forEach((val) => {
-        if (this[val] !== '') {
-          this[val].forEach((v) => {
-            this.remove(v);
-          });
-        }
-      });
+      // const single = ['backgroundImage', 'officialBannerImg'];
+      // single.forEach((val) => {
+      //   if (this[val].id !== '' && this[val].id.length > 10) {
+      //     this.remove(val, this[val].id);
+      //     this[val].id = '';
+      //   }
+      //   if (this[val].data !== null) {
+      //     this.upload(val, this[val].data);
+      //     this[val].data = null;
+      //   }
+      // });
+
+      // const multiple = ['partners'];
+      // multiple.forEach((val) => {
+      //   if (this[val] !== '') {
+      //     this[val].forEach((v) => {
+      //       this.remove(v);
+      //     });
+      //   }
+      // });
+
       const data = {};
       const notRequire = ['backgroundImage', 'hospitalEnvironmentPhotos', 'hospitalNo', 'hospitalTimeZone', 'officialBannerImg', 'officialLogoImg', 'partners'];
       notRequire.forEach((item) => {
@@ -351,46 +394,40 @@ export default {
       const dataJS = JSON.stringify(data);
       this.$http.post(api, dataJS).then((res) => {
         if (res.data.success === true) {
-          this.getList(true);
+          setTimeout(() => {
+            this.getList(true);
+          }, 2000);
         }
       });
     },
-    /* About Images */
-    singleFile(target) {
-      const { files } = window.event.target;
-      const fr = new FileReader();
-      const fd = new FormData();
-      fd.append('uploadedFiles', files[0]);
-      fr.addEventListener('load', () => {
-        this.data[target].value = {
-          id: `${this.randomNumber()}`, mimeType: '', url: fr.result,
-        };
-        this[target].data = fd;
+    checkUpload() {
+      const single = ['backgroundImage', 'officialBannerImg'];
+      single.forEach((item) => {
+        if (this[item].data !== null) {
+          this.upload(item, this[item].data);
+          this[item].data = null;
+        }
       });
-      fr.readAsDataURL(files[0]);
-      window.event.target.value = '';
+      this.saveEdit();
     },
-    multipleFiles(target) {
-      const { files } = window.event.target;
-      for (let i = 0; i < files.length; i += 1) {
-        const fr = new FileReader();
-        this[target].push(files[i]); // demo
-        fr.addEventListener('load', () => {
-          this.data[target].values.push({
-            id: `${this.randomNumber()}`, mimeType: '', url: fr.result,
-          });
-        });
-        fr.readAsDataURL(files[i]);
-      }
-      window.event.target.value = '';
-    },
-    upload(key, data) {
-      const api = `http://${this.domain}.upis.info/Api/Setting/Upload/${key}`;
+    upload(target, data) {
+      const api = `http://${this.domain}.upis.info/Api/Setting/Upload/${target}`;
       this.$http.post(api, data).then((res) => {
         if (res.data.success === true) {
-          this.getList();
+          // this.checkUpload();
+          console.log('good!');
         }
       });
+    },
+    checkRmove() {
+      const single = ['backgroundImage', 'officialBannerImg'];
+      single.forEach((item) => {
+        if (this[item].id !== '' && this[item].id.length > 10) {
+          this.remove(this[item].id);
+          this[item].id = '';
+        }
+      });
+      this.checkUpload();
     },
     remove(id) {
       const api = `http://${this.domain}.upis.info/Api/Setting/Remove`;
@@ -400,7 +437,8 @@ export default {
       const dataJS = JSON.stringify(data);
       this.$http.post(api, dataJS).then((res) => {
         if (res.data.success === true) {
-          // this.getList();
+          // this.checkRmove();
+          console.log('good!');
         }
       });
     },
@@ -416,7 +454,7 @@ export default {
     /* 刪除緩存的圖片 */
     removeLocalImg(key, index) {
       if (index === undefined) {
-        this[key] = this.data[key].value.id;
+        this[key].id = this.data[key].value.id;
         this.data[key].value = null;
       } else {
         this[key].push(this.data[key].values[index].id);
