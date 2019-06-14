@@ -6,28 +6,34 @@
     @open="handleOpen"
     @close="handleClose"
     :collapse="collapse"
-    background-color="#333"
     text-color="#fff"
+    background-color="#333"
     active-text-color="#ffd04b"
   >
     <el-menu-item index="1">
       <i class="el-icon-s-home"></i>
-      <span>首頁</span>
+      <span>{{ $t('Home') }}</span>
     </el-menu-item>
     <el-submenu index="2">
       <template slot="title">
-        <i class="el-icon-microphone"></i>
-        <span>語言</span>
+        <i class="el-icon-chat-dot-round"></i>
+        <span>{{ $t('Language') }}</span>
       </template>
-      <el-menu-item index="2-1">繁體中文</el-menu-item>
-      <el-menu-item index="2-2">English</el-menu-item>
+      <el-menu-item @click="changeLanguage('tw')">繁體中文</el-menu-item>
+      <el-menu-item @click="changeLanguage('us')">English</el-menu-item>
     </el-submenu>
-    <el-submenu index="3">
+    <el-submenu v-for="(item, index) in menu" :key="index" :index="String(index + 3)">
       <template slot="title">
-        <i class="el-icon-setting"></i>
-        <span>系統</span>
+        <i :class="item.icon"></i>
+        <span>{{ $t(item.groupName) }}</span>
       </template>
-      <el-menu-item index="3-1">院內消息</el-menu-item>
+      <el-menu-item
+        v-for="(v, i) in item.pages"
+        :key="i"
+        :index="String((index + 3) - (i + 1))"
+        :route="{ name: `${v.pageName}` }"
+      >{{ $t(v.pageName) }}</el-menu-item>
+      <!-- <el-menu-item index="3-1">院內消息</el-menu-item>
       <el-menu-item index="3-2">醫生排班</el-menu-item>
       <el-menu-item index="3-3" :route="{ name: '角色維護' }">角色維護</el-menu-item>
       <el-menu-item index="3-4">使用者維護</el-menu-item>
@@ -36,13 +42,18 @@
       <el-menu-item index="3-7">分類設定</el-menu-item>
       <el-menu-item index="3-8">衛教宣導</el-menu-item>
       <el-menu-item index="3-9">項目管理</el-menu-item>
-      <el-menu-item index="3-10" :route="{ name: '系統設定' }">系統設定</el-menu-item>
+      <el-menu-item index="3-10" :route="{ name: '系統設定' }">系統設定</el-menu-item>-->
     </el-submenu>
   </el-menu>
 </template>
 
 <script>
 export default {
+  data() {
+    return {
+      menu: [],
+    };
+  },
   methods: {
     handleOpen(key, keyPath) {
       console.log(key, keyPath);
@@ -50,11 +61,40 @@ export default {
     handleClose(key, keyPath) {
       console.log(key, keyPath);
     },
+    getLanguage() {
+      const lsLanguage = localStorage.getItem('language');
+      const language = lsLanguage === null || lsLanguage === 'tw' ? 'tw' : 'us';
+      // if (language === 'tw') {
+      //   this.local = 'zh-tw';
+      // } else {
+      //   this.local = 'en-us';
+      // }
+      this.$store.commit('LANGUAGE', language);
+    },
+    changeLanguage(lang) {
+      window.event.preventDefault();
+      this.$store.commit('LANGUAGE', lang);
+      localStorage.setItem('language', lang);
+    },
   },
   computed: {
     collapse() {
       return this.$store.state.collapse;
     },
+  },
+  created() {
+    this.getLanguage();
+    this.menu = JSON.parse(localStorage.getItem('menuGrp'));
+    this.menu.forEach((item) => {
+      const i = item;
+      if (item.groupName === 'Patient') {
+        i.icon = 'el-icon-user';
+      } else if (item.groupName === 'Pharmacy') {
+        i.icon = 'el-icon-first-aid-kit';
+      } else if (item.groupName === 'Maintenance') {
+        i.icon = 'el-icon-setting';
+      }
+    });
   },
 };
 </script>

@@ -28,27 +28,32 @@ export default new Router({
       },
     },
     {
-      name: '系統',
+      /* 系統 */
+      name: 'System',
       path: '/system',
       component: () => import('./views/System.vue'),
       children: [
         {
-          name: '角色維護',
+          /* 角色維護 */
+          name: 'RoleManagement',
           path: 'role/maintain',
           component: () => import('./components/system/role/Maintain.vue'),
         },
         {
-          name: '新增角色',
+          /* 新增角色 */
+          name: 'RoleCreate',
           path: 'role/create',
           component: () => import('./components/system/role/Create.vue'),
         },
         {
-          name: '編輯角色',
+          /* 編輯角色 */
+          name: 'RoleEdit',
           path: 'role/edit',
           component: () => import('./components/system/role/Edit.vue'),
         },
         {
-          name: '系統設定',
+          /* 系統設定 */
+          name: 'Setting',
           path: 'setting',
           component: () => import('./components/system/Setting.vue'),
         },

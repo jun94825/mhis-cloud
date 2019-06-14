@@ -164,7 +164,7 @@ export default {
           this.$store.commit('LOADING', false);
           localStorage.setItem('cookie', res.data.content.access_token);
           localStorage.setItem('menuGrp', JSON.stringify(res.data.content.info.menu.menuGrp));
-          this.$router.push({ name: '系統' });
+          this.$router.push({ name: 'System' });
         } else {
           this.$store.commit('LOADING', false);
           this.$refs.data.resetFields();

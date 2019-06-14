@@ -2,6 +2,10 @@
 
 .sys-header {
   padding: 1rem 1.5rem;
+
+  > p {
+    font-size: 1.125rem;
+  }
 }
 
 .form-inside > button {

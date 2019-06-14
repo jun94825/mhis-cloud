@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Noto+Sans+TC&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Lato&display=swap');
 
 * {
   box-sizing: border-box;
@@ -8,15 +8,19 @@ html,
 body,
 #app {
   height: 100% !important;
+  font-family: 'Lato', sans-serif;
 }
 
 body {
   margin: 0 !important;
-  font-family: 'Noto Sans TC', sans-serif !important;
 }
 
 p {
   margin: 0;
+}
+
+.el-loading-mask {
+  position: fixed;
 }
 
 .el-loading-spinner {

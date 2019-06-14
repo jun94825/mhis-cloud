@@ -61,7 +61,10 @@
         </div>
         <div class="item-row">
           <p class="row-p mb-auto">官網商標</p>
-          <label class="el-button el-button--primary el-button--small">
+          <label
+            class="el-button el-button--primary el-button--small"
+            @click="multipleFiles('partners')"
+          >
             <input type="file" size="small" class="d-none">
             選擇檔案
           </label>
@@ -262,8 +265,6 @@ export default {
   data() {
     return {
       data: {},
-      src: '',
-      temp: [],
       /* About Images */
       backgroundImage: {
         id: '',
@@ -273,7 +274,14 @@ export default {
         id: '',
         data: null,
       },
-      partners: [],
+      partners: {
+        id: [],
+        data: [],
+      },
+      hospitalEnvironmentPhotos: {
+        id: [],
+        data: [],
+      },
       /* Time Picker */
       pickerSetting: {
         start: '00:00',
@@ -325,6 +333,27 @@ export default {
           });
         });
     },
+    saveEdit() {
+      const api = `http://${this.domain}.upis.info/Api/Setting/Edit`;
+      this.$store.commit('LOADING', true);
+      const data = {};
+      const notRequire = ['backgroundImage', 'hospitalEnvironmentPhotos', 'hospitalNo', 'hospitalTimeZone', 'officialBannerImg', 'officialLogoImg', 'partners'];
+      notRequire.forEach((item) => {
+        delete this.data[item];
+      });
+      const require = Object.keys(this.data);
+      require.forEach((item) => {
+        data[item] = this.data[item].value;
+      });
+      const dataJS = JSON.stringify(data);
+      this.$http.post(api, dataJS).then((res) => {
+        if (res.data.success === true) {
+          setTimeout(() => {
+            this.getList(true);
+          }, 1500);
+        }
+      });
+    },
     /* About Images */
     singleFile(target) {
       const { files } = window.event.target;
@@ -346,7 +375,7 @@ export default {
       const { files } = window.event.target;
       for (let i = 0; i < files.length; i += 1) {
         const fr = new FileReader();
-        this[target].push(files[i]); // test
+        this[target].data.push(files[i]); // test
         fr.addEventListener('load', () => {
           this.data[target].values.push({
             id: `${this.randomNumber()}`,
@@ -358,48 +387,6 @@ export default {
       }
       window.event.target.value = '';
     },
-    saveEdit() {
-      const api = `http://${this.domain}.upis.info/Api/Setting/Edit`;
-      this.$store.commit('LOADING', true);
-      // const single = ['backgroundImage', 'officialBannerImg'];
-      // single.forEach((val) => {
-      //   if (this[val].id !== '' && this[val].id.length > 10) {
-      //     this.remove(val, this[val].id);
-      //     this[val].id = '';
-      //   }
-      //   if (this[val].data !== null) {
-      //     this.upload(val, this[val].data);
-      //     this[val].data = null;
-      //   }
-      // });
-
-      // const multiple = ['partners'];
-      // multiple.forEach((val) => {
-      //   if (this[val] !== '') {
-      //     this[val].forEach((v) => {
-      //       this.remove(v);
-      //     });
-      //   }
-      // });
-
-      const data = {};
-      const notRequire = ['backgroundImage', 'hospitalEnvironmentPhotos', 'hospitalNo', 'hospitalTimeZone', 'officialBannerImg', 'officialLogoImg', 'partners'];
-      notRequire.forEach((item) => {
-        delete this.data[item];
-      });
-      const require = Object.keys(this.data);
-      require.forEach((item) => {
-        data[item] = this.data[item].value;
-      });
-      const dataJS = JSON.stringify(data);
-      this.$http.post(api, dataJS).then((res) => {
-        if (res.data.success === true) {
-          setTimeout(() => {
-            this.getList(true);
-          }, 2000);
-        }
-      });
-    },
     checkUpload() {
       const single = ['backgroundImage', 'officialBannerImg'];
       single.forEach((item) => {
@@ -408,23 +395,42 @@ export default {
           this[item].data = null;
         }
       });
+      const multiple = ['partners', 'hospitalEnvironmentPhotos'];
+      multiple.forEach((item) => {
+        if (this[item].data.length !== 0) {
+          this[item].data.forEach((i) => {
+            const fd = new FormData();
+            fd.append('uploadedFiles', i);
+            this.upload(item, fd);
+          });
+          this[item].data = [];
+        }
+      });
       this.saveEdit();
     },
     upload(target, data) {
       const api = `http://${this.domain}.upis.info/Api/Setting/Upload/${target}`;
       this.$http.post(api, data).then((res) => {
-        if (res.data.success === true) {
-          // this.checkUpload();
-          console.log('good!');
+        if (res.data.success === false) {
+          alert('Error!');
         }
       });
     },
     checkRmove() {
       const single = ['backgroundImage', 'officialBannerImg'];
       single.forEach((item) => {
-        if (this[item].id !== '' && this[item].id.length > 10) {
+        if (this[item].id !== '' && this[item].id.length > 8) {
           this.remove(this[item].id);
           this[item].id = '';
+        }
+      });
+      const multiple = ['partners', 'hospitalEnvironmentPhotos'];
+      multiple.forEach((item) => {
+        if (this[item].id.length !== 0) {
+          this[item].id.forEach((i) => {
+            this.remove(i);
+          });
+          this[item].id = [];
         }
       });
       this.checkUpload();
@@ -436,13 +442,11 @@ export default {
       };
       const dataJS = JSON.stringify(data);
       this.$http.post(api, dataJS).then((res) => {
-        if (res.data.success === true) {
-          // this.checkRmove();
-          console.log('good!');
+        if (res.data.success === false) {
+          alert('Error!');
         }
       });
     },
-    /* 切換顯示垃圾桶的半透明背景 */
     switchDeleteBg(id) {
       const t = document.getElementById(id);
       if (t.style.display === 'none') {
@@ -451,13 +455,12 @@ export default {
         t.style.display = 'none';
       }
     },
-    /* 刪除緩存的圖片 */
     removeLocalImg(key, index) {
       if (index === undefined) {
         this[key].id = this.data[key].value.id;
         this.data[key].value = null;
       } else {
-        this[key].push(this.data[key].values[index].id);
+        this[key].id.push(this.data[key].values[index].id);
         this.data[key].values.splice(index, 1);
       }
     },
