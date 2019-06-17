@@ -6,17 +6,20 @@ Vue.use(Router);
 export default new Router({
   routes: [
     {
-      name: '登入',
+      /* 登入 */
+      name: 'Login',
       path: '/',
       component: () => import('./views/Login.vue'),
     },
     {
-      name: '註冊',
+      /* 註冊 */
+      name: 'Register',
       path: '/register',
       component: () => import('./views/Register.vue'),
     },
     {
-      name: '註冊成功',
+      /* 註冊成功 */
+      name: 'Success',
       path: '/success',
       component: () => import('./views/Success.vue'),
       beforeEnter: (to, from, next) => {
@@ -50,6 +53,18 @@ export default new Router({
           name: 'RoleEdit',
           path: 'role/edit',
           component: () => import('./components/system/role/Edit.vue'),
+        },
+        {
+          /* ICD 10 維護 */
+          name: 'ICD10',
+          path: 'icd/maintain',
+          component: () => import('./components/system/icd/Maintain.vue'),
+        },
+        {
+          /* 新增 ICD 10 */
+          name: 'ICD10Create',
+          path: 'icd/create',
+          component: () => import('./components/system/icd/Create.vue'),
         },
         {
           /* 系統設定 */

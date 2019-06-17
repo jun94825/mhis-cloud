@@ -325,7 +325,7 @@ export default {
         })
         .catch(() => {
           this.$store.commit('LOADING', false);
-          this.$router.push({ name: '登入' });
+          this.$router.push({ name: 'Setting' });
           this.$message({
             type: 'warning',
             center: true,

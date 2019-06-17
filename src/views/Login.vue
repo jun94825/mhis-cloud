@@ -143,7 +143,7 @@ export default {
     changeLanguage() {
       this.$store.commit('LANGUAGE', this.local.substr(3, 2));
       localStorage.setItem('language', this.local.substr(3, 2));
-      this.submitForm('data');
+      // this.submitForm('data');
     },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
