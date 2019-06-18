@@ -1,12 +1,25 @@
 <template>
   <div>
-    <el-row class="sys-header">
+    <el-row class="main-title" type="flex" align="middle" justify="space-between">
       <p>角色維護</p>
+      <el-button type="primary" size="small" @click="toCreatePage">新增角色</el-button>
     </el-row>
-    <el-row class="form">
-      <div class="form-inside">
-        <el-button type="primary" size="small" @click="toCreatePage">新增角色</el-button>
-        <el-row class="form-header">
+    <el-row class="main-layout">
+      <div class="layout-inside">
+        <el-table :data="roles">
+          <el-table-column label="角色名稱" min-width="150">
+            <template slot-scope="scope">
+              <p size="medium">{{ scope.row.name }}</p>
+            </template>
+          </el-table-column>
+          <el-table-column width="150" align="right">
+            <template slot-scope="scope">
+              <i class="el-icon-edit-outline" @click="toEditPage(scope.row.id)"></i>
+              <i class="el-icon-delete" @click="checkDelRole(scope.row.id, scope.row.name)"></i>
+            </template>
+          </el-table-column>
+        </el-table>
+        <!-- <el-row class="inside-header">
           <p>角色名稱</p>
         </el-row>
         <el-row
@@ -22,7 +35,7 @@
             <i class="el-icon-edit-outline" @click="toEditPage(item.id)"></i>
             <i class="el-icon-delete" @click="checkDelRole(item.id, item.name)"></i>
           </div>
-        </el-row>
+        </el-row>-->
       </div>
     </el-row>
   </div>

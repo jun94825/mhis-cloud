@@ -1,14 +1,14 @@
 <template>
   <div>
-    <el-row type="flex" align="middle" justify="space-between" class="sys-header">
+    <el-row type="flex" align="middle" justify="space-between" class="main-title">
       <el-row type="flex" align="middle">
         <i class="el-icon-back" @click="back"></i>
         <p>編輯角色權限</p>
       </el-row>
       <el-button type="primary" size="small" @click="editRole">儲存</el-button>
     </el-row>
-    <el-row class="form">
-      <div class="form-inside">
+    <el-row class="main-layout">
+      <div class="layout-inside">
         <p>{{ roleName }}</p>
         <el-row type="flex" align="middle" justify="space-between" class="form-header">
           <p>功能分類</p>
@@ -239,5 +239,5 @@ export default {
 
 
 <style lang="scss" scoped>
-@import "../../../assets/styles/components/system/role/sharing.scss";
+@import "../../../assets/styles/components/system/role/edit.scss";
 </style>

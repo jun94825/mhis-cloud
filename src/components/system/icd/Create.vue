@@ -1,6 +1,7 @@
 <template>
   <div>
-    <el-row class="sys-header">
+    <el-row class="sys-header" type="flex" align="middle">
+      <i class="el-icon-back" @click="back"></i>
       <p>新增 ICD 10</p>
     </el-row>
     <el-row class="form">
@@ -32,13 +33,13 @@
 export default {
   data() {
     return {
-      options: ['PCS', 'cm2'],
       data: {
         code: '',
         type: '',
         stdName: '',
         alert: false,
       },
+      options: ['PCS', 'cm'],
     };
   },
   computed: {
@@ -48,14 +49,23 @@ export default {
   },
   methods: {
     create() {
-      const api = `http://${this.domain}.upis.info/Api/ICD10/Create`;
       this.$store.commit('LOADING', true);
+      const api = `http://${this.domain}.upis.info/Api/ICD10/Create`;
       const dataJS = JSON.stringify(this.data);
       this.$http.post(api, dataJS)
         .then((res) => {
-          console.log(res);
-          this.$store.commit('LOADING', false);
+          if (res.data.success === true) {
+            this.$message({
+              message: '新增成功',
+              type: 'success',
+              center: true,
+            });
+            this.$router.push({ name: 'ICD10' });
+          }
         });
+    },
+    back() {
+      this.$router.go(-1);
     },
   },
   created() {
@@ -65,7 +75,6 @@ export default {
   },
 };
 </script>
-
 
 <style lang="scss" scoped>
 @import "../../../assets/styles/components/system/role/sharing.scss";

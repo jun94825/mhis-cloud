@@ -1,12 +1,13 @@
 <template>
   <div>
-    <el-row class="sys-header">
+    <el-row class="sys-header" type="flex" align="middle" justify="space-between">
       <p>ICD 10 設定</p>
+      <el-button size="mini" type="success" @click="toCreatePage">新增</el-button>
     </el-row>
     <el-row class="form">
       <div class="form-inside">
-        <el-table id="table" :data="data">
-          <el-table-column label="ICD 10 Code" min-width="150">
+        <el-table id="table" :data="data.list">
+          <el-table-column label="ICD 10 Code" width="125">
             <template slot-scope="scope">
               <el-tag size="medium">{{ scope.row.icd10Code }}</el-tag>
             </template>
@@ -16,31 +17,29 @@
               <span>{{ scope.row.stdName }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="Type" min-width="75" align="center">
+          <el-table-column label="Type" width="100" align="center">
             <template slot-scope="scope">
               <el-tag size="medium" type="info">{{ scope.row.type }}</el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="Report Table" min-width="100" align="center">
+          <el-table-column label="Report Table" width="125" align="center">
             <template slot-scope="scope">
               <i class="el-icon-check" v-if="scope.row.alert"></i>
               <i class="el-icon-close" v-if="!scope.row.alert"></i>
             </template>
           </el-table-column>
-          <el-table-column min-width="150" align="right">
+          <el-table-column width="100" align="right">
             <template slot-scope="scope">
-              <el-button size="mini" type="success" @click="toCreatePage">新增</el-button>
-              <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-              <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+              <el-button size="mini" @click="toEditPage(scope.$index, scope.row)">编辑</el-button>
             </template>
           </el-table-column>
         </el-table>
         <el-pagination
+          background
           class="pagination"
           layout="prev, pager, next"
-          background
-          :page-size="pageSize"
-          :total="total"
+          :total="data.totalRecordCnt"
+          :page-size="data.pageSize"
           @current-change="handleCurrentChange"
         ></el-pagination>
       </div>
@@ -52,9 +51,7 @@
 export default {
   data() {
     return {
-      pageSize: 15,
-      total: 150817,
-      data: [],
+      data: {},
     };
   },
   computed: {
@@ -64,8 +61,8 @@ export default {
   },
   methods: {
     getList(num = 1) {
-      const api = `http://${this.domain}.upis.info/Api/ICD10/List/${num}`;
       this.$store.commit('LOADING', true);
+      const api = `http://${this.domain}.upis.info/Api/ICD10/List/${num}`;
       const data = {
         keyword: '',
         orderby: 'icd10Code',
@@ -74,25 +71,18 @@ export default {
       const dataJS = JSON.stringify(data);
       this.$http.post(api, dataJS)
         .then((res) => {
-          console.log(res);
-          this.data = res.data.content.list;
+          this.data = res.data.content;
           this.$store.commit('LOADING', false);
-          console.log(this.data);
         });
     },
-    handleEdit(index, row) {
-      console.log(index, row);
-    },
-    handleDelete(index, row) {
-      console.log(index, row);
+    toEditPage(index, row) {
+      this.$router.push({ name: 'ICD10Edit', query: { key: row.id } });
     },
     toCreatePage() {
       this.$router.push({ name: 'ICD10Create' });
     },
-    /* pagination */
     handleCurrentChange(val) {
       this.getList(val);
-      console.log(val);
     },
   },
   created() {

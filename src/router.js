@@ -37,7 +37,7 @@ export default new Router({
       component: () => import('./views/System.vue'),
       children: [
         {
-          /* 角色維護 */
+          /* 維護角色 */
           name: 'RoleManagement',
           path: 'role/maintain',
           component: () => import('./components/system/role/Maintain.vue'),
@@ -55,16 +55,22 @@ export default new Router({
           component: () => import('./components/system/role/Edit.vue'),
         },
         {
-          /* ICD 10 維護 */
+          /* 維護 ICD 10 */
           name: 'ICD10',
           path: 'icd/maintain',
           component: () => import('./components/system/icd/Maintain.vue'),
         },
         {
-          /* 新增 ICD 10 */
+          /* 新增 & 刪除 ICD 10 */
           name: 'ICD10Create',
           path: 'icd/create',
           component: () => import('./components/system/icd/Create.vue'),
+        },
+        {
+          /* 編輯 ICD 10 */
+          name: 'ICD10Edit',
+          path: 'icd/edit',
+          component: () => import('./components/system/icd/Edit.vue'),
         },
         {
           /* 系統設定 */

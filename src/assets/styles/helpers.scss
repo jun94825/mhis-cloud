@@ -5,6 +5,8 @@
 $primary: #002e5e;
 $primary-dark: #001938;
 $primary-light: #0b7dd1;
+$main-bg: #f5f5f5;
+$main-border: #e2e2e2;
 
 /******************
  ***   Mixins   ***
@@ -89,4 +91,30 @@ $primary-light: #0b7dd1;
 
 .p-rel {
   position: relative;
+}
+
+/*******************
+ ***   Sharing   ***
+ *******************/
+
+.main-title {
+  padding: 0.75rem 1.5rem;
+  background-color: #fff;
+  border-bottom: 0.125rem $main-border solid;
+
+  > p {
+    font-size: 1.125rem;
+    font-weight: bold;
+  }
+}
+
+.main-layout {
+  padding: 1.5rem;
+  background-color: $main-bg;
+
+  .layout-inside {
+    background-color: #fff;
+    border: 0.125rem $main-border solid;
+    padding: 1.25rem 1.5rem 3rem 1.5rem;
+  }
 }

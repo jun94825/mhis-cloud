@@ -1,8 +1,8 @@
 <template>
   <el-menu
     router
-    default-active="1"
     class="menu"
+    default-active="1"
     @open="handleOpen"
     @close="handleClose"
     :collapse="collapse"

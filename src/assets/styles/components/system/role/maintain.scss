@@ -1,37 +1,14 @@
-@import 'sharing.scss';
+@import '../../../helpers.scss';
 
-.sys-header {
-  padding: 1rem 1.5rem;
-
-  > p {
-    font-size: 1.125rem;
-  }
+.el-icon-edit-outline {
+  cursor: pointer;
+  color: #007bff;
+  font-size: 1.25rem;
 }
 
-.form-inside > button {
-  display: block;
-  margin-left: auto;
-}
-
-.roles {
-  padding: 1rem;
-  font-size: 0.875rem;
-  border-bottom: 0.0625rem #e2e2e2 solid;
-
-  > p {
-    color: #4a4a4a;
-  }
-
-  .el-icon-edit-outline {
-    cursor: pointer;
-    color: #007bff;
-    font-size: 1.25rem;
-  }
-
-  .el-icon-delete {
-    cursor: pointer;
-    color: #dc3545;
-    font-size: 1.25rem;
-    margin-left: 1.5rem;
-  }
+.el-icon-delete {
+  cursor: pointer;
+  color: #dc3545;
+  font-size: 1.25rem;
+  margin-left: 1.5rem;
 }

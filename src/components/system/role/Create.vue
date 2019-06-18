@@ -1,14 +1,14 @@
 <template>
   <div>
-    <el-row type="flex" align="middle" justify="space-between" class="sys-header">
+    <el-row type="flex" align="middle" justify="space-between" class="main-title">
       <el-row type="flex" align="middle">
         <i class="el-icon-back" @click="back"></i>
         <p>編輯角色權限</p>
       </el-row>
       <el-button type="primary" size="small" @click="createRole">新增</el-button>
     </el-row>
-    <el-row class="form">
-      <div class="form-inside">
+    <el-row class="main-layout">
+      <div class="layout-inside">
         <el-input size="small" placeholder="請輸入角色名稱" v-model="roleName"></el-input>
         <el-row type="flex" align="middle" justify="space-between" class="form-header">
           <p>功能分類</p>
@@ -88,6 +88,7 @@ export default {
             setting.children[1].children[1].style.visibility = 'hidden';
             setting.children[1].children[3].style.visibility = 'hidden';
           });
+          console.log(this.data);
           this.$store.commit('LOADING', false);
         });
     },
@@ -194,5 +195,5 @@ export default {
 
 
 <style lang="scss" scoped>
-@import "../../../assets/styles/components/system/role/sharing.scss";
+@import "../../../assets/styles/components/system/role/create.scss";
 </style>
