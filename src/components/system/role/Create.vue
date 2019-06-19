@@ -22,7 +22,7 @@
         <div v-for="(val, index) in data" :key="index">
           <el-row type="flex" align="middle" class="category-title">
             <i class="el-icon-plus"></i>
-            <p>{{ $t(val.scopeName) }}</p>
+            <p>{{ $t(val.name) }}</p>
           </el-row>
           <el-row
             :id="v.name"
@@ -70,8 +70,11 @@ export default {
       const api = `http://${this.domain}.upis.info/Api/Page/All`;
       this.$http.get(api)
         .then((res) => {
+          console.log(res);
           const r = res.data.content.pageList;
           r.forEach((item, index) => {
+            const i = item;
+            i.id = index;
             r[index].pages.forEach((val) => {
               const v = val;
               v.all = false;
@@ -88,7 +91,6 @@ export default {
             setting.children[1].children[1].style.visibility = 'hidden';
             setting.children[1].children[3].style.visibility = 'hidden';
           });
-          console.log(this.data);
           this.$store.commit('LOADING', false);
         });
     },
