@@ -6,6 +6,15 @@
     </el-row>
     <el-row class="form">
       <div class="form-inside">
+        <el-row type="flex" style="margin-right: auto;">
+          <el-input
+            v-model="search.keyword"
+            placeholder="Keyword"
+            size="small"
+            @keyup.enter.native="getList"
+          ></el-input>
+          <el-button type="primary" size="small" style="margin-left: 1rem;" @click="getList">搜尋</el-button>
+        </el-row>
         <el-table id="table" :data="data.list">
           <el-table-column label="ICD 10 Code" width="125">
             <template slot-scope="scope">
@@ -22,7 +31,7 @@
               <el-tag size="medium" type="info">{{ scope.row.type }}</el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="Report Table" width="125" align="center">
+          <el-table-column label="Reportable" width="125" align="center">
             <template slot-scope="scope">
               <i class="el-icon-check" v-if="scope.row.alert"></i>
               <i class="el-icon-close" v-if="!scope.row.alert"></i>
@@ -52,6 +61,12 @@ export default {
   data() {
     return {
       data: {},
+      search: {
+        keyword: '',
+        orderby: 'icd10Code',
+        orderByDesc: true,
+      },
+      currentPage: 1,
     };
   },
   computed: {
@@ -60,15 +75,10 @@ export default {
     },
   },
   methods: {
-    getList(num = 1) {
+    getList() {
       this.$store.commit('LOADING', true);
-      const api = `http://${this.domain}.upis.info/Api/ICD10/List/${num}`;
-      const data = {
-        keyword: '',
-        orderby: 'icd10Code',
-        orderByDesc: true,
-      };
-      const dataJS = JSON.stringify(data);
+      const api = `http://${this.domain}.upis.info/Api/ICD10/List/${this.currentPage}`;
+      const dataJS = JSON.stringify(this.search);
       this.$http.post(api, dataJS)
         .then((res) => {
           this.data = res.data.content;
@@ -82,7 +92,8 @@ export default {
       this.$router.push({ name: 'ICD10Create' });
     },
     handleCurrentChange(val) {
-      this.getList(val);
+      this.currentPage = val;
+      this.getList();
     },
   },
   created() {

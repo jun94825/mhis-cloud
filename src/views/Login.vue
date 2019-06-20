@@ -4,9 +4,10 @@
       <img src="../assets/images/mhis-white.png" alt>
       <p>{{ info.hosptialName }}</p>
     </el-row>
-    <el-row type="flex" justify="center" class="main" :style="{ backgroundImage: `url(${bgUrl})` }">
+    <el-row type="flex" align="middle" class="main" :style="{ backgroundImage: `url(${bgUrl})` }">
       <el-form
         ref="data"
+        class="form"
         status-icon
         :model="data"
         :rules="rules"
@@ -46,6 +47,16 @@
         </el-row>
         <el-button class="w-250 mhis-primary" @click="submitForm('data')">{{ $t('Register') }}</el-button>
       </el-form>
+      <div class="img-area">
+        <img
+          :src="item.url"
+          alt
+          width="150"
+          height="150"
+          v-for="(item, index) in info.logos"
+          :key="index"
+        >
+      </div>
     </el-row>
   </div>
 </template>

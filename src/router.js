@@ -37,43 +37,50 @@ export default new Router({
       component: () => import('./views/System.vue'),
       children: [
         {
-          /* 維護角色 */
+          /* Role */
           name: 'RoleManagement',
           path: 'role/maintain',
           component: () => import('./components/system/role/Maintain.vue'),
         },
         {
-          /* 新增角色 */
           name: 'RoleCreate',
           path: 'role/create',
           component: () => import('./components/system/role/Create.vue'),
         },
         {
-          /* 編輯角色 */
           name: 'RoleEdit',
           path: 'role/edit',
           component: () => import('./components/system/role/Edit.vue'),
         },
         {
-          /* 維護 ICD 10 */
+          /* Category */
+          name: 'Category',
+          path: 'category/maintain',
+          component: () => import('./components/system/category/Maintain.vue'),
+        },
+        {
+          name: 'CategoryCreate',
+          path: 'category/create',
+          component: () => import('./components/system/category/Create.vue'),
+        },
+        {
+          /* ICD10 */
           name: 'ICD10',
           path: 'icd/maintain',
           component: () => import('./components/system/icd/Maintain.vue'),
         },
         {
-          /* 新增 & 刪除 ICD 10 */
           name: 'ICD10Create',
           path: 'icd/create',
           component: () => import('./components/system/icd/Create.vue'),
         },
         {
-          /* 編輯 ICD 10 */
           name: 'ICD10Edit',
           path: 'icd/edit',
           component: () => import('./components/system/icd/Edit.vue'),
         },
         {
-          /* 系統設定 */
+          /* Setting */
           name: 'Setting',
           path: 'setting',
           component: () => import('./components/system/Setting.vue'),
