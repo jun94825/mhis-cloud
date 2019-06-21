@@ -13,7 +13,9 @@ module.exports = {
   Account: '帳號',
   Password: '密碼',
   RememberMe: '記住我',
-  CreateAccount: '創建帳戶',
+
+  /* Header */
+  SignOut: '登出',
 
   /* Sidebar */
   Home: '首頁',
@@ -35,4 +37,41 @@ module.exports = {
   HealthEducation: '衛教宣導',
   ICD10: 'ICD 10 設定',
   Setting: '系統設定',
+
+  /* Setting */
+  Save: '儲存變更',
+  MailSetting: '郵件設定',
+  HosptialInformation: '醫院簡介',
+  FingerPrint: '指紋機',
+  BackgroundImage: '背景圖',
+  OfficialBannerImage: '官方橫幅圖',
+  OfficialLogo: '官網商標',
+  Partner: '贊助商',
+  VisitingTime: '看診時段',
+  Morning: '早上',
+  Afternoon: '下午',
+  Night: '晚上',
+  To: '至',
+  Select: '選擇檔案',
+  Start: '起始時間',
+  End: '結束時間',
+
+  UserAcc: '登入帳號',
+  UserPwd: '登入密碼',
+  Port: '埠',
+  HostUrl: '郵件主機網址',
+  ContactMail: '聯絡人郵件',
+  ContactBccMail: '聯絡人副本郵件',
+
+  HosptialNo: '醫院編號',
+  HosptialName: '醫院名稱',
+  HosptialTel: '醫院電話',
+  HosptialAdd: '醫院地址',
+  HospitalContactNamel: '聯絡人姓名',
+  HospitalContactTel: '聯絡人電話',
+  HospitalSlogan: '口號',
+  HospitalEnvironment: '醫院環境',
+
+  /* ICD10 */
+  ICD10Setting: 'ICD10 Setting',
 };

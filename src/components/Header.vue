@@ -12,7 +12,7 @@
           <i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item icon="el-icon-d-arrow-left" @click.native="signOut">登出</el-dropdown-item>
+          <el-dropdown-item icon="el-icon-d-arrow-left" @click.native="signOut">{{ $t('SignOut') }}</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </el-row>

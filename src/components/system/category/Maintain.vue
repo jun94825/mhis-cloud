@@ -57,7 +57,7 @@ export default {
   },
   methods: {
     getList() {
-      const api = `http://${this.domain}.upis.info/Api/CodeFile/List/${this.currentPage}`;
+      const api = `http://${this.domain}.upis.info/Api/Category/List/${this.currentPage}`;
       // const dataJS = JSON.stringify(this.search);
       this.$http.post(api, {})
         .then((res) => {

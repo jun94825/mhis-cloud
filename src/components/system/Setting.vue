@@ -1,26 +1,26 @@
 <template>
   <div>
     <el-row type="flex" align="middle" justify="space-between" class="title">
-      <p>系統設定</p>
-      <el-button type="primary" size="small" @click="checkRmove">儲存變更</el-button>
+      <p>{{ $t('Setting') }}</p>
+      <el-button type="primary" size="small" @click="checkRmove">{{ $t('Save') }}</el-button>
     </el-row>
     <el-row type="flex" align="middle" class="slide">
-      <a href="javascript:;" @click="scroll(0)">基本設定</a>
-      <a href="javascript:;" @click="scroll(1)">郵件設定</a>
-      <a href="javascript:;" @click="scroll(2)">醫院簡介</a>
+      <a href="javascript:;" @click="scroll(0)">{{ $t('Setting') }}</a>
+      <a href="javascript:;" @click="scroll(1)">{{ $t('MailSetting') }}</a>
+      <a href="javascript:;" @click="scroll(2)">{{ $t('HosptialInformation') }}</a>
     </el-row>
     <el-row class="main" v-if="JSON.stringify(data) !== '{}'">
-      <p class="mark">基本設定</p>
+      <p class="mark">{{ $t('Setting') }}</p>
       <div class="main-item">
         <div class="item-row">
-          <p class="row-p">指紋機</p>
+          <p class="row-p">{{ $t('FingerPrint') }}</p>
           <el-switch active-color="#0b7dd1" inactive-color="#ccc" v-model="data.fingerPrint.value"></el-switch>
         </div>
         <div class="item-row">
-          <p class="row-p">背景圖</p>
+          <p class="row-p">{{ $t('BackgroundImage') }}</p>
           <label class="el-button el-button--primary el-button--small">
             <input type="file" size="small" class="d-none" @change="singleFile('backgroundImage')">
-            選擇檔案
+            {{ $t('Select') }}
           </label>
         </div>
         <div class="item-row" v-if="data.backgroundImage.value !== null">
@@ -36,7 +36,7 @@
           </div>
         </div>
         <div class="item-row">
-          <p class="row-p">官方橫幅圖</p>
+          <p class="row-p">{{ $t('OfficialBannerImage') }}</p>
           <label class="el-button el-button--primary el-button--small">
             <input
               type="file"
@@ -44,7 +44,7 @@
               class="d-none"
               @change="singleFile('officialBannerImg')"
             >
-            選擇檔案
+            {{ $t('Select') }}
           </label>
         </div>
         <div class="item-row" v-if="data.officialBannerImg.value !== null">
@@ -60,17 +60,17 @@
           </div>
         </div>
         <div class="item-row">
-          <p class="row-p mb-auto">官網商標</p>
+          <p class="row-p mb-auto">{{ $t('OfficialLogo') }}</p>
           <label
             class="el-button el-button--primary el-button--small"
             @click="multipleFiles('partners')"
           >
             <input type="file" size="small" class="d-none">
-            選擇檔案
+            {{ $t('Select') }}
           </label>
         </div>
         <div class="item-row">
-          <p class="row-p mb-auto">贊助商</p>
+          <p class="row-p mb-auto">{{ $t('Partner') }}</p>
           <div v-for="(item, index) in data.partners.values" :key="index">
             <div
               class="multiple-img p-rel"
@@ -95,101 +95,101 @@
           </label>
         </div>
         <div class="item-row">
-          <p class="row-p">看診時段</p>
-          <p>早上</p>
+          <p class="row-p">{{ $t('VisitingTime') }}</p>
+          <p>{{ $t('Morning') }}</p>
           <el-time-select
             class="row-time-picker"
             :picker-options="pickerSetting"
-            placeholder="起始時間"
+            :placeholder="$t('Start')"
             v-model="data.morningShiftStart.value"
           ></el-time-select>
-          <p style="margin-left: 1rem;">至</p>
+          <p style="margin-left: 1rem;">{{ $t('To') }}</p>
           <el-time-select
             class="row-time-picker"
             :picker-options="pickerSetting"
-            placeholder="結束時間"
+            :placeholder="$t('End')"
             v-model="data.morningShiftEnd.value"
           ></el-time-select>
         </div>
         <div class="item-row">
           <p class="row-p"></p>
-          <p>下午</p>
+          <p>{{ $t('Afternoon') }}</p>
           <el-time-select
             class="row-time-picker"
             :picker-options="pickerSetting"
-            placeholder="起始時間"
+            :placeholder="$t('Start')"
             v-model="data.afternoonShiftStart.value"
           ></el-time-select>
-          <p style="margin-left: 1rem;">至</p>
+          <p style="margin-left: 1rem;">{{ $t('To') }}</p>
           <el-time-select
             class="row-time-picker"
             :picker-options="pickerSetting"
-            placeholder="結束時間"
+            :placeholder="$t('End')"
             v-model="data.afternoonShiftEnd.value"
           ></el-time-select>
         </div>
         <div class="item-row">
           <p class="row-p"></p>
-          <p>夜間</p>
+          <p>{{ $t('Night') }}</p>
           <el-time-select
             class="row-time-picker"
             :picker-options="pickerSetting"
-            placeholder="起始時間"
+            :placeholder="$t('Start')"
             v-model="data.eveningShiftStart.value"
           ></el-time-select>
-          <p style="margin-left: 1rem;">至</p>
+          <p style="margin-left: 1rem;">{{ $t('To') }}</p>
           <el-time-select
             class="row-time-picker"
             :picker-options="pickerSetting"
-            placeholder="結束時間"
+            :placeholder="$t('End')"
             v-model="data.eveningShiftEnd.value"
           ></el-time-select>
         </div>
       </div>
-      <p class="mark">郵件設定</p>
+      <p class="mark">{{ $t('MailSetting') }}</p>
       <div class="main-item">
         <div class="item-row">
-          <p class="row-p">登入帳號</p>
+          <p class="row-p">{{ $t('UserAcc') }}</p>
           <el-input class="row-input" v-model="data.mailUserName.value"></el-input>
         </div>
         <div class="item-row">
-          <p class="row-p">登入密碼</p>
+          <p class="row-p">{{ $t('UserPwd') }}</p>
           <el-input class="row-input" v-model="data.mailUserPassword.value"></el-input>
         </div>
         <div class="item-row">
-          <p class="row-p">埠</p>
+          <p class="row-p">{{ $t('Port') }}</p>
           <el-input class="row-input" v-model="data.mailPort.value"></el-input>
         </div>
         <div class="item-row">
-          <p class="row-p">郵件主機網址</p>
+          <p class="row-p">{{ $t('HostUrl') }}</p>
           <el-input class="row-input" v-model="data.mailUrl.value"></el-input>
         </div>
         <div class="item-row">
-          <p class="row-p">聯絡人郵件</p>
+          <p class="row-p">{{ $t('ContactMail') }}</p>
           <el-input class="row-input" v-model="data.mailContactMail.value"></el-input>
         </div>
         <div class="item-row">
-          <p class="row-p">聯絡人副本郵件</p>
+          <p class="row-p">{{ $t('ContactBccMail') }}</p>
           <el-input class="row-input" v-model="data.mailContactBccMail.value"></el-input>
         </div>
       </div>
-      <p class="mark">醫院簡介</p>
+      <p class="mark">{{ $t('HosptialInformation') }}</p>
       <div class="main-item">
         <div class="item-row">
-          <p class="row-p">醫院編號</p>
+          <p class="row-p">{{ $t('HosptialNo') }}</p>
           <p>{{ data.hospitalNo }}</p>
         </div>
         <div class="item-row">
-          <p class="row-p">醫院名稱</p>
+          <p class="row-p">{{ $t('HosptialName') }}</p>
           <el-input class="row-input" v-model="data.hospitalName.value"></el-input>
         </div>
         <div class="item-row">
-          <p class="row-p">醫院電話</p>
+          <p class="row-p">{{ $t('HosptialTel') }}</p>
           <el-input class="row-input" v-model="data.hospitalTel.value"></el-input>
         </div>
         <!-- Google Maps -->
         <div class="item-row">
-          <p class="row-p">醫院地址</p>
+          <p class="row-p">{{ $t('HosptialAdd') }}</p>
           <p>{{ data.hospitalAddress.value }}</p>
         </div>
         <div class="item-row">
@@ -213,19 +213,25 @@
         </div>
         <!-- Google Maps -->
         <div class="item-row">
-          <p class="row-p">聯絡人姓名</p>
+          <p class="row-p">{{ $t('HospitalContactNamel') }}</p>
           <el-input class="row-input" v-model="data.hospitalContactName.value"></el-input>
         </div>
         <div class="item-row">
-          <p class="row-p">聯絡人電話</p>
+          <p class="row-p">{{ $t('HospitalContactTel') }}</p>
           <el-input class="row-input" v-model="data.hospitalContactTel.value"></el-input>
         </div>
         <div class="item-row">
-          <p class="row-p">口號</p>
+          <p class="row-p">{{ $t('HospitalSlogan') }}</p>
           <el-input class="row-input" v-model="data.hospitalSlogan.value"></el-input>
         </div>
         <div class="item-row">
-          <p class="row-p mb-auto">醫院環境</p>
+          <p class="row-p" style="margin-bottom: auto;">關於醫院</p>
+          <!-- Vue2 Editor -->
+          <vue-editor :editorToolbar="customToolbar" v-model="data.hospitalAbout.value"></vue-editor>
+          <!-- Vue2 Editor -->
+        </div>
+        <div class="item-row">
+          <p class="row-p mb-auto">{{ $t('HospitalEnvironment') }}</p>
           <div v-for="(item, index) in data.hospitalEnvironmentPhotos.values" :key="index">
             <div
               class="multiple-img p-rel"
@@ -260,8 +266,24 @@
 
 <script>
 import { setTimeout } from 'timers';
+import { VueEditor } from 'vue2-editor';
+
+const customToolbar = [
+  [{ font: [] }],
+  [{ header: 1 }, { header: 2 }],
+  ['bold', 'italic', 'underline', 'strike'],
+  [{ align: '' }, { align: 'center' }, { align: 'right' }, { align: 'justify' }],
+  ['blockquote', 'code-block'],
+  [{ list: 'ordered' }, { list: 'bullet' }, { list: 'check' }],
+  [{ indent: '-1' }, { indent: '+1' }],
+  [{ color: [] }, { background: [] }],
+  ['link', 'image', 'video', 'formula'],
+];
 
 export default {
+  components: {
+    VueEditor,
+  },
   data() {
     return {
       data: {},
@@ -282,6 +304,8 @@ export default {
         id: [],
         data: [],
       },
+      /* Vue2Editor */
+      customToolbar,
       /* Time Picker */
       pickerSetting: {
         start: '00:00',

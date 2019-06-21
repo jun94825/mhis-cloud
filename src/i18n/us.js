@@ -13,7 +13,9 @@ module.exports = {
   Account: 'Account',
   Password: 'Password',
   RememberMe: 'Remember Me',
-  CreateAccount: 'Create Account',
+
+  /* Header */
+  SignOut: 'Sign Out',
 
   /* Sidebar */
   Home: 'Home',
@@ -35,4 +37,38 @@ module.exports = {
   HealthEducation: 'Health Education',
   ICD10: 'ICD 10 Management',
   Setting: 'Configuration',
+
+  /* Setting */
+  Save: 'Save',
+  MailSetting: 'Mail Setting',
+  HosptialInformation: 'Hosptial Information',
+  FingerPrint: 'Finger Print',
+  BackgroundImage: 'Background Image',
+  OfficialBannerImage: 'Official Banner Image',
+  OfficialLogo: 'Official Logo',
+  Partner: 'Partner',
+  VisitingTime: 'Visiting Time',
+  Morning: 'Morning',
+  Afternoon: 'Afternoon',
+  Night: 'Night',
+  To: 'To',
+  Select: 'Select',
+  Start: 'Start',
+  End: 'End',
+
+  UserAcc: 'User Account',
+  UserPwd: 'User Password',
+  Port: 'Port',
+  HostUrl: 'Host Url',
+  ContactMail: 'Contact Mail',
+  ContactBccMail: 'Contact Bcc Mail',
+
+  HosptialNo: 'Hosptial No',
+  HosptialName: 'Hosptial Name',
+  HosptialTel: 'Hosptial Tel',
+  HosptialAdd: 'Hosptial Address',
+  HospitalContactNamel: 'Hospital Contact Namel',
+  HospitalContactTel: 'Hospital Contact Tel',
+  HospitalSlogan: 'Hospital Slogan',
+  HospitalEnvironment: 'Hospital Environment',
 };

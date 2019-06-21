@@ -33,6 +33,7 @@ export default {
         parentId: '',
         itemCode: '',
       },
+      list: [],
     };
   },
   computed: {
@@ -43,12 +44,10 @@ export default {
   methods: {
     create() {
       this.$store.commit('LOADING', true);
-      const api = `http://${this.domain}.upis.info/Api/CodeFile/Create`;
+      const api = `http://${this.domain}.upis.info/Api/Category/Create`;
       const dataJS = JSON.stringify(this.data);
-      console.log(dataJS);
       this.$http.post(api, dataJS)
         .then((res) => {
-          console.log(res);
           if (res.data.success === true) {
             this.$message({
               message: '新增成功',
@@ -61,15 +60,11 @@ export default {
     },
     getSelectList() {
       this.$store.commit('LOADING', true);
-      const api = `http://${this.domain}.upis.info/Api/GetSelectList`;
-      const data = {
-        type: [],
-      };
-      const dataJS = JSON.stringify(data);
-      this.$http.post(api, dataJS)
+      const api = `http://${this.domain}.upis.info/Api/Category/Options`;
+      this.$http.get(api)
         .then((res) => {
           if (res.data.success === true) {
-            console.log(res);
+            this.list = res.data.content.lists[0].list;
           }
           this.$store.commit('LOADING', false);
         });
