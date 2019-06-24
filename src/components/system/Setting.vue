@@ -1,10 +1,10 @@
 <template>
   <div>
-    <el-row type="flex" align="middle" justify="space-between" class="title">
+    <el-row class="header" type="flex" align="middle" justify="space-between">
       <p>{{ $t('Setting') }}</p>
       <el-button type="primary" size="small" @click="checkRmove">{{ $t('Save') }}</el-button>
     </el-row>
-    <el-row type="flex" align="middle" class="slide">
+    <el-row class="slide" type="flex" align="middle">
       <a href="javascript:;" @click="scroll(0)">{{ $t('Setting') }}</a>
       <a href="javascript:;" @click="scroll(1)">{{ $t('MailSetting') }}</a>
       <a href="javascript:;" @click="scroll(2)">{{ $t('HosptialInformation') }}</a>
@@ -544,9 +544,9 @@ export default {
     },
   },
   created() {
-    const token = localStorage.getItem('cookie');
-    this.$http.defaults.headers.common.Authorization = `Bearer ${token}`;
-    this.$store.commit('DOMAIN');
+    // const token = localStorage.getItem('cookie');
+    // this.$http.defaults.headers.common.Authorization = `Bearer ${token}`;
+    this.$store.commit('VERIFY');
     this.getList();
     this.geolocate();
     this.render();

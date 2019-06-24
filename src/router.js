@@ -64,6 +64,11 @@ export default new Router({
           component: () => import('./components/system/category/Create.vue'),
         },
         {
+          name: 'CategoryEdit',
+          path: 'category/edit',
+          component: () => import('./components/system/category/Edit.vue'),
+        },
+        {
           /* ICD10 */
           name: 'ICD10',
           path: 'icd/maintain',

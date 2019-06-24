@@ -2,24 +2,24 @@
   <div>
     <el-row class="sys-header" type="flex" align="middle">
       <i class="el-icon-back" @click="back"></i>
-      <p>編輯 ICD 10</p>
+      <p>編輯 ICD10</p>
     </el-row>
     <div class="form">
       <div class="form-inside">
-        <div style="display: flex; align-items: center; margin-bottom: 25px;">
-          <p>ICD 10 Code：</p>
+        <div class="inside-item">
+          <p>ICD10 Code</p>
           <el-tag>{{ data.icd10Code }}</el-tag>
         </div>
-        <div style="display: flex; align-items: center; margin-bottom: 25px;">
-          <p>Name：</p>
-          <el-input v-model="data.stdName" style="width: 500px;"></el-input>
+        <div class="inside-item">
+          <p>Name</p>
+          <el-input v-model="data.stdName"></el-input>
         </div>
-        <div style="display: flex; align-items: center; margin-bottom: 25px;">
-          <p>Type：</p>
+        <div class="inside-item">
+          <p>Type</p>
           <el-tag>{{ data.type }}</el-tag>
         </div>
-        <div style="display: flex; align-items: center; margin-bottom: 25px;">
-          <el-checkbox v-model="data.alert">Report Table</el-checkbox>
+        <div class="inside-item">
+          <el-checkbox v-model="data.alert">Reportable</el-checkbox>
         </div>
         <el-button type="primary" size="small" @click="editICD">修改</el-button>
         <el-button type="danger" size="small" @click="delICD">刪除</el-button>
@@ -104,5 +104,5 @@ export default {
 
 
 <style lang="scss" scoped>
-@import "../../../assets/styles/components/system/role/sharing.scss";
+@import "../../../assets/styles/helpers.scss";
 </style>

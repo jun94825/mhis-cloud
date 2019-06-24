@@ -1,9 +1,9 @@
 @import '../helpers.scss';
 
 .reg-bg {
+  @include bg-center('../assets/images/register-bg.png');
   height: 100%;
   position: relative;
-  @include bg-center('../assets/images/register-bg.png');
 
   .advmeds-logo {
     @include ps-abs(1.5rem, 3rem);

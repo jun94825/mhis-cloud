@@ -1,8 +1,8 @@
 <template>
-  <el-row type="flex" align="middle" justify="center" class="reg-bg">
-    <img src="../assets/images/advmeds-long.png" alt class="advmeds-logo">
-    <el-col :xl="6" :lg="8" :md="10" :sm="14" :xs="22" class="form-bg">
-      <el-row type="flex" align="middle" justify="center" class="form-header">
+  <el-row class="reg-bg" type="flex" align="middle" justify="center">
+    <img class="advmeds-logo" src="../assets/images/advmeds-long.png" alt>
+    <el-col class="form-bg" :xl="6" :lg="8" :md="10" :sm="14" :xs="22">
+      <el-row class="form-header" type="flex" align="middle" justify="center">
         <img src="../assets/images/mhis-blue.png" alt>
         <p>{{ $t('Register') }}</p>
       </el-row>
@@ -14,14 +14,14 @@
           :rules="rules"
           @keyup.enter.native="submitForm('data')"
         >
-          <el-form-item :label="$t('Language')" class="mb-8">
-            <el-select v-model="data.local" class="w-250" @change="changeLanguage">
+          <el-form-item class="mb-8" :label="$t('Language')">
+            <el-select class="w-250" v-model="data.local" @change="changeLanguage">
               <el-option label="繁體中文" value="zh-tw"></el-option>
               <el-option label="English" value="en-us"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item :label="$t('TimeZone')" class="mb-8">
-            <el-select v-model="data.timeZone" class="w-250">
+          <el-form-item class="mb-8" :label="$t('TimeZone')">
+            <el-select class="w-250" v-model="data.timeZone">
               <el-option label="GMT+6" value="6"></el-option>
               <el-option label="GMT+7" value="7"></el-option>
               <el-option label="GMT+8" value="8"></el-option>
@@ -29,34 +29,34 @@
               <el-option label="GMT+10" value="10"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item :label="$t('HospitalNo')" class="mb-8" prop="hospitalNo">
-            <el-input v-model="data.hospitalNo" maxlength="20" class="w-250"></el-input>
+          <el-form-item class="mb-8" :label="$t('HospitalNo')" prop="hospitalNo">
+            <el-input class="w-250" v-model="data.hospitalNo"></el-input>
           </el-form-item>
-          <el-form-item :label="$t('HospitalName')" class="mb-8" prop="hospitalName">
-            <el-input v-model="data.hospitalName" maxlength="200" class="w-250"></el-input>
+          <el-form-item class="mb-8" :label="$t('HospitalName')" prop="hospitalName">
+            <el-input class="w-250" v-model="data.hospitalName"></el-input>
           </el-form-item>
-          <el-form-item :label="$t('Email')" class="mb-8" prop="email">
-            <el-input v-model="data.email" class="w-250"></el-input>
+          <el-form-item class="mb-8" :label="$t('Email')" prop="email">
+            <el-input class="w-250" v-model="data.email"></el-input>
           </el-form-item>
-          <el-form-item :label="$t('ContactPerson')" class="mb-8" prop="contactPerson">
-            <el-input v-model="data.contactPerson" maxlength="20" class="w-250"></el-input>
+          <el-form-item class="mb-8" :label="$t('ContactPerson')" prop="contactPerson">
+            <el-input class="w-250" v-model="data.contactPerson"></el-input>
           </el-form-item>
-          <el-row type="flex" align="middle" justify="space-between" class="mb-8">
-            <el-form-item :label="$t('Captcha')" class="mb-0" prop="captcha">
-              <el-input v-model="data.captcha" maxlength="4" class="w-90"></el-input>
+          <el-row class="mb-8" type="flex" align="middle" justify="space-between">
+            <el-form-item class="mb-0" :label="$t('Captcha')" prop="captcha">
+              <el-input class="w-90" v-model="data.captcha" maxlength="4"></el-input>
             </el-form-item>
             <img :src="captchaUrl" class="mt-40" width="90" height="40" alt>
             <el-button
+              class="mt-40"
               circle
               type="primary"
               icon="el-icon-refresh-right"
-              class="mt-40"
               @click="getCaptcha"
             ></el-button>
           </el-row>
           <el-button
-            type="primary"
             class="w-250 mt-16"
+            type="primary"
             @click="submitForm('data')"
           >{{ $t('Register') }}</el-button>
         </el-form>

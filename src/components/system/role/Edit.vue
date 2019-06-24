@@ -1,14 +1,14 @@
 <template>
   <div>
-    <el-row type="flex" align="middle" justify="space-between" class="main-title">
+    <el-row type="flex" align="middle" justify="space-between" class="sys-header">
       <el-row type="flex" align="middle">
         <i class="el-icon-back" @click="back"></i>
         <p>編輯角色權限</p>
       </el-row>
       <el-button type="primary" size="small" @click="editRole">儲存</el-button>
     </el-row>
-    <el-row class="main-layout">
-      <div class="layout-inside">
+    <el-row class="form">
+      <div class="form-inside">
         <p>{{ roleName }}</p>
         <el-row type="flex" align="middle" justify="space-between" class="form-header">
           <p>功能分類</p>
@@ -22,7 +22,7 @@
         <div v-for="(val, index) in data" :key="index">
           <el-row type="flex" align="middle" class="category-title">
             <i class="el-icon-plus"></i>
-            <p>{{ val.scopeName }}</p>
+            <p>{{ val.name }}</p>
           </el-row>
           <el-row
             :id="v.name"
@@ -74,12 +74,12 @@ export default {
           r.forEach((item, index) => {
             r[index].pages.forEach((val) => {
               const v = val;
+              v.num = 0;
               v.all = false;
               v.read = false;
               v.create = false;
               v.edit = false;
               v.delete = false;
-              v.num = 0;
             });
           });
           this.data = r;
@@ -179,17 +179,17 @@ export default {
     all(target) {
       const t = target;
       if (!t.all) {
+        t.num = 3;
         t.read = true;
         t.create = true;
         t.edit = true;
         t.delete = true;
-        t.num = 3;
       } else {
+        t.num = 0;
         t.read = false;
         t.create = false;
         t.edit = false;
         t.delete = false;
-        t.num = 0;
       }
     },
     check(target) {
@@ -228,9 +228,7 @@ export default {
     },
   },
   created() {
-    const token = localStorage.getItem('cookie');
-    this.$http.defaults.headers.common.Authorization = `Bearer ${token}`;
-    this.$store.commit('DOMAIN');
+    this.$store.commit('VERIFY');
     this.id = window.location.href;
     this.getPageAll();
   },
@@ -239,5 +237,72 @@ export default {
 
 
 <style lang="scss" scoped>
-@import "../../../assets/styles/components/system/role/edit.scss";
+@import "../../../assets/styles/helpers.scss";
+
+.el-input {
+  width: 10rem;
+}
+
+.form-header {
+  padding: 1rem;
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  background-color: #f5f5f5;
+  border-bottom: 0.0625rem solid #e2e2e2;
+
+  .el-row {
+    width: 30%;
+  }
+}
+
+.category-title {
+  padding: 1rem;
+  font-size: 0.875rem;
+  border-bottom: 0.0625rem solid #e2e2e2;
+
+  > i {
+    margin: 0 1rem;
+    cursor: pointer;
+    font-weight: bold;
+  }
+}
+
+.category-content {
+  padding: 1rem;
+  background-color: #f5f5f5;
+  border-bottom: 0.0625rem solid #e2e2e2;
+
+  .fuck {
+    margin-left: 2.5rem;
+
+    > label {
+      cursor: pointer;
+      font-size: 0.875rem;
+    }
+
+    > input {
+      margin-right: 1rem;
+    }
+  }
+
+  .el-row {
+    width: 30%;
+
+    > input {
+      cursor: pointer;
+      zoom: 150%;
+    }
+
+    > label {
+      margin-right: unset;
+    }
+  }
+}
+
+.el-icon-back {
+  cursor: pointer;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-right: 1rem;
+}
 </style>

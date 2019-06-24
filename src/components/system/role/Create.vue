@@ -1,14 +1,14 @@
 <template>
   <div>
-    <el-row type="flex" align="middle" justify="space-between" class="main-title">
+    <el-row type="flex" align="middle" justify="space-between" class="sys-header">
       <el-row type="flex" align="middle">
         <i class="el-icon-back" @click="back"></i>
         <p>編輯角色權限</p>
       </el-row>
       <el-button type="primary" size="small" @click="createRole">新增</el-button>
     </el-row>
-    <el-row class="main-layout">
-      <div class="layout-inside">
+    <el-row class="form">
+      <div class="form-inside">
         <el-input size="small" placeholder="請輸入角色名稱" v-model="roleName"></el-input>
         <el-row type="flex" align="middle" justify="space-between" class="form-header">
           <p>功能分類</p>
@@ -70,7 +70,6 @@ export default {
       const api = `http://${this.domain}.upis.info/Api/Page/All`;
       this.$http.get(api)
         .then((res) => {
-          console.log(res);
           const r = res.data.content.pageList;
           r.forEach((item, index) => {
             const i = item;
@@ -187,9 +186,7 @@ export default {
     },
   },
   created() {
-    const token = localStorage.getItem('cookie');
-    this.$http.defaults.headers.common.Authorization = `Bearer ${token}`;
-    this.$store.commit('DOMAIN');
+    this.$store.commit('VERIFY');
     this.getPageAll();
   },
 };
@@ -197,5 +194,72 @@ export default {
 
 
 <style lang="scss" scoped>
-@import "../../../assets/styles/components/system/role/create.scss";
+@import "../../../assets/styles/helpers.scss";
+
+.el-input {
+  width: 10rem;
+}
+
+.form-header {
+  padding: 1rem;
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  background-color: #f5f5f5;
+  border-bottom: 0.0625rem solid #e2e2e2;
+
+  .el-row {
+    width: 30%;
+  }
+}
+
+.category-title {
+  padding: 1rem;
+  font-size: 0.875rem;
+  border-bottom: 0.0625rem solid #e2e2e2;
+
+  > i {
+    margin: 0 1rem;
+    cursor: pointer;
+    font-weight: bold;
+  }
+}
+
+.category-content {
+  padding: 1rem;
+  background-color: #f5f5f5;
+  border-bottom: 0.0625rem solid #e2e2e2;
+
+  .fuck {
+    margin-left: 2.5rem;
+
+    > label {
+      cursor: pointer;
+      font-size: 0.875rem;
+    }
+
+    > input {
+      margin-right: 1rem;
+    }
+  }
+
+  .el-row {
+    width: 30%;
+
+    > input {
+      cursor: pointer;
+      zoom: 150%;
+    }
+
+    > label {
+      margin-right: unset;
+    }
+  }
+}
+
+.el-icon-back {
+  cursor: pointer;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-right: 1rem;
+}
 </style>

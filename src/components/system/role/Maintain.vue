@@ -1,11 +1,11 @@
 <template>
   <div>
-    <el-row class="main-title" type="flex" align="middle" justify="space-between">
+    <el-row class="sys-header" type="flex" align="middle" justify="space-between">
       <p>角色維護</p>
       <el-button type="primary" size="small" @click="toCreatePage">新增角色</el-button>
     </el-row>
-    <el-row class="main-layout">
-      <div class="layout-inside">
+    <el-row class="form">
+      <div class="form-inside">
         <el-table :data="roles">
           <el-table-column label="角色名稱" min-width="150">
             <template slot-scope="scope">
@@ -101,9 +101,7 @@ export default {
     },
   },
   created() {
-    const token = localStorage.getItem('cookie');
-    this.$http.defaults.headers.common.Authorization = `Bearer ${token}`;
-    this.$store.commit('DOMAIN');
+    this.$store.commit('VERIFY');
     this.getRoles();
   },
 };
@@ -111,5 +109,18 @@ export default {
 
 
 <style lang="scss" scoped>
-@import "../../../assets/styles/components/system/role/maintain.scss";
+@import "../../../assets/styles/helpers.scss";
+
+.el-icon-edit-outline {
+  cursor: pointer;
+  color: #007bff;
+  font-size: 1.25rem;
+}
+
+.el-icon-delete {
+  cursor: pointer;
+  color: #dc3545;
+  font-size: 1.25rem;
+  margin-left: 1.5rem;
+}
 </style>

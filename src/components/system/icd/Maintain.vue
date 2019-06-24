@@ -6,14 +6,14 @@
     </el-row>
     <el-row class="form">
       <div class="form-inside">
-        <el-row type="flex" style="margin-right: auto;">
+        <el-row class="mb-8 mr-auto" type="flex">
           <el-input
             v-model="search.keyword"
             placeholder="Keyword"
             size="small"
             @keyup.enter.native="getList"
           ></el-input>
-          <el-button type="primary" size="small" style="margin-left: 1rem;" @click="getList">搜尋</el-button>
+          <el-button class="ml-16" type="primary" size="small" @click="getList">搜尋</el-button>
         </el-row>
         <el-table id="table" :data="data.list">
           <el-table-column label="ICD 10 Code" width="125">
@@ -85,11 +85,11 @@ export default {
           this.$store.commit('LOADING', false);
         });
     },
-    toEditPage(index, row) {
-      this.$router.push({ name: 'ICD10Edit', query: { key: row.id } });
-    },
     toCreatePage() {
       this.$router.push({ name: 'ICD10Create' });
+    },
+    toEditPage(index, row) {
+      this.$router.push({ name: 'ICD10Edit', query: { key: row.id } });
     },
     handleCurrentChange(val) {
       this.currentPage = val;
@@ -97,20 +97,18 @@ export default {
     },
   },
   created() {
-    const token = localStorage.getItem('cookie');
-    this.$http.defaults.headers.common.Authorization = `Bearer ${token}`;
-    this.$store.commit('DOMAIN');
+    this.$store.commit('VERIFY');
     this.getList();
   },
 };
 </script>
 
 <style lang="scss" scoped>
-@import "../../../assets/styles/components/system/role/sharing.scss";
+@import "../../../assets/styles/helpers.scss";
 
-#table {
-  width: 100%;
-}
+// #table {
+//   width: 100%;
+// }
 
 .el-icon-check {
   font-size: 1.25rem;
@@ -130,7 +128,7 @@ export default {
   flex-direction: column;
 
   .pagination {
-    margin-top: 2rem;
+    margin-top: 2.5rem;
   }
 }
 </style>

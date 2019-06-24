@@ -25,5 +25,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/styles/views/system.scss";
+.sidebar {
+  min-height: calc(100vh - 4rem);
+  background-color: #333;
+}
+
+.main {
+  width: 100%;
+  min-width: calc(100% - 200px);
+  max-width: calc(100% - 64px);
+  background-color: #f5f5f5;
+}
 </style>

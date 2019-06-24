@@ -1,60 +1,59 @@
 <template>
   <div class="h-100">
-    <el-row type="flex" align="middle" justify="center" class="header">
+    <el-row class="header" type="flex" align="middle" justify="center">
       <img src="../assets/images/mhis-white.png" alt>
       <p>{{ info.hosptialName }}</p>
     </el-row>
-    <el-row type="flex" align="middle" class="main" :style="{ backgroundImage: `url(${bgUrl})` }">
+    <el-row class="main" type="flex" align="middle" :style="{ backgroundImage: `url(${bgUrl})` }">
       <el-form
         ref="data"
-        class="form"
         status-icon
         :model="data"
         :rules="rules"
         @keyup.enter.native="submitForm('data')"
       >
         <el-form-item class="mb-20">
-          <el-select v-model="local" class="w-250" @change="changeLanguage">
+          <el-select class="w-250" v-model="local" @change="changeLanguage">
             <el-option label="繁體中文" value="zh-tw"></el-option>
             <el-option label="English" value="en-us"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item class="mb-20" prop="userName">
-          <el-input v-model="data.userName" :placeholder="$t('Account')" class="w-250"></el-input>
+          <el-input class="w-250" v-model="data.userName" :placeholder="$t('Account')"></el-input>
         </el-form-item>
         <el-form-item class="mb-20" prop="password">
           <el-input
+            class="w-250"
             v-model="data.password"
             :placeholder="$t('Password')"
-            class="w-250"
             type="password"
           ></el-input>
         </el-form-item>
-        <el-row type="flex" align="middle" justify="space-between" class="mb-20">
+        <el-row class="mb-20" type="flex" align="middle" justify="space-between">
           <el-form-item class="mb-0" prop="captcha">
             <el-input
+              class="w-90"
               v-model="data.captcha"
               :placeholder="$t('Captcha')"
-              class="w-90"
               maxlength="4"
             ></el-input>
           </el-form-item>
           <img :src="captchaUrl" width="90" height="40" alt>
-          <el-button icon="el-icon-refresh" circle class="mhis-primary" @click="getCaptcha"></el-button>
+          <el-button class="mhis-primary" icon="el-icon-refresh" circle @click="getCaptcha"></el-button>
         </el-row>
-        <el-row type="flex" class="mb-20">
+        <el-row class="mb-20" type="flex">
           <el-checkbox v-model="data.remember">{{ $t('RememberMe') }}</el-checkbox>
         </el-row>
         <el-button class="w-250 mhis-primary" @click="submitForm('data')">{{ $t('Register') }}</el-button>
       </el-form>
       <div class="img-area">
         <img
-          :src="item.url"
-          alt
           width="150"
           height="150"
           v-for="(item, index) in info.logos"
           :key="index"
+          :src="item.url"
+          alt
         >
       </div>
     </el-row>
@@ -201,7 +200,7 @@ export default {
     },
   },
   created() {
-    this.$store.commit('DOMAIN');
+    this.$store.commit('VERIFY');
     this.getLanguage();
     this.getCaptcha();
     this.getInfo();

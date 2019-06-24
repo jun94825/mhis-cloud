@@ -85,5 +85,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/styles/components/sidebar.scss";
+@import "../assets/styles/helpers.scss";
+
+.menu {
+  border-right: unset;
+
+  &:not(.el-menu--collapse) {
+    width: 12.5rem;
+  }
+}
 </style>

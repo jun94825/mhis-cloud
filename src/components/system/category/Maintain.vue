@@ -19,7 +19,7 @@
           </el-table-column>
           <el-table-column width="100" align="right">
             <template slot-scope="scope">
-              <el-button size="mini">编辑</el-button>
+              <el-button size="mini" @click="toEditPage(scope.$index, scope.row)">编辑</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -57,24 +57,27 @@ export default {
   },
   methods: {
     getList() {
+      this.$store.commit('LOADING', true);
       const api = `http://${this.domain}.upis.info/Api/Category/List/${this.currentPage}`;
-      // const dataJS = JSON.stringify(this.search);
       this.$http.post(api, {})
         .then((res) => {
           this.data = res.data.content;
+          this.$store.commit('LOADING', false);
         });
-    },
-    handleCurrentChange(val) {
-      console.log(val);
     },
     toCreatePage() {
       this.$router.push({ name: 'CategoryCreate' });
     },
+    toEditPage(index, row) {
+      this.$router.push({ name: 'CategoryEdit', query: { key: row.id } });
+    },
+    handleCurrentChange(val) {
+      this.currentPage = val;
+      this.getList();
+    },
   },
   created() {
-    const token = localStorage.getItem('cookie');
-    this.$http.defaults.headers.common.Authorization = `Bearer ${token}`;
-    this.$store.commit('DOMAIN');
+    this.$store.commit('VERIFY');
     this.getList();
   },
 };
@@ -82,7 +85,7 @@ export default {
 
 
 <style lang="scss" scoped>
-@import "../../../assets/styles/components/system/role/sharing.scss";
+@import "../../../assets/styles/helpers.scss";
 
 .form-inside {
   display: flex;
