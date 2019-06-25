@@ -8,11 +8,11 @@
       <div class="form-inside">
         <div class="inside-item">
           <p>Category</p>
-          <el-select v-model="categoryValue" placeholder="請選擇">
+          <el-select v-model="data.categoryId" placeholder="請選擇">
             <el-option
               v-for="(item, index) in categoryList"
               :label="item.label"
-              :value="item.label"
+              :value="item.id"
               :key="index"
             ></el-option>
           </el-select>
@@ -20,7 +20,6 @@
         <div class="inside-item">
           <p>Parent Cat</p>
           <el-cascader
-            v-model="parentValue"
             :options="parentList"
             :props="{ expandTrigger: 'hover' }"
             @change="handleChange"
@@ -34,10 +33,6 @@
         <div class="inside-item">
           <p>Item Code</p>
           <el-input v-model="data.itemCode"></el-input>
-        </div>
-        <div class="inside-item">
-          <p>Parent Id</p>
-          <el-input v-model="data.parentId"></el-input>
         </div>
         <el-button type="primary" size="small" @click="create">送出</el-button>
       </div>
@@ -56,9 +51,7 @@ export default {
         categoryId: '',
       },
       parentList: [],
-      parentValue: [],
       categoryList: [],
-      categoryValue: '',
     };
   },
   computed: {
@@ -94,9 +87,13 @@ export default {
         });
     },
     create() {
+      // if (this.data.categoryId === '') {
+      //   this.$message({ type: 'warning', center: 'center', message: '請選擇分類' });
+      // } else {
       this.$store.commit('LOADING', true);
       const api = `http://${this.domain}.upis.info/Api/Category/Create`;
       const dataJS = JSON.stringify(this.data);
+      console.log(dataJS);
       this.$http.post(api, dataJS)
         .then((res) => {
           if (res.data.success === true) {
@@ -105,9 +102,18 @@ export default {
             this.$router.push({ name: 'Category' });
           }
         });
+      // }
     },
-    handleChange(value) {
-      console.log(value);
+    handleChange(v) {
+      // const res = this.parentList.filter(item => item.value === 'Job Title');
+      this.parentList.forEach((item) => {
+        item.children.forEach((i) => {
+          if (i.value === v[1]) {
+            this.data.parentId = i.id;
+          }
+        });
+        // item.children.filter(i => i.value === '123');
+      });
     },
     previousPage() {
       this.$router.go(-1);

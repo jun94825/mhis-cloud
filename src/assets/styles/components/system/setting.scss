@@ -52,6 +52,7 @@
 
       .row-p {
         width: 10rem;
+        min-width: 10rem;
         font-size: 0.875rem;
       }
 
@@ -89,8 +90,14 @@
       }
 
       .gmap-area {
-        @include size(40rem, 20rem);
+        @include size(62.5rem, 31.25rem);
         margin-left: 10rem;
+        min-width: 46.875rem;
+      }
+
+      .editor-area {
+        width: 62.5rem;
+        min-width: 46.875rem;
       }
     }
   }

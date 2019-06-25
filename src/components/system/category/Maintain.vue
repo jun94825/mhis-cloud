@@ -6,8 +6,25 @@
     </el-row>
     <div class="form">
       <div class="form-inside">
+        <el-row class="mb-8 mr-auto" type="flex">
+          <el-select size="small" v-model="search.parentId" placeholder="Category">
+            <el-option
+              v-for="(item, index) in selectList"
+              :key="index"
+              :label="item.label"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+          <el-input class="ml-16" size="small" v-model="search.keyword" placeholder="Keyword"></el-input>
+          <el-button class="ml-16" type="primary" size="small" @click="getList">搜尋</el-button>
+        </el-row>
         <el-table :data="data.list">
-          <el-table-column label="Code" width="125">
+          <el-table-column label="Category" width="200">
+            <template slot-scope="scope">
+              <span>{{ scope.row.parentName }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="Code" width="150">
             <template slot-scope="scope">
               <span>{{ scope.row.itemCode }}</span>
             </template>
@@ -41,11 +58,12 @@ export default {
   data() {
     return {
       data: {},
+      selectList: [],
       currentPage: 1,
       search: {
-        parentId: '',
+        parentId: null,
         keyword: '',
-        orderBy: '',
+        orderBy: 'id',
         orderByDesc: true,
       },
     };
@@ -59,10 +77,29 @@ export default {
     getList() {
       this.$store.commit('LOADING', true);
       const api = `http://${this.domain}.upis.info/Api/Category/List/${this.currentPage}`;
-      this.$http.post(api, {})
+      const dataJS = JSON.stringify(this.search);
+      this.$http.post(api, dataJS)
         .then((res) => {
-          this.data = res.data.content;
+          if (res.data.success) {
+            this.data = res.data.content;
+            this.$store.commit('LOADING', false);
+          }
+        })
+        .catch(() => {
+          this.$message({ type: 'warning', center: 'center', message: '連線逾時，請重新登入' });
           this.$store.commit('LOADING', false);
+          this.$router.push({ name: 'Login' });
+        });
+    },
+    getSelectList() {
+      const api = `http://${this.domain}.upis.info/Api/GetSelectList`;
+      const data = {
+        type: [''],
+      };
+      const dataJS = JSON.stringify(data);
+      this.$http.post(api, dataJS)
+        .then((res) => {
+          this.selectList = res.data.content.lists[0].list;
         });
     },
     toCreatePage() {
@@ -79,6 +116,7 @@ export default {
   created() {
     this.$store.commit('VERIFY');
     this.getList();
+    this.getSelectList();
   },
 };
 </script>

@@ -9,9 +9,9 @@
         <el-row class="mb-8 mr-auto" type="flex">
           <el-input
             v-model="search.keyword"
-            placeholder="Keyword"
-            size="small"
             @keyup.enter.native="getList"
+            size="small"
+            placeholder="Keyword"
           ></el-input>
           <el-button class="ml-16" type="primary" size="small" @click="getList">搜尋</el-button>
         </el-row>

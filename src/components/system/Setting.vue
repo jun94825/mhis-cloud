@@ -227,7 +227,11 @@
         <div class="item-row">
           <p class="row-p" style="margin-bottom: auto;">關於醫院</p>
           <!-- Vue2 Editor -->
-          <vue-editor :editorToolbar="customToolbar" v-model="data.hospitalAbout.value"></vue-editor>
+          <vue-editor
+            class="editor-area"
+            :editorToolbar="customToolbar"
+            v-model="data.hospitalAbout.value"
+          ></vue-editor>
           <!-- Vue2 Editor -->
         </div>
         <div class="item-row">
@@ -544,8 +548,6 @@ export default {
     },
   },
   created() {
-    // const token = localStorage.getItem('cookie');
-    // this.$http.defaults.headers.common.Authorization = `Bearer ${token}`;
     this.$store.commit('VERIFY');
     this.getList();
     this.geolocate();

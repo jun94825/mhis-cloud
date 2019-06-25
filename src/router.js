@@ -4,6 +4,7 @@ import Router from 'vue-router';
 Vue.use(Router);
 
 export default new Router({
+  mode: 'history',
   routes: [
     {
       /* 登入 */
@@ -51,6 +52,22 @@ export default new Router({
           name: 'RoleEdit',
           path: 'role/edit',
           component: () => import('./components/system/role/Edit.vue'),
+        },
+        {
+          /* Room */
+          name: 'Room',
+          path: 'room/maintain',
+          component: () => import('./components/system/room/Maintain.vue'),
+        },
+        {
+          name: 'RoomCreate',
+          path: 'room/create',
+          component: () => import('./components/system/room/Create.vue'),
+        },
+        {
+          name: 'RoomEdit',
+          path: 'room/edit',
+          component: () => import('./components/system/room/Edit.vue'),
         },
         {
           /* Category */
