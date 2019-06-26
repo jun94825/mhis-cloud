@@ -8,7 +8,7 @@ export default {
     return {
       currentPage: 1,
       search: {
-        dept: null,
+        dept: '',
         keyword: '',
         orderBy: 'id',
         orderByDesc: true,
@@ -47,7 +47,7 @@ export default {
   },
   created() {
     this.$store.commit('VERIFY');
-    this.create();
+    this.getList();
   },
 };
 </script>

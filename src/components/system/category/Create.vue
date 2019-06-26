@@ -83,36 +83,35 @@ export default {
           this.$store.commit('LOADING', false);
         })
         .catch(() => {
-          alert('連線逾時');
+          this.$message({ type: 'warning', center: 'center', message: '連線逾時，請重新登入' });
+          this.$store.commit('LOADING', false);
+          this.$router.push({ name: 'Login' });
         });
     },
     create() {
-      // if (this.data.categoryId === '') {
-      //   this.$message({ type: 'warning', center: 'center', message: '請選擇分類' });
-      // } else {
-      this.$store.commit('LOADING', true);
-      const api = `http://${this.domain}.upis.info/Api/Category/Create`;
-      const dataJS = JSON.stringify(this.data);
-      console.log(dataJS);
-      this.$http.post(api, dataJS)
-        .then((res) => {
-          if (res.data.success === true) {
-            this.$message({ type: 'success', center: true, message: '新增成功' });
-            this.$store.commit('LOADING', false);
-            this.$router.push({ name: 'Category' });
-          }
-        });
-      // }
+      if (this.data.desc === '' || this.data.itemCode === '') {
+        this.$message({ type: 'warning', center: 'center', message: 'Description 與 Item Code 為必填' });
+      } else {
+        this.$store.commit('LOADING', true);
+        const api = `http://${this.domain}.upis.info/Api/Category/Create`;
+        const dataJS = JSON.stringify(this.data);
+        this.$http.post(api, dataJS)
+          .then((res) => {
+            if (res.data.success === true) {
+              this.$message({ type: 'success', center: true, message: '新增成功' });
+              this.$store.commit('LOADING', false);
+              this.$router.push({ name: 'Category' });
+            }
+          });
+      }
     },
-    handleChange(v) {
-      // const res = this.parentList.filter(item => item.value === 'Job Title');
+    handleChange(value) {
       this.parentList.forEach((item) => {
         item.children.forEach((i) => {
-          if (i.value === v[1]) {
+          if (i.value === value[1]) {
             this.data.parentId = i.id;
           }
         });
-        // item.children.filter(i => i.value === '123');
       });
     },
     previousPage() {
@@ -124,7 +123,6 @@ export default {
   },
 };
 </script>
-
 
 <style lang="scss" scoped>
 @import "../../../assets/styles/helpers.scss";

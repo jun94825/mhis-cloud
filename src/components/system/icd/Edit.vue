@@ -22,7 +22,7 @@
           <el-checkbox v-model="data.alert">Reportable</el-checkbox>
         </div>
         <el-button type="primary" size="small" @click="editICD">修改</el-button>
-        <el-button type="danger" size="small" @click="delICD">刪除</el-button>
+        <!-- <el-button type="danger" size="small" @click="delICD">刪除</el-button> -->
       </div>
     </div>
   </div>
@@ -72,21 +72,21 @@ export default {
           }
         });
     },
-    delICD() {
-      this.$store.commit('LOADING', true);
-      const api = `http://${this.domain}.upis.info/Api/ICD10/Delete/${this.data.id}`;
-      this.$http.delete(api)
-        .then((res) => {
-          if (res.data.success === true) {
-            this.$message({
-              message: '刪除成功',
-              type: 'success',
-              center: true,
-            });
-            this.$router.push({ name: 'ICD10' });
-          }
-        });
-    },
+    // delICD() {
+    //   this.$store.commit('LOADING', true);
+    //   const api = `http://${this.domain}.upis.info/Api/ICD10/Delete/${this.data.id}`;
+    //   this.$http.delete(api)
+    //     .then((res) => {
+    //       if (res.data.success === true) {
+    //         this.$message({
+    //           message: '刪除成功',
+    //           type: 'success',
+    //           center: true,
+    //         });
+    //         this.$router.push({ name: 'ICD10' });
+    //       }
+    //     });
+    // },
     back() {
       this.$router.go(-1);
     },

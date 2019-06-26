@@ -17,6 +17,7 @@
           </el-select>
           <el-input class="ml-16" size="small" v-model="search.keyword" placeholder="Keyword"></el-input>
           <el-button class="ml-16" type="primary" size="small" @click="getList">搜尋</el-button>
+          <el-button class="ml-16" type="info" size="small" @click="getList('reset')">重置</el-button>
         </el-row>
         <el-table :data="data.list">
           <el-table-column label="Category" width="200">
@@ -34,9 +35,19 @@
               <span>{{ scope.row.desc }}</span>
             </template>
           </el-table-column>
-          <el-table-column width="100" align="right">
+          <el-table-column width="75" align="right">
             <template slot-scope="scope">
               <el-button size="mini" @click="toEditPage(scope.$index, scope.row)">编辑</el-button>
+            </template>
+          </el-table-column>
+          <el-table-column width="75" align="right">
+            <template slot-scope="scope">
+              <el-button
+                size="mini"
+                type="danger"
+                @click="del(scope.$index, scope.row)"
+                :disabled="scope.row.locked"
+              >刪除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -61,8 +72,8 @@ export default {
       selectList: [],
       currentPage: 1,
       search: {
-        parentId: null,
         keyword: '',
+        parentId: '',
         orderBy: 'id',
         orderByDesc: true,
       },
@@ -74,9 +85,45 @@ export default {
     },
   },
   methods: {
-    getList() {
+    del(index, item) {
+      let message = '';
+      if (item.childrenCnt === 0) {
+        message = '此操作將永久刪除該文件，是否繼續？';
+      } else {
+        message = `此文件包含 ${item.childrenCnt} 個子項目，如確定刪除，關聯將被斷開，是否繼續？`;
+      }
+      this.$confirm(message, '提示', {
+        type: 'warning',
+        confirmButtonText: '確定',
+        cancelButtonText: '取消',
+      }).then(() => {
+        this.$store.commit('LOADING', true);
+        const api = `http://${this.domain}.upis.info/Api/Category/Delete/${item.id}`;
+        this.$http.delete(api)
+          .then((res) => {
+            if (res.data.success) {
+              this.$store.commit('LOADING', false);
+              this.$message({
+                type: 'success',
+                message: '刪除成功!',
+              });
+              this.getList();
+            }
+          });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消刪除',
+        });
+      });
+    },
+    getList(value) {
       this.$store.commit('LOADING', true);
       const api = `http://${this.domain}.upis.info/Api/Category/List/${this.currentPage}`;
+      if (value === 'reset') {
+        this.search.keyword = '';
+        this.search.parentId = '';
+      }
       const dataJS = JSON.stringify(this.search);
       this.$http.post(api, dataJS)
         .then((res) => {

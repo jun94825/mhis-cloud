@@ -37,9 +37,14 @@
               <i class="el-icon-close" v-if="!scope.row.alert"></i>
             </template>
           </el-table-column>
-          <el-table-column width="100" align="right">
+          <el-table-column width="75" align="right">
             <template slot-scope="scope">
               <el-button size="mini" @click="toEditPage(scope.$index, scope.row)">编辑</el-button>
+            </template>
+          </el-table-column>
+          <el-table-column width="75" align="right">
+            <template slot-scope="scope">
+              <el-button size="mini" type="danger" @click="del(scope.$index, scope.row)">刪除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -75,6 +80,45 @@ export default {
     },
   },
   methods: {
+    del(index, item) {
+      this.$confirm('此操作將永久刪除該文件，是否繼續？', '提示', {
+        type: 'warning',
+        confirmButtonText: '確定',
+        cancelButtonText: '取消',
+      }).then(() => {
+        this.$store.commit('LOADING', true);
+        const api = `http://${this.domain}.upis.info/Api/ICD10/Delete/${item.id}`;
+        this.$http.delete(api)
+          .then((res) => {
+            if (res.data.success) {
+              this.$store.commit('LOADING', false);
+              this.$message({
+                type: 'success',
+                message: '刪除成功!',
+              });
+              this.getList();
+            }
+          });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消刪除',
+        });
+      });
+      // const api = `http://${this.domain}.upis.info/Api/ICD10/Delete/${item.id}`;
+      // this.$http.delete(api)
+      //   .then((res) => {
+      //     if (res.data.success === true) {
+      //       this.$store.commit('LOADING', false);
+      //       this.$message({
+      //         message: '刪除成功',
+      //         type: 'success',
+      //         center: true,
+      //       });
+      //       this.getList();
+      //     }
+      //   });
+    },
     getList() {
       this.$store.commit('LOADING', true);
       const api = `http://${this.domain}.upis.info/Api/ICD10/List/${this.currentPage}`;

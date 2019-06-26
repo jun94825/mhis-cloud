@@ -12,15 +12,22 @@
             :options="parentList"
             :props="{ expandTrigger: 'hover' }"
             @change="handleChange"
-            placeholder="請選擇"
+            :placeholder="placeholder"
           ></el-cascader>
+        </div>
+        <div class="inside-item">
+          <p>Category</p>
+          <el-tag>{{ data.category }}</el-tag>
+        </div>
+        <div class="inside-item">
+          <p>Code</p>
+          <el-tag>{{ data.itemCode }}</el-tag>
         </div>
         <div class="inside-item">
           <p>Description</p>
           <el-input v-model="data.desc" :placeholder="data.desc"></el-input>
         </div>
         <el-button type="primary" size="small" @click="edit">修改</el-button>
-        <el-button type="danger" size="small" @click="del">刪除</el-button>
       </div>
     </div>
   </div>
@@ -33,6 +40,7 @@ export default {
       id: '',
       data: {},
       parentList: [],
+      placeholder: '',
     };
   },
   computed: {
@@ -41,18 +49,6 @@ export default {
     },
   },
   methods: {
-    del() {
-      this.$store.commit('LOADING', true);
-      const api = `http://${this.domain}.upis.info/Api/Category/Delete/${this.id}`;
-      this.$http.delete(api)
-        .then((res) => {
-          if (res.data.success) {
-            this.$message({ type: 'success', center: true, message: '刪除成功' });
-            this.$store.commit('LOADING', false);
-            this.$router.push({ name: 'Category' });
-          }
-        });
-    },
     edit() {
       this.$store.commit('LOADING', true);
       const api = `http://${this.domain}.upis.info/Api/Category/Edit`;
@@ -73,7 +69,6 @@ export default {
       const api = `http://${this.domain}.upis.info/Api/Category/Edit/${this.id}`;
       this.$http.get(api)
         .then((res) => {
-          console.log(res);
           if (res.data.success) {
             this.data = res.data.content;
           }
@@ -102,6 +97,24 @@ export default {
               });
             });
             this.parentList = r;
+            /* ===== */
+            if (this.data.parentId === null) {
+              this.placeholder = '請選擇';
+            } else {
+              let mesOne = '';
+              let mesTwo = '';
+              this.parentList.forEach((item) => {
+                if (this.data.parentCategoryId === item.id) {
+                  mesOne = item.label;
+                }
+                item.children.forEach((i) => {
+                  if (this.data.parentId === i.id) {
+                    mesTwo = i.label;
+                  }
+                });
+              });
+              this.placeholder = `${mesOne} / ${mesTwo}`;
+            }
           }
           this.$store.commit('LOADING', false);
         })
@@ -133,7 +146,6 @@ export default {
   },
 };
 </script>
-
 
 <style lang="scss" scoped>
 @import "../../../assets/styles/helpers.scss";

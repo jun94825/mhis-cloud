@@ -37,8 +37,8 @@ export default new Router({
       path: '/system',
       component: () => import('./views/System.vue'),
       children: [
+        /* Role */
         {
-          /* Role */
           name: 'RoleManagement',
           path: 'role/maintain',
           component: () => import('./components/system/role/Maintain.vue'),
@@ -53,8 +53,8 @@ export default new Router({
           path: 'role/edit',
           component: () => import('./components/system/role/Edit.vue'),
         },
+        /* Room */
         {
-          /* Room */
           name: 'Room',
           path: 'room/maintain',
           component: () => import('./components/system/room/Maintain.vue'),
@@ -69,8 +69,24 @@ export default new Router({
           path: 'room/edit',
           component: () => import('./components/system/room/Edit.vue'),
         },
+        /* Department */
         {
-          /* Category */
+          name: 'Department',
+          path: 'dept/maintain',
+          component: () => import('./components/system/department/Maintain.vue'),
+        },
+        {
+          name: 'DepartmentCreate',
+          path: 'dept/create',
+          component: () => import('./components/system/department/Create.vue'),
+        },
+        {
+          name: 'DepartmentEdit',
+          path: 'dept/edit',
+          component: () => import('./components/system/department/Edit.vue'),
+        },
+        /* Category */
+        {
           name: 'Category',
           path: 'category/maintain',
           component: () => import('./components/system/category/Maintain.vue'),
@@ -85,8 +101,8 @@ export default new Router({
           path: 'category/edit',
           component: () => import('./components/system/category/Edit.vue'),
         },
+        /* ICD10 */
         {
-          /* ICD10 */
           name: 'ICD10',
           path: 'icd/maintain',
           component: () => import('./components/system/icd/Maintain.vue'),
@@ -101,8 +117,8 @@ export default new Router({
           path: 'icd/edit',
           component: () => import('./components/system/icd/Edit.vue'),
         },
+        /* Setting */
         {
-          /* Setting */
           name: 'Setting',
           path: 'setting',
           component: () => import('./components/system/Setting.vue'),
