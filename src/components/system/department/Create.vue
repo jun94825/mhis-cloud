@@ -7,7 +7,7 @@
     <div class="form">
       <div class="form-inside">
         <div class="inside-item">
-          <p>Category</p>
+          <p>Category Name</p>
           <el-select v-model="data.parentId" placeholder="請選擇">
             <el-option
               v-for="(item, index) in selectList"
@@ -18,11 +18,11 @@
           </el-select>
         </div>
         <div class="inside-item">
-          <p>Department No</p>
+          <p class="required">Department No</p>
           <el-input v-model="data.deptNo"></el-input>
         </div>
         <div class="inside-item">
-          <p>Department Name</p>
+          <p class="required">Department Name</p>
           <el-input v-model="data.deptName"></el-input>
         </div>
         <div class="inside-item">
@@ -70,15 +70,14 @@ export default {
         this.$store.commit('LOADING', true);
         const api = `http://${this.domain}.upis.info/Api/Dept/Create`;
         const dataJS = JSON.stringify(this.data);
-        this.$http.post(api, dataJS)
-          .then((res) => {
-            console.log(res);
-            if (res.data.success === true) {
-              this.$message({ type: 'success', center: true, message: '新增成功' });
-              this.$store.commit('LOADING', false);
-              this.$router.push({ name: 'Department' });
-            }
-          });
+        this.$http.post(api, dataJS).then((res) => {
+          console.log(res);
+          if (res.data.success === true) {
+            this.$message({ type: 'success', center: true, message: '新增成功' });
+            this.$store.commit('LOADING', false);
+            this.$router.push({ name: 'Department' });
+          }
+        });
       }
     },
     previousPage() {

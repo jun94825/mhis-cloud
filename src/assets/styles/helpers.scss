@@ -107,6 +107,13 @@ $text-light: #777;
   position: relative; // setting
 }
 
+.required::before {
+  content: '*';
+  color: red;
+  margin-right: 0.5rem;
+  display: inline-block;
+}
+
 /*******************
  ***   Sharing   ***
  *******************/

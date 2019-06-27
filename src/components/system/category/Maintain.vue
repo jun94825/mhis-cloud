@@ -69,14 +69,14 @@ export default {
   data() {
     return {
       data: {},
-      selectList: [],
-      currentPage: 1,
       search: {
         keyword: '',
         parentId: '',
         orderBy: 'id',
         orderByDesc: true,
       },
+      currentPage: 1,
+      selectList: [],
     };
   },
   computed: {
@@ -85,12 +85,46 @@ export default {
     },
   },
   methods: {
-    del(index, item) {
+    getList(val = false) {
+      this.$store.commit('LOADING', true);
+      const api = `http://${this.domain}.upis.info/Api/Category/List/${this.currentPage}`;
+      if (val === 'reset') {
+        this.search.keyword = '';
+        this.search.parentId = '';
+      }
+      const searchJS = JSON.stringify(this.search);
+      this.$http.post(api, searchJS).then((res) => {
+        if (res.data.success) {
+          this.data = res.data.content;
+          this.getSelectList();
+          this.$store.commit('LOADING', false);
+          if (val) {
+            this.$message({ type: 'success', center: 'center', message: '刪除成功!' });
+          }
+        }
+      }).catch(() => {
+        this.$message({ type: 'warning', center: 'center', message: '連線逾時，請重新登入' });
+        this.$store.commit('LOADING', false);
+        this.$router.push({ name: 'Login' });
+      });
+    },
+    getSelectList() {
+      const api = `http://${this.domain}.upis.info/Api/GetSelectList`;
+      const data = {
+        type: [],
+      };
+      const dataJS = JSON.stringify(data);
+      this.$http.post(api, dataJS)
+        .then((res) => {
+          this.selectList = res.data.content.lists[0].list;
+        });
+    },
+    del(index, row) {
       let message = '';
-      if (item.childrenCnt === 0) {
-        message = '此操作將永久刪除該文件，是否繼續？';
+      if (row.childrenCnt > 0) {
+        message = `此文件包含 ${row.childrenCnt} 個子項目，如確定刪除，關聯將被斷開，是否繼續？`;
       } else {
-        message = `此文件包含 ${item.childrenCnt} 個子項目，如確定刪除，關聯將被斷開，是否繼續？`;
+        message = '此操作將永久刪除該文件，是否繼續？';
       }
       this.$confirm(message, '提示', {
         type: 'warning',
@@ -98,56 +132,16 @@ export default {
         cancelButtonText: '取消',
       }).then(() => {
         this.$store.commit('LOADING', true);
-        const api = `http://${this.domain}.upis.info/Api/Category/Delete/${item.id}`;
-        this.$http.delete(api)
-          .then((res) => {
-            if (res.data.success) {
-              this.$store.commit('LOADING', false);
-              this.$message({
-                type: 'success',
-                message: '刪除成功!',
-              });
-              this.getList();
-            }
-          });
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消刪除',
-        });
-      });
-    },
-    getList(value) {
-      this.$store.commit('LOADING', true);
-      const api = `http://${this.domain}.upis.info/Api/Category/List/${this.currentPage}`;
-      if (value === 'reset') {
-        this.search.keyword = '';
-        this.search.parentId = '';
-      }
-      const dataJS = JSON.stringify(this.search);
-      this.$http.post(api, dataJS)
-        .then((res) => {
+        const api = `http://${this.domain}.upis.info/Api/Category/Delete/${row.id}`;
+        this.$http.delete(api).then((res) => {
           if (res.data.success) {
-            this.data = res.data.content;
             this.$store.commit('LOADING', false);
+            this.getList(true);
           }
-        })
-        .catch(() => {
-          this.$message({ type: 'warning', center: 'center', message: '連線逾時，請重新登入' });
-          this.$store.commit('LOADING', false);
-          this.$router.push({ name: 'Login' });
         });
-    },
-    getSelectList() {
-      const api = `http://${this.domain}.upis.info/Api/GetSelectList`;
-      const data = {
-        type: [''],
-      };
-      const dataJS = JSON.stringify(data);
-      this.$http.post(api, dataJS)
-        .then((res) => {
-          this.selectList = res.data.content.lists[0].list;
-        });
+      }).catch(() => {
+        this.$message({ type: 'info', center: 'center', message: '已取消刪除' });
+      });
     },
     toCreatePage() {
       this.$router.push({ name: 'CategoryCreate' });
@@ -163,7 +157,6 @@ export default {
   created() {
     this.$store.commit('VERIFY');
     this.getList();
-    this.getSelectList();
   },
 };
 </script>

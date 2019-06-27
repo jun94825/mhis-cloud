@@ -16,13 +16,12 @@
         </div>
         <div class="inside-item">
           <p>Type</p>
-          <el-tag>{{ data.type }}</el-tag>
+          <el-tag type="info">{{ data.type }}</el-tag>
         </div>
         <div class="inside-item">
           <el-checkbox v-model="data.alert">Reportable</el-checkbox>
         </div>
         <el-button type="primary" size="small" @click="editICD">修改</el-button>
-        <!-- <el-button type="danger" size="small" @click="delICD">刪除</el-button> -->
       </div>
     </div>
   </div>
@@ -43,7 +42,7 @@ export default {
     },
   },
   methods: {
-    getICD() {
+    getCurrentICD() {
       this.$store.commit('LOADING', true);
       const api = `http://${this.domain}.upis.info/Api/ICD10/Edit/${this.id}`;
       this.$http.get(api)
@@ -72,32 +71,15 @@ export default {
           }
         });
     },
-    // delICD() {
-    //   this.$store.commit('LOADING', true);
-    //   const api = `http://${this.domain}.upis.info/Api/ICD10/Delete/${this.data.id}`;
-    //   this.$http.delete(api)
-    //     .then((res) => {
-    //       if (res.data.success === true) {
-    //         this.$message({
-    //           message: '刪除成功',
-    //           type: 'success',
-    //           center: true,
-    //         });
-    //         this.$router.push({ name: 'ICD10' });
-    //       }
-    //     });
-    // },
     back() {
       this.$router.go(-1);
     },
   },
   created() {
-    const token = localStorage.getItem('cookie');
-    this.$http.defaults.headers.common.Authorization = `Bearer ${token}`;
     const { href } = window.location;
     this.id = href.substring(href.indexOf('=') + 1, href.length);
-    this.$store.commit('DOMAIN');
-    this.getICD();
+    this.$store.commit('VERIFY');
+    this.getCurrentICD();
   },
 };
 </script>

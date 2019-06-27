@@ -1,22 +1,17 @@
 <template>
   <div>
     <el-row class="sys-header" type="flex" align="middle" justify="space-between">
-      <p>ICD 10 設定</p>
+      <p>ICD10 設定</p>
       <el-button size="mini" type="success" @click="toCreatePage">新增</el-button>
     </el-row>
     <el-row class="form">
       <div class="form-inside">
         <el-row class="mb-8 mr-auto" type="flex">
-          <el-input
-            v-model="search.keyword"
-            @keyup.enter.native="getList"
-            size="small"
-            placeholder="Keyword"
-          ></el-input>
+          <el-input size="small" v-model="search.keyword" placeholder="Keyword"></el-input>
           <el-button class="ml-16" type="primary" size="small" @click="getList">搜尋</el-button>
         </el-row>
-        <el-table id="table" :data="data.list">
-          <el-table-column label="ICD 10 Code" width="125">
+        <el-table :data="data.list">
+          <el-table-column label="ICD10 Code" width="150">
             <template slot-scope="scope">
               <el-tag size="medium">{{ scope.row.icd10Code }}</el-tag>
             </template>
@@ -26,7 +21,7 @@
               <span>{{ scope.row.stdName }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="Type" width="100" align="center">
+          <el-table-column label="Type" width="125" align="center">
             <template slot-scope="scope">
               <el-tag size="medium" type="info">{{ scope.row.type }}</el-tag>
             </template>
@@ -37,9 +32,9 @@
               <i class="el-icon-close" v-if="!scope.row.alert"></i>
             </template>
           </el-table-column>
-          <el-table-column width="75" align="right">
+          <el-table-column width="100" align="right">
             <template slot-scope="scope">
-              <el-button size="mini" @click="toEditPage(scope.$index, scope.row)">编辑</el-button>
+              <el-button size="mini" @click="toEditPage(scope.$index, scope.row)">編輯</el-button>
             </template>
           </el-table-column>
           <el-table-column width="75" align="right">
@@ -80,54 +75,37 @@ export default {
     },
   },
   methods: {
-    del(index, item) {
+    getList(val = false) {
+      this.$store.commit('LOADING', true);
+      const api = `http://${this.domain}.upis.info/Api/ICD10/List/${this.currentPage}`;
+      const searchJS = JSON.stringify(this.search);
+      this.$http.post(api, searchJS).then((res) => {
+        if (res.data.success) {
+          this.data = res.data.content;
+          this.$store.commit('LOADING', false);
+          if (val) {
+            this.$message({ type: 'success', center: 'center', message: '刪除成功!' });
+          }
+        }
+      });
+    },
+    del(index, row) {
       this.$confirm('此操作將永久刪除該文件，是否繼續？', '提示', {
         type: 'warning',
         confirmButtonText: '確定',
         cancelButtonText: '取消',
       }).then(() => {
         this.$store.commit('LOADING', true);
-        const api = `http://${this.domain}.upis.info/Api/ICD10/Delete/${item.id}`;
-        this.$http.delete(api)
-          .then((res) => {
-            if (res.data.success) {
-              this.$store.commit('LOADING', false);
-              this.$message({
-                type: 'success',
-                message: '刪除成功!',
-              });
-              this.getList();
-            }
-          });
+        const api = `http://${this.domain}.upis.info/Api/ICD10/Delete/${row.id}`;
+        this.$http.delete(api).then((res) => {
+          if (res.data.success) {
+            this.$store.commit('LOADING', false);
+            this.getList(true);
+          }
+        });
       }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消刪除',
-        });
+        this.$message({ type: 'info', center: 'center', message: '已取消刪除' });
       });
-      // const api = `http://${this.domain}.upis.info/Api/ICD10/Delete/${item.id}`;
-      // this.$http.delete(api)
-      //   .then((res) => {
-      //     if (res.data.success === true) {
-      //       this.$store.commit('LOADING', false);
-      //       this.$message({
-      //         message: '刪除成功',
-      //         type: 'success',
-      //         center: true,
-      //       });
-      //       this.getList();
-      //     }
-      //   });
-    },
-    getList() {
-      this.$store.commit('LOADING', true);
-      const api = `http://${this.domain}.upis.info/Api/ICD10/List/${this.currentPage}`;
-      const dataJS = JSON.stringify(this.search);
-      this.$http.post(api, dataJS)
-        .then((res) => {
-          this.data = res.data.content;
-          this.$store.commit('LOADING', false);
-        });
     },
     toCreatePage() {
       this.$router.push({ name: 'ICD10Create' });
@@ -150,20 +128,16 @@ export default {
 <style lang="scss" scoped>
 @import "../../../assets/styles/helpers.scss";
 
-// #table {
-//   width: 100%;
-// }
-
 .el-icon-check {
+  color: #67c23a;
   font-size: 1.25rem;
   font-weight: bold;
-  color: #67c23a;
 }
 
 .el-icon-close {
+  color: #f56c6c;
   font-size: 1.25rem;
   font-weight: bold;
-  color: #f56c6c;
 }
 
 .form-inside {

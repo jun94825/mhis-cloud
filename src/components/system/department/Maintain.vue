@@ -84,7 +84,7 @@ export default {
       this.$router.push({ name: 'DepartmentEdit', query: { key: row.id } });
     },
     del(index, item) {
-      this.$confirm('此操作將刪除該文件，是否繼續？', '提示', {
+      this.$confirm('此操作將永久刪除該文件，是否繼續？', '提示', {
         type: 'warning',
         confirmButtonText: '確定',
         cancelButtonText: '取消',
