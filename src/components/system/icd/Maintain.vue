@@ -9,6 +9,7 @@
         <el-row class="mb-8 mr-auto" type="flex">
           <el-input size="small" v-model="search.keyword" placeholder="Keyword"></el-input>
           <el-button class="ml-16" type="primary" size="small" @click="getList">搜尋</el-button>
+          <el-button class="ml-16" type="info" size="small" @click="getList('reset')">重置</el-button>
         </el-row>
         <el-table :data="data.list">
           <el-table-column label="ICD10 Code" width="150">
@@ -49,6 +50,7 @@
           layout="prev, pager, next"
           :total="data.totalRecordCnt"
           :page-size="data.pageSize"
+          :current-page="data.page"
           @current-change="handleCurrentChange"
         ></el-pagination>
       </div>
@@ -75,15 +77,19 @@ export default {
     },
   },
   methods: {
-    getList(val = false) {
+    getList(val) {
       this.$store.commit('LOADING', true);
+      if (val === 'reset') {
+        this.search.keyword = '';
+        this.currentPage = 1;
+      }
       const api = `http://${this.domain}.upis.info/Api/ICD10/List/${this.currentPage}`;
       const searchJS = JSON.stringify(this.search);
       this.$http.post(api, searchJS).then((res) => {
         if (res.data.success) {
           this.data = res.data.content;
           this.$store.commit('LOADING', false);
-          if (val) {
+          if (val === 'del') {
             this.$message({ type: 'success', center: 'center', message: '刪除成功!' });
           }
         }
@@ -100,22 +106,22 @@ export default {
         this.$http.delete(api).then((res) => {
           if (res.data.success) {
             this.$store.commit('LOADING', false);
-            this.getList(true);
+            this.getList('del');
           }
         });
       }).catch(() => {
         this.$message({ type: 'info', center: 'center', message: '已取消刪除' });
       });
     },
+    handleCurrentChange(val) {
+      this.currentPage = val;
+      this.getList();
+    },
     toCreatePage() {
       this.$router.push({ name: 'ICD10Create' });
     },
     toEditPage(index, row) {
       this.$router.push({ name: 'ICD10Edit', query: { key: row.id } });
-    },
-    handleCurrentChange(val) {
-      this.currentPage = val;
-      this.getList();
     },
   },
   created() {

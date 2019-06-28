@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row class="sys-header" type="flex" align="middle">
-      <i class="el-icon-back" @click="back"></i>
+      <i class="el-icon-back" @click="previousPage"></i>
       <p>編輯 ICD10</p>
     </el-row>
     <div class="form">
@@ -21,7 +21,7 @@
         <div class="inside-item">
           <el-checkbox v-model="data.alert">Reportable</el-checkbox>
         </div>
-        <el-button type="primary" size="small" @click="editICD">修改</el-button>
+        <el-button type="primary" size="small" @click="edit">修改</el-button>
       </div>
     </div>
   </div>
@@ -45,15 +45,14 @@ export default {
     getCurrentICD() {
       this.$store.commit('LOADING', true);
       const api = `http://${this.domain}.upis.info/Api/ICD10/Edit/${this.id}`;
-      this.$http.get(api)
-        .then((res) => {
-          if (res.data.success === true) {
-            this.data = res.data.content;
-            this.$store.commit('LOADING', false);
-          }
-        });
+      this.$http.get(api).then((res) => {
+        if (res.data.success) {
+          this.data = res.data.content;
+          this.$store.commit('LOADING', false);
+        }
+      });
     },
-    editICD() {
+    edit() {
       this.$store.commit('LOADING', true);
       const api = `http://${this.domain}.upis.info/Api/ICD10/Edit`;
       this.data.code = this.data.icd10Code;
@@ -71,7 +70,7 @@ export default {
           }
         });
     },
-    back() {
+    previousPage() {
       this.$router.go(-1);
     },
   },

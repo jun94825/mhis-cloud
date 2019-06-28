@@ -6,6 +6,11 @@
     </el-row>
     <div class="form">
       <div class="form-inside">
+        <el-row class="mb-8 mr-auto" type="flex">
+          <el-input size="small" v-model="search.keyword" placeholder="Keyword"></el-input>
+          <el-button class="ml-16" type="primary" size="small" @click="getList">搜尋</el-button>
+          <el-button class="ml-16" type="info" size="small" @click="getList('reset')">重置</el-button>
+        </el-row>
         <el-table :data="data.list">
           <el-table-column label="Room No" width="175">
             <template slot-scope="scope">
@@ -19,7 +24,7 @@
           </el-table-column>
           <el-table-column width="75" align="right">
             <template slot-scope="scope">
-              <el-button size="mini" @click="toEditPage(scope.$index, scope.row)">编辑</el-button>
+              <el-button size="mini" @click="toEditPage(scope.$index, scope.row)">編輯</el-button>
             </template>
           </el-table-column>
           <el-table-column width="75" align="right">
@@ -34,6 +39,7 @@
           layout="prev, pager, next"
           :total="data.totalRecordCnt"
           :page-size="data.pageSize"
+          :current-page="data.page"
           @current-change="handleCurrentChange"
         ></el-pagination>
       </div>
@@ -46,13 +52,13 @@ export default {
   data() {
     return {
       data: {},
-      currentPage: 1,
       search: {
         dept: '',
         keyword: '',
         orderBy: 'id',
         orderByDesc: true,
       },
+      currentPage: 1,
     };
   },
   computed: {
@@ -61,15 +67,23 @@ export default {
     },
   },
   methods: {
-    getList() {
+    getList(val) {
       this.$store.commit('LOADING', true);
+      if (val === 'reset') {
+        this.search.keyword = '';
+        this.currentPage = 1;
+      }
       const api = `http://${this.domain}.upis.info/Api/Room/List/${this.currentPage}`;
       const dataJS = JSON.stringify(this.search);
-      this.$http.post(api, dataJS)
-        .then((res) => {
+      this.$http.post(api, dataJS).then((res) => {
+        if (res.data.success) {
           this.data = res.data.content;
           this.$store.commit('LOADING', false);
-        });
+          if (val === 'del') {
+            this.$message({ type: 'success', center: 'center', message: '刪除成功!' });
+          }
+        }
+      });
     },
     del(index, row) {
       this.$confirm('此操作將永久刪除該文件，是否繼續？', '提示', {
@@ -79,36 +93,25 @@ export default {
       }).then(() => {
         this.$store.commit('LOADING', true);
         const api = `http://${this.domain}.upis.info/Api/Room/Delete/${row.id}`;
-        this.$http.delete(api)
-          .then((res) => {
-            if (res.data.success) {
-              this.$store.commit('LOADING', false);
-              this.$message({
-                type: 'success',
-                message: '刪除成功!',
-              });
-              this.getList();
-            }
-          });
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消刪除',
+        this.$http.delete(api).then((res) => {
+          if (res.data.success) {
+            this.$store.commit('LOADING', false);
+            this.getList('del');
+          }
         });
+      }).catch(() => {
+        this.$message({ type: 'info', center: 'center', message: '已取消刪除' });
       });
+    },
+    handleCurrentChange(val) {
+      this.currentPage = val;
+      this.getList();
     },
     toCreatePage() {
       this.$router.push({ name: 'RoomCreate' });
     },
     toEditPage(index, row) {
       this.$router.push({ name: 'RoomEdit', query: { key: row.id } });
-    },
-    back() {
-      this.$router.go(-1);
-    },
-    handleCurrentChange(val) {
-      this.currentPage = val;
-      this.getList();
     },
   },
   created() {

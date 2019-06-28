@@ -57,6 +57,7 @@
           layout="prev, pager, next"
           :total="data.totalRecordCnt"
           :page-size="data.pageSize"
+          :current-page="data.page"
           @current-change="handleCurrentChange"
         ></el-pagination>
       </div>
@@ -85,12 +86,13 @@ export default {
     },
   },
   methods: {
-    getList(val = false) {
+    getList(val) {
       this.$store.commit('LOADING', true);
       const api = `http://${this.domain}.upis.info/Api/Category/List/${this.currentPage}`;
       if (val === 'reset') {
         this.search.keyword = '';
         this.search.parentId = '';
+        this.currentPage = 1;
       }
       const searchJS = JSON.stringify(this.search);
       this.$http.post(api, searchJS).then((res) => {
@@ -98,7 +100,7 @@ export default {
           this.data = res.data.content;
           this.getSelectList();
           this.$store.commit('LOADING', false);
-          if (val) {
+          if (val === 'del') {
             this.$message({ type: 'success', center: 'center', message: '刪除成功!' });
           }
         }
@@ -143,15 +145,15 @@ export default {
         this.$message({ type: 'info', center: 'center', message: '已取消刪除' });
       });
     },
+    handleCurrentChange(val) {
+      this.currentPage = val;
+      this.getList();
+    },
     toCreatePage() {
       this.$router.push({ name: 'CategoryCreate' });
     },
     toEditPage(index, row) {
       this.$router.push({ name: 'CategoryEdit', query: { key: row.id } });
-    },
-    handleCurrentChange(val) {
-      this.currentPage = val;
-      this.getList();
     },
   },
   created() {
