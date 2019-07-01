@@ -29,7 +29,7 @@
           </el-table-column>
           <el-table-column width="75" align="right">
             <template slot-scope="scope">
-              <el-button size="mini" @click="toEditPage(scope.$index, scope.row)">编辑</el-button>
+              <el-button size="mini" @click="toEditPage(scope.$index, scope.row)">編輯</el-button>
             </template>
           </el-table-column>
           <el-table-column width="75" align="right">

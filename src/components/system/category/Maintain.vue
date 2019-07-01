@@ -138,7 +138,7 @@ export default {
         this.$http.delete(api).then((res) => {
           if (res.data.success) {
             this.$store.commit('LOADING', false);
-            this.getList(true);
+            this.getList('del');
           }
         });
       }).catch(() => {

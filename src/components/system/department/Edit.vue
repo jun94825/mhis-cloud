@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row class="sys-header" type="flex" align="middle">
-      <i class="el-icon-back" @click="back"></i>
+      <i class="el-icon-back" @click="previousPage"></i>
       <p>編輯科別</p>
     </el-row>
     <div class="form">
@@ -44,7 +44,12 @@ export default {
     getCurrentDept() {
       const api = `http://${this.domain}.upis.info/Api/Dept/Edit/${this.id}`;
       this.$http.get(api).then((res) => {
-        this.data = res.data.content;
+        if (res.data.success) {
+          if (res.data.content.parentDept === '') {
+            res.data.content.parentDept = '一';
+          }
+          this.data = res.data.content;
+        }
       });
     },
     edit() {
@@ -56,16 +61,14 @@ export default {
         canBeReg: this.data.canBeReg,
       };
       const dataJS = JSON.stringify(data);
-      this.$http.post(api, dataJS)
-        .then((res) => {
-          if (res.data.success) {
-            this.$message({ type: 'success', center: true, message: '修改成功' });
-            this.$store.commit('LOADING', false);
-            this.$router.push({ name: 'Department' });
-          }
-        });
+      this.$http.post(api, dataJS).then((res) => {
+        if (res.data.success) {
+          this.$message({ type: 'success', center: true, message: '修改成功' });
+          this.$router.push({ name: 'Department' });
+        }
+      });
     },
-    back() {
+    previousPage() {
       this.$router.go(-1);
     },
   },

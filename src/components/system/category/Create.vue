@@ -27,12 +27,12 @@
           ></el-cascader>
         </div>
         <div class="inside-item">
-          <p>Description</p>
-          <el-input v-model="data.desc"></el-input>
+          <p class="required">Item Code</p>
+          <el-input v-model="data.itemCode"></el-input>
         </div>
         <div class="inside-item">
-          <p>Item Code</p>
-          <el-input v-model="data.itemCode"></el-input>
+          <p class="required">Description</p>
+          <el-input v-model="data.desc"></el-input>
         </div>
         <el-button type="primary" size="small" @click="create">送出</el-button>
       </div>
@@ -63,46 +63,38 @@ export default {
     getOptions() {
       this.$store.commit('LOADING', true);
       const api = `http://${this.domain}.upis.info/Api/Category/Options`;
-      this.$http.get(api)
-        .then((res) => {
-          if (res.data.success === true) {
-            const r = res.data.content.lists[0].list;
-            this.categoryList = r;
-            r.forEach((item) => {
-              const i = item;
-              i.value = i.label;
-              i.children = i.list;
-              delete i.list;
-              i.children.forEach((value) => {
-                const v = value;
-                v.value = v.label;
-              });
+      this.$http.get(api).then((res) => {
+        if (res.data.success) {
+          const r = res.data.content.lists[0].list;
+          this.categoryList = r;
+          r.forEach((item) => {
+            const i = item;
+            i.value = i.label;
+            i.children = i.list;
+            delete i.list;
+            i.children.forEach((value) => {
+              const v = value;
+              v.value = v.label;
             });
-            this.parentList = r;
-          }
-          this.$store.commit('LOADING', false);
-        })
-        .catch(() => {
-          this.$message({ type: 'warning', center: 'center', message: '連線逾時，請重新登入' });
-          this.$store.commit('LOADING', false);
-          this.$router.push({ name: 'Login' });
-        });
+          });
+          this.parentList = r;
+        }
+        this.$store.commit('LOADING', false);
+      });
     },
     create() {
       if (this.data.desc === '' || this.data.itemCode === '') {
-        this.$message({ type: 'warning', center: 'center', message: 'Description 與 Item Code 為必填' });
+        this.$message({ type: 'warning', center: 'center', message: 'Item Code 與 Description 為必填' });
       } else {
         this.$store.commit('LOADING', true);
         const api = `http://${this.domain}.upis.info/Api/Category/Create`;
         const dataJS = JSON.stringify(this.data);
-        this.$http.post(api, dataJS)
-          .then((res) => {
-            if (res.data.success === true) {
-              this.$message({ type: 'success', center: true, message: '新增成功' });
-              this.$store.commit('LOADING', false);
-              this.$router.push({ name: 'Category' });
-            }
-          });
+        this.$http.post(api, dataJS).then((res) => {
+          if (res.data.success) {
+            this.$message({ type: 'success', center: true, message: '新增成功' });
+            this.$router.push({ name: 'Category' });
+          }
+        });
       }
     },
     handleChange(value) {

@@ -12,7 +12,7 @@
         </div>
         <div class="inside-item">
           <p>Room Name</p>
-          <el-input v-model="data.desc" :placeholder="data.roomName"></el-input>
+          <el-input v-model="data.roomName"></el-input>
         </div>
         <div class="inside-item">
           <p>Remark</p>
@@ -21,11 +21,12 @@
         <div class="inside-item">
           <p>Allow Dept.</p>
           <el-cascader
-            :options="selectList"
+            v-model="test2"
+            placeholder="請選擇"
+            :options="allowDeptOptions"
             :show-all-levels="false"
             :props="{ multiple: true, expandTrigger: 'hover' }"
             @change="handleChange"
-            placeholder="請選擇"
           ></el-cascader>
         </div>
         <el-button type="primary" size="small" @click="edit">修改</el-button>
@@ -40,10 +41,12 @@ export default {
     return {
       id: '',
       data: {},
-      selectList: [],
       canBeRegister: -1,
-      // test: [['Taipei', 'Banciao']],
+      allowDeptSelect: [],
+      allowDeptOptions: [],
+      // test: [['Taipei', 'Banciao'], ['Kaohsiung', 'Nanzih']],
       test2: [],
+      test3: [],
     };
   },
   computed: {
@@ -58,11 +61,17 @@ export default {
       this.$http.get(api).then((res) => {
         if (res.data.success) {
           this.data = res.data.content;
-          this.getSelect();
+          /* find same */
+          res.data.content.selectedDepts.forEach((item) => {
+            item.children.forEach((i) => {
+              this.allowDeptSelect.push(i);
+            });
+          });
+          this.getOptions();
         }
       });
     },
-    getSelect() {
+    getOptions() {
       const api = `http://${this.domain}.upis.info/Api/Dept/GetSelect/${this.canBeRegister}`;
       this.$http.get(api).then((res) => {
         if (res.data.success) {
@@ -77,38 +86,63 @@ export default {
               v.value = v.label;
             });
           });
-          this.selectList = r;
+          this.allowDeptOptions = r;
+          /* find same step 1 */
+          this.data.selectedDepts.forEach((item) => {
+            this.allowDeptOptions.forEach((i) => {
+              if (item.id === i.id) {
+                for (let x = 0; x < item.children.length; x += 1) {
+                  this.test2.push([i.label]);
+                }
+              }
+            });
+          });
+          /* find same step 2 */
+          this.allowDeptSelect.forEach((item) => {
+            this.allowDeptOptions.forEach((value) => {
+              value.children.forEach((v) => {
+                if (item === v.id) {
+                  this.test3.push(v.label);
+                }
+              });
+            });
+          });
+          /* find same step 3 */
+          this.test2.forEach((item, index) => {
+            item.push(this.test3[index]);
+          });
           this.$store.commit('LOADING', false);
         }
       });
     },
     edit() {
-      this.data.remark = '123';
+      this.$store.commit('LOADING', true);
+      const api = `http://${this.domain}.upis.info/Api/Room/Edit`;
+      /* 重整資料結構 */
       delete this.data.depts;
       delete this.data.roomNo;
       delete this.data.selectedDepts;
-      this.data.depts = this.test2;
-      /* 以上為整理資料結構用 */
-      this.$store.commit('LOADING', true);
-      const api = `http://${this.domain}.upis.info/Api/Room/Edit`;
+      this.data.depts = this.allowDeptSelect;
+      /* 重整資料結構 */
       const dataJS = JSON.stringify(this.data);
-      console.log(dataJS);
       this.$http.post(api, dataJS).then((res) => {
-        console.log(res);
-        this.$store.commit('LOADING', false);
+        if (res.data.success) {
+          this.$store.commit('LOADING', false);
+          this.$router.push({ name: 'Room' });
+        }
       });
     },
     handleChange(array) {
-      this.test2 = [];
+      this.allowDeptSelect = [];
       this.data.selectedDepts = [];
       array.forEach((item) => {
         this.data.selectedDepts.push(item[1]);
       });
-      this.selectList.forEach((item) => {
+      this.allowDeptOptions.forEach((item) => {
         item.children.forEach((i) => {
           this.data.selectedDepts.forEach((value) => {
             if (value === i.label) {
-              this.test2.push(i.id);
+              this.allowDeptSelect.push(i.id);
             }
           });
         });

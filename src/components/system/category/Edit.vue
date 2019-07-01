@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row class="sys-header" type="flex" align="middle">
-      <i class="el-icon-back" @click="back"></i>
+      <i class="el-icon-back" @click="previousPage"></i>
       <p>編輯分類</p>
     </el-row>
     <div class="form">
@@ -12,7 +12,7 @@
             :options="parentList"
             :props="{ expandTrigger: 'hover' }"
             @change="handleChange"
-            :placeholder="placeholder"
+            v-model="showParentCat[0]"
           ></el-cascader>
         </div>
         <div class="inside-item">
@@ -41,6 +41,7 @@ export default {
       data: {},
       parentList: [],
       placeholder: '',
+      showParentCat: [],
     };
   },
   computed: {
@@ -49,6 +50,53 @@ export default {
     },
   },
   methods: {
+    getCurrentCat() {
+      this.$store.commit('LOADING', true);
+      const api = `http://${this.domain}.upis.info/Api/Category/Edit/${this.id}`;
+      this.$http.get(api).then((res) => {
+        if (res.data.success) {
+          this.data = res.data.content;
+          this.getOptions();
+        }
+      });
+    },
+    getOptions() {
+      const api = `http://${this.domain}.upis.info/Api/Category/Options`;
+      this.$http.get(api).then((res) => {
+        if (res.data.success) {
+          const r = res.data.content.lists[0].list;
+          r.forEach((item) => {
+            const i = item;
+            i.value = i.label;
+            i.children = i.list;
+            delete i.list;
+            i.children.forEach((value) => {
+              const v = value;
+              v.value = v.label;
+            });
+          });
+          this.parentList = r;
+          /* find parent category */
+          if (this.data.parentId === null) {
+            this.placeholder = '請選擇';
+          } else {
+            const list = [];
+            this.parentList.forEach((item) => {
+              if (this.data.parentCategoryId === item.id) {
+                list.push(item.label);
+              }
+              item.children.forEach((i) => {
+                if (this.data.parentId === i.id) {
+                  list.push(i.label);
+                }
+              });
+            });
+            this.showParentCat.push(list);
+          }
+        }
+        this.$store.commit('LOADING', false);
+      });
+    },
     edit() {
       this.$store.commit('LOADING', true);
       const api = `http://${this.domain}.upis.info/Api/Category/Edit`;
@@ -56,73 +104,12 @@ export default {
       delete this.data.itemCode;
       delete this.data.parentCategoryId;
       const dataJS = JSON.stringify(this.data);
-      this.$http.post(api, dataJS)
-        .then((res) => {
-          if (res.data.success) {
-            this.$message({ type: 'success', center: true, message: '修改成功' });
-            this.$store.commit('LOADING', false);
-            this.$router.push({ name: 'Category' });
-          }
-        });
-    },
-    getCurrentCat() {
-      const api = `http://${this.domain}.upis.info/Api/Category/Edit/${this.id}`;
-      this.$http.get(api)
-        .then((res) => {
-          if (res.data.success) {
-            this.data = res.data.content;
-          }
-        })
-        .catch(() => {
-          this.$message({ type: 'warning', center: 'center', message: '連線逾時，請重新登入' });
-          this.$store.commit('LOADING', false);
-          this.$router.push({ name: 'Login' });
-        });
-    },
-    getOptions() {
-      this.$store.commit('LOADING', true);
-      const api = `http://${this.domain}.upis.info/Api/Category/Options`;
-      this.$http.get(api)
-        .then((res) => {
-          if (res.data.success === true) {
-            const r = res.data.content.lists[0].list;
-            r.forEach((item) => {
-              const i = item;
-              i.value = i.label;
-              i.children = i.list;
-              delete i.list;
-              i.children.forEach((value) => {
-                const v = value;
-                v.value = v.label;
-              });
-            });
-            this.parentList = r;
-            /* ===== */
-            if (this.data.parentId === null) {
-              this.placeholder = '請選擇';
-            } else {
-              let mesOne = '';
-              let mesTwo = '';
-              this.parentList.forEach((item) => {
-                if (this.data.parentCategoryId === item.id) {
-                  mesOne = item.label;
-                }
-                item.children.forEach((i) => {
-                  if (this.data.parentId === i.id) {
-                    mesTwo = i.label;
-                  }
-                });
-              });
-              this.placeholder = `${mesOne} / ${mesTwo}`;
-            }
-          }
-          this.$store.commit('LOADING', false);
-        })
-        .catch(() => {
-          this.$message({ type: 'warning', center: 'center', message: '連線逾時，請重新登入' });
-          this.$store.commit('LOADING', false);
-          this.$router.push({ name: 'Login' });
-        });
+      this.$http.post(api, dataJS).then((res) => {
+        if (res.data.success) {
+          this.$message({ type: 'success', center: true, message: '修改成功' });
+          this.$router.push({ name: 'Category' });
+        }
+      });
     },
     handleChange(value) {
       this.parentList.forEach((item) => {
@@ -133,7 +120,7 @@ export default {
         });
       });
     },
-    back() {
+    previousPage() {
       this.$router.go(-1);
     },
   },
@@ -141,7 +128,6 @@ export default {
     const { href } = window.location;
     this.id = href.substring(href.indexOf('=') + 1, href.length);
     this.$store.commit('VERIFY');
-    this.getOptions();
     this.getCurrentCat();
   },
 };

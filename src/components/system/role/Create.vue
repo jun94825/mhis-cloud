@@ -1,52 +1,74 @@
 <template>
   <div>
-    <el-row type="flex" align="middle" justify="space-between" class="sys-header">
+    <el-row class="sys-header" type="flex" align="middle" justify="space-between">
       <el-row type="flex" align="middle">
-        <i class="el-icon-back" @click="back"></i>
-        <p>編輯角色權限</p>
+        <i class="el-icon-back" @click="previousPage"></i>
+        <p>新增角色</p>
       </el-row>
-      <el-button type="primary" size="small" @click="createRole">新增</el-button>
+      <el-button size="mini" type="success" @click="create">新增</el-button>
     </el-row>
-    <el-row class="form">
+    <div class="form">
       <div class="form-inside">
-        <el-input size="small" placeholder="請輸入角色名稱" v-model="roleName"></el-input>
-        <el-row type="flex" align="middle" justify="space-between" class="form-header">
-          <p>功能分類</p>
-          <el-row type="flex" align="middle" justify="space-around">
-            <p>讀取</p>
-            <p>新增</p>
-            <p>修改</p>
-            <p>刪除</p>
-          </el-row>
-        </el-row>
-        <div v-for="(val, index) in data" :key="index">
-          <el-row type="flex" align="middle" class="category-title">
-            <i class="el-icon-plus"></i>
-            <p>{{ $t(val.name) }}</p>
-          </el-row>
-          <el-row
-            :id="v.name"
-            type="flex"
-            align="middle"
-            justify="space-between"
-            class="category-content"
-            v-for="(v, i) in val.pages"
-            :key="i"
-          >
-            <el-row type="flex" align="middle" class="fuck">
-              <input :id="v.id" type="checkbox" v-model="v.all" @click="all(v)">
-              <label :for="v.id">{{ $t(v.name) }}</label>
-            </el-row>
-            <el-row type="flex" align="middle" justify="space-around">
-              <input type="checkbox" v-model="v.read" @click="cancel(v)">
-              <input type="checkbox" v-model="v.create" @click="check(v)">
-              <input type="checkbox" v-model="v.edit" @click="check(v)">
-              <input type="checkbox" v-model="v.delete" @click="check(v)">
-            </el-row>
-          </el-row>
-        </div>
+        <el-input class="mb-8" size="small" v-model="roleName" placeholder="角色名稱"></el-input>
+        <el-table
+          stripe
+          row-key="id"
+          :data="data"
+          default-expand-all
+          v-if="JSON.stringify(data) !== '{}'"
+          :tree-props="{children: 'pages', hasChildren: 'hasChildren'}"
+        >
+          <el-table-column prop="name" label="功能分類" min-width="250">
+            <template slot-scope="scope">
+              <el-checkbox
+                v-model="scope.row.all"
+                v-if="scope.row.id > 5"
+                @change="all(scope.row)"
+              >{{ scope.row.name }}</el-checkbox>
+              <p v-else style="display: inline;">{{ scope.row.name }}</p>
+            </template>
+          </el-table-column>
+          <el-table-column label="讀取" width="125" align="center">
+            <template slot-scope="scope">
+              <el-checkbox
+                v-model="scope.row.read"
+                v-if="scope.row.id > 5"
+                @change="cancel(scope.row)"
+              ></el-checkbox>
+            </template>
+          </el-table-column>
+          <el-table-column label="新增" width="125" align="center">
+            <template slot-scope="scope">
+              <el-checkbox
+                :class="scope.row.name"
+                v-model="scope.row.create"
+                v-if="scope.row.id > 5"
+                @change="check(scope.row, 'create')"
+              ></el-checkbox>
+            </template>
+          </el-table-column>
+          <el-table-column label="修改" width="125" align="center">
+            <template slot-scope="scope">
+              <el-checkbox
+                v-model="scope.row.edit"
+                v-if="scope.row.id > 5"
+                @change="check(scope.row, 'edit')"
+              ></el-checkbox>
+            </template>
+          </el-table-column>
+          <el-table-column label="刪除" width="125" align="center">
+            <template slot-scope="scope">
+              <el-checkbox
+                :class="scope.row.name"
+                v-model="scope.row.delete"
+                v-if="scope.row.id > 5"
+                @change="check(scope.row, 'delete')"
+              ></el-checkbox>
+            </template>
+          </el-table-column>
+        </el-table>
       </div>
-    </el-row>
+    </div>
   </div>
 </template>
 
@@ -54,8 +76,8 @@
 export default {
   data() {
     return {
-      data: {},
       id: '',
+      data: {},
       roleName: '',
     };
   },
@@ -68,121 +90,118 @@ export default {
     getPageAll() {
       this.$store.commit('LOADING', true);
       const api = `http://${this.domain}.upis.info/Api/Page/All`;
-      this.$http.get(api)
-        .then((res) => {
+      this.$http.get(api).then((res) => {
+        if (res.data.success) {
           const r = res.data.content.pageList;
           r.forEach((item, index) => {
             const i = item;
             i.id = index;
             r[index].pages.forEach((val) => {
               const v = val;
+              v.num = 0;
               v.all = false;
               v.read = false;
-              v.create = false;
               v.edit = false;
+              v.create = false;
               v.delete = false;
-              v.num = 0;
             });
           });
           this.data = r;
           this.$nextTick(() => {
-            const setting = document.getElementById('Setting');
-            setting.children[1].children[1].style.visibility = 'hidden';
-            setting.children[1].children[3].style.visibility = 'hidden';
+            const s = document.querySelectorAll('.Setting');
+            s.forEach((item) => {
+              const i = item;
+              i.style.visibility = 'hidden';
+            });
           });
           this.$store.commit('LOADING', false);
-        });
+        }
+      });
     },
-    all(target) {
-      const t = target;
-      if (!t.all) {
-        t.read = true;
-        t.create = true;
-        t.edit = true;
-        t.delete = true;
-        t.num = 3;
+    all(row) {
+      const r = row;
+      if (r.all) {
+        r.num = 3;
+        r.read = true;
+        r.edit = true;
+        r.create = true;
+        r.delete = true;
       } else {
-        t.read = false;
-        t.create = false;
-        t.edit = false;
-        t.delete = false;
-        t.num = 0;
+        r.num = 0;
+        r.read = false;
+        r.edit = false;
+        r.create = false;
+        r.delete = false;
       }
     },
-    check(target) {
+    check(row, target) {
+      const r = row;
       const t = target;
-      if (t.read === false) {
-        window.event.preventDefault();
-        this.$message({
-          type: 'warning',
-          center: true,
-          message: '請先勾選讀取選項',
-        });
+      if (!r.read) {
+        r.num = 0;
+        r[t] = null;
+        this.$message({ type: 'warning', center: true, message: '請先勾選讀取選項' });
       }
-      if (window.event.target.checked && t.read !== false) {
-        t.num += 1;
-      } else if (t.read === true) {
-        t.num -= 1;
+      if (r.read && window.event.target.checked) {
+        r.num += 1;
+      } else if (r.read) {
+        r.num -= 1;
       }
-      if (t.num === 3) {
-        t.all = true;
+      if (r.num === 3) {
+        r.all = true;
       } else {
-        t.all = false;
+        r.all = false;
+      }
+      /* only for setting */
+      if (r.name === 'Setting' && r.read && r.num === 1) {
+        r.all = true;
+      } else if (r.name === 'Setting' && r.num === 0) {
+        r.all = false;
       }
     },
-    cancel(target) {
-      const t = target;
-      if (t.read) {
-        t.all = false;
-        t.edit = false;
-        t.create = false;
-        t.delete = false;
-        t.num = 0;
+    cancel(row) {
+      const r = row;
+      if (!r.read) {
+        r.num = 0;
+        r.all = false;
+        r.edit = false;
+        r.create = false;
+        r.delete = false;
       }
     },
-    back() {
-      this.$router.go(-1);
-    },
-    createRole() {
-      const api = `http://${this.domain}.upis.info/Api/Role/Create`;
+    create() {
       if (this.roleName === '') {
-        this.$message({
-          type: 'warning',
-          center: true,
-          message: '請輸入角色名稱',
-        });
+        this.$message({ type: 'warning', center: true, message: '請輸入角色名稱' });
       } else {
         this.$store.commit('LOADING', true);
+        const api = `http://${this.domain}.upis.info/Api/Role/Create`;
         const concat = [];
         for (let i = 0; i < this.data.length; i += 1) {
           this.data[i].pages.forEach((item) => {
             concat.push(item);
           });
         }
-        const require = concat
+        const required = concat
           .filter(item => item.read || item.create || item.edit || item.delete);
-        require.forEach((item, index) => {
-          delete require[index].all;
-          delete require[index].name;
-          delete require[index].num;
+        required.forEach((item, index) => {
+          delete required[index].all;
+          delete required[index].name;
+          delete required[index].num;
         });
         const dataJS = JSON.stringify({
+          list: required,
           roleName: this.roleName,
-          list: require,
         });
-        this.$http.post(api, dataJS)
-          .then((res) => {
-            if (res.data.success === true) {
-              this.$store.commit('LOADING', false);
-              this.$message({
-                type: 'success',
-                center: true,
-                message: '新增成功',
-              });
-              this.$router.push({ name: '角色維護' });
-            }
-          });
+        this.$http.post(api, dataJS).then((res) => {
+          if (res.data.success) {
+            this.$message({ type: 'success', center: true, message: '新增成功' });
+            this.$router.push({ name: 'RoleManagement' });
+          }
+        });
       }
+    },
+    previousPage() {
+      this.$router.go(-1);
     },
   },
   created() {

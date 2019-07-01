@@ -15,12 +15,12 @@ export default new Vuex.Store({
   },
   mutations: {
     VERIFY() {
-      const token = localStorage.getItem('cookie');
-      axios.defaults.headers.common.Authorization = `Bearer ${token}`;
       // const url = window.location.href;
       const url = 'http://jun.upis.info/fuck';
       const dot = url.indexOf('.');
       this.state.domain = url.substring(7, dot);
+      const token = localStorage.getItem('cookie');
+      axios.defaults.headers.common.Authorization = `Bearer ${token}`;
     },
     LOADING(state, payload) {
       this.state.loading = payload;

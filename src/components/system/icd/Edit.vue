@@ -33,7 +33,6 @@ export default {
     return {
       id: '',
       data: {},
-      options: ['PCS', 'cm'],
     };
   },
   computed: {
@@ -58,17 +57,12 @@ export default {
       this.data.code = this.data.icd10Code;
       delete this.data.icd10Code;
       const dataJS = JSON.stringify(this.data);
-      this.$http.post(api, dataJS)
-        .then((res) => {
-          if (res.data.success === true) {
-            this.$message({
-              message: '修改成功',
-              type: 'success',
-              center: true,
-            });
-            this.$router.push({ name: 'ICD10' });
-          }
-        });
+      this.$http.post(api, dataJS).then((res) => {
+        if (res.data.success) {
+          this.$message({ type: 'success', center: 'center', message: '刪除成功!' });
+          this.$router.push({ name: 'ICD10' });
+        }
+      });
     },
     previousPage() {
       this.$router.go(-1);

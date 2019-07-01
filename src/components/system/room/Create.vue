@@ -29,6 +29,9 @@
             ></el-option>
           </el-select>
         </div>
+        <div class="inside-item">
+          <el-checkbox v-model="data.status">Status</el-checkbox>
+        </div>
         <el-button type="primary" size="small" @click="create">送出</el-button>
       </div>
     </div>
@@ -40,12 +43,14 @@ export default {
   data() {
     return {
       data: {
+        depts: [],
         roomNo: '',
         roomName: '',
-        depts: [],
+        status: false,
       },
-      selectList: [],
       select: [],
+      selectList: [],
+      canBeRegister: -1,
     };
   },
   computed: {
@@ -54,23 +59,25 @@ export default {
     },
   },
   methods: {
+    getSelect() {
+      this.$store.commit('LOADING', true);
+      const api = `http://${this.domain}.upis.info/Api/Dept/GetSelect/${this.canBeRegister}`;
+      this.$http.get(api).then((res) => {
+        if (res.data.success) {
+          this.selectList = res.data.content.list;
+          this.$store.commit('LOADING', false);
+        }
+      });
+    },
     create() {
       this.$store.commit('LOADING', true);
       const api = `http://${this.domain}.upis.info/Api/Room/Create`;
       const dataJS = JSON.stringify(this.data);
       this.$http.post(api, dataJS).then((res) => {
-        if (res.data.success === true) {
+        if (res.data.success) {
           this.$message({ type: 'success', center: true, message: '新增成功' });
-          this.$store.commit('LOADING', false);
           this.$router.push({ name: 'Room' });
         }
-      });
-    },
-    getSelect() {
-      const num = -1;
-      const api = `http://${this.domain}.upis.info/Api/Dept/GetSelect/${num}`;
-      this.$http.get(api).then((res) => {
-        this.selectList = res.data.content.list;
       });
     },
     previousPage() {

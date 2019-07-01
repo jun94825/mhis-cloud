@@ -38,13 +38,13 @@
 export default {
   data() {
     return {
-      selectList: [],
       data: {
         deptNo: '',
         deptName: '',
         parentId: '',
         canBeReg: false,
       },
+      selectList: [],
     };
   },
   computed: {
@@ -58,8 +58,8 @@ export default {
       const api = `http://${this.domain}.upis.info/Api/Dept/Select`;
       this.$http.get(api).then((res) => {
         if (res.data.success) {
-          this.$store.commit('LOADING', false);
           this.selectList = res.data.content.list;
+          this.$store.commit('LOADING', false);
         }
       });
     },
@@ -71,10 +71,8 @@ export default {
         const api = `http://${this.domain}.upis.info/Api/Dept/Create`;
         const dataJS = JSON.stringify(this.data);
         this.$http.post(api, dataJS).then((res) => {
-          console.log(res);
-          if (res.data.success === true) {
+          if (res.data.success) {
             this.$message({ type: 'success', center: true, message: '新增成功' });
-            this.$store.commit('LOADING', false);
             this.$router.push({ name: 'Department' });
           }
         });
