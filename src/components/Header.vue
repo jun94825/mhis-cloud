@@ -2,13 +2,13 @@
   <el-row class="header" type="flex" align="middle" justify="space-between">
     <el-row class="left" type="flex" align="middle">
       <i class="el-icon-s-operation" @click="switchCollapse"></i>
-      <img src="../assets/images/mhis-white.png" width="80" height="35" alt>
+      <img src="../assets/images/mhis-white.png" width="80" height="35" alt />
     </el-row>
     <el-row class="right" type="flex" align="middle">
-      <img src="../assets/logo.png" width="30" height="30" alt>
+      <img src="../assets/logo.png" width="30" height="30" alt />
       <el-dropdown>
         <span class="el-dropdown-link">
-          {{ data.hosptialName}}
+          {{ data.hosptialName }}
           <i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
@@ -33,16 +33,18 @@ export default {
   },
   methods: {
     getInfo() {
-      const api = 'http://jun.upis.info/Api/Login/Info';
+      const api = `http://${this.domain}.upis.info/Api/Login/Info`;
       this.$http.get(api).then((res) => {
-        this.data = res.data.content;
+        if (res.data.success) {
+          this.data = res.data.content;
+        }
       });
-    },
-    switchCollapse() {
-      this.$store.commit('COLLAPSE');
     },
     signOut() {
       this.$router.push({ name: 'Login' });
+    },
+    switchCollapse() {
+      this.$store.commit('COLLAPSE');
     },
   },
   created() {

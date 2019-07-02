@@ -12,15 +12,15 @@
   >
     <el-menu-item index="1">
       <i class="el-icon-s-home"></i>
-      <span>{{ $t('Home') }}</span>
+      <span>{{ $t('home') }}</span>
     </el-menu-item>
     <el-submenu index="2">
       <template slot="title">
         <i class="el-icon-chat-dot-round"></i>
-        <span>{{ $t('Language') }}</span>
+        <span>{{ $t('language') }}</span>
       </template>
-      <el-menu-item @click="changeLanguage('tw')">繁體中文</el-menu-item>
       <el-menu-item @click="changeLanguage('us')">English</el-menu-item>
+      <el-menu-item @click="changeLanguage('tw')">繁體中文</el-menu-item>
     </el-submenu>
     <el-submenu v-for="(item, index) in menu" :key="index" :index="`${index + 3}`">
       <template slot="title">

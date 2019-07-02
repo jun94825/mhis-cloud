@@ -1,52 +1,74 @@
 <template>
   <div>
-    <el-row type="flex" align="middle" justify="space-between" class="sys-header">
+    <el-row class="sys-header" type="flex" align="middle" justify="space-between">
       <el-row type="flex" align="middle">
-        <i class="el-icon-back" @click="back"></i>
-        <p>編輯角色權限</p>
+        <i class="el-icon-back" @click="previousPage"></i>
+        <p>{{ $t('editRole') }}</p>
       </el-row>
-      <el-button type="primary" size="small" @click="editRole">儲存</el-button>
+      <el-button size="small" type="success" @click="edit">{{ $t('confirm') }}</el-button>
     </el-row>
-    <el-row class="form">
+    <div class="form">
       <div class="form-inside">
-        <p>{{ roleName }}</p>
-        <el-row type="flex" align="middle" justify="space-between" class="form-header">
-          <p>功能分類</p>
-          <el-row type="flex" align="middle" justify="space-around">
-            <p>新增</p>
-            <p>刪除</p>
-            <p>修改</p>
-            <p>讀取</p>
-          </el-row>
-        </el-row>
-        <div v-for="(val, index) in data" :key="index">
-          <el-row type="flex" align="middle" class="category-title">
-            <i class="el-icon-plus"></i>
-            <p>{{ val.name }}</p>
-          </el-row>
-          <el-row
-            :id="v.name"
-            type="flex"
-            align="middle"
-            justify="space-between"
-            class="category-content"
-            v-for="(v, i) in val.pages"
-            :key="i"
-          >
-            <el-row type="flex" align="middle" class="fuck">
-              <input :id="v.id" type="checkbox" v-model="v.all" @click="all(v)">
-              <label :for="v.id">{{ v.name }}</label>
-            </el-row>
-            <el-row type="flex" align="middle" justify="space-around">
-              <input type="checkbox" v-model="v.read" @click="cancel(v)">
-              <input type="checkbox" v-model="v.create" @click="check(v)">
-              <input type="checkbox" v-model="v.edit" @click="check(v)">
-              <input type="checkbox" v-model="v.delete" @click="check(v)">
-            </el-row>
-          </el-row>
-        </div>
+        <el-tag>{{ roleName }}</el-tag>
+        <el-table
+          stripe
+          row-key="id"
+          :data="data"
+          default-expand-all
+          v-if="JSON.stringify(data) !== '{}'"
+          :tree-props="{children: 'pages', hasChildren: 'hasChildren'}"
+        >
+          <el-table-column prop="name" label="Finctional" min-width="250">
+            <template slot-scope="scope">
+              <el-checkbox
+                v-model="scope.row.all"
+                v-if="scope.row.id > 5"
+                @change="all(scope.row)"
+              >{{ $t(scope.row.name) }}</el-checkbox>
+              <p v-else style="display: inline;">{{ $t(scope.row.name) }}</p>
+            </template>
+          </el-table-column>
+          <el-table-column label="Read" width="125" align="center">
+            <template slot-scope="scope">
+              <el-checkbox
+                v-model="scope.row.read"
+                v-if="scope.row.id > 5"
+                @change="cancel(scope.row)"
+              ></el-checkbox>
+            </template>
+          </el-table-column>
+          <el-table-column label="Create" width="125" align="center">
+            <template slot-scope="scope">
+              <el-checkbox
+                :class="scope.row.name"
+                v-model="scope.row.create"
+                v-if="scope.row.id > 5"
+                @change="check(scope.row, 'create')"
+              ></el-checkbox>
+            </template>
+          </el-table-column>
+          <el-table-column label="Modify" width="125" align="center">
+            <template slot-scope="scope">
+              <el-checkbox
+                v-model="scope.row.edit"
+                v-if="scope.row.id > 5"
+                @change="check(scope.row, 'edit')"
+              ></el-checkbox>
+            </template>
+          </el-table-column>
+          <el-table-column label="Delete" width="125" align="center">
+            <template slot-scope="scope">
+              <el-checkbox
+                :class="scope.row.name"
+                v-model="scope.row.delete"
+                v-if="scope.row.id > 5"
+                @change="check(scope.row, 'delete')"
+              ></el-checkbox>
+            </template>
+          </el-table-column>
+        </el-table>
       </div>
-    </el-row>
+    </div>
   </div>
 </template>
 
@@ -54,8 +76,8 @@
 export default {
   data() {
     return {
-      data: {},
       id: '',
+      data: {},
       roleName: '',
     };
   },
@@ -68,38 +90,37 @@ export default {
     getPageAll() {
       const api = `http://${this.domain}.upis.info/Api/Page/All`;
       this.$store.commit('LOADING', true);
-      this.$http.get(api)
-        .then((res) => {
+      this.$http.get(api).then((res) => {
+        if (res.data.success) {
           const r = res.data.content.pageList;
           r.forEach((item, index) => {
-            r[index].pages.forEach((val) => {
-              const v = val;
+            r[index].pages.forEach((value) => {
+              const v = value;
               v.num = 0;
               v.all = false;
               v.read = false;
-              v.create = false;
               v.edit = false;
+              v.create = false;
               v.delete = false;
             });
           });
-          this.data = r;
           this.$nextTick(() => {
-            this.getRole(r);
+            this.getCurrentRole(r);
           });
-        });
+        }
+      });
     },
-    getRole(data) {
-      const key = this.id.substring(this.id.indexOf('=') + 1, this.id.length);
-      const api = `http://${this.domain}.upis.info/Api/Role/Edit/${key}`;
-      this.$http.get(api)
-        .then((res) => {
+    getCurrentRole(data) {
+      const api = `http://${this.domain}.upis.info/Api/Role/Edit/${this.id}`;
+      this.$http.get(api).then((res) => {
+        if (res.data.success) {
           const r = res.data.content.pages;
           this.roleName = res.data.content.roleName;
           r.forEach((item) => {
             const i = item;
             if (i.read && i.create && i.edit && i.delete) {
-              i.all = true;
               i.num = 3;
+              i.all = true;
             } else if (i.create && i.edit) {
               i.num = 2;
             } else if (i.create && i.delete) {
@@ -109,43 +130,46 @@ export default {
             } else if (i.create || i.edit || i.delete) {
               i.num = 1;
             } else {
-              i.all = false;
               i.num = 0;
+              i.all = false;
             }
             if (i.id > 9 && i.id < 22) {
-              data[2].pages.forEach((item, index) => {
-                if (i.id === item.id) {
+              data[2].pages.forEach((value, index) => {
+                if (i.id === value.id) {
                   this.$set(data[2].pages, index, i);
                 } else if (i.id === 21 && i.read === true && i.edit === true) {
                   i.all = true; // Not very Good!
                 }
               });
             } else if (i.id === 22) {
-              data[1].pages.forEach((item, index) => {
-                if (i.id === item.id) {
+              data[1].pages.forEach((value, index) => {
+                if (i.id === value.id) {
                   this.$set(data[1].pages, index, i);
                 }
               });
             } else if (i.id === 23) {
-              data[0].pages.forEach((item, index) => {
-                if (i.id === item.id) {
+              data[0].pages.forEach((value, index) => {
+                if (i.id === value.id) {
                   this.$set(data[0].pages, index, i);
                 }
               });
             }
           });
-        });
+        }
+      });
       this.data = data;
       this.$nextTick(() => {
-        const setting = document.getElementById('Setting');
-        setting.children[1].children[1].style.visibility = 'hidden';
-        setting.children[1].children[3].style.visibility = 'hidden';
-        this.$store.commit('LOADING', false);
+        const s = document.querySelectorAll('.Setting');
+        s.forEach((item) => {
+          const i = item;
+          i.style.visibility = 'hidden';
+        });
       });
+      this.$store.commit('LOADING', false);
     },
-    editRole() {
-      const api = `http://${this.domain}.upis.info/Api/Role/Edit`;
+    edit() {
       this.$store.commit('LOADING', true);
+      const api = `http://${this.domain}.upis.info/Api/Role/Edit`;
       const concat = [];
       for (let i = 0; i < this.data.length; i += 1) {
         this.data[i].pages.forEach((item) => {
@@ -160,76 +184,75 @@ export default {
         delete require[index].num;
       });
       const dataJS = JSON.stringify({
-        roleId: this.id.substring(this.id.indexOf('=') + 1, this.id.length),
         list: require,
+        roleId: this.id,
       });
-      this.$http.post(api, dataJS)
-        .then((res) => {
-          if (res.data.success === true) {
-            this.$store.commit('LOADING', false);
-            this.$message({
-              type: 'success',
-              center: true,
-              message: '編輯完成',
-            });
-            this.$router.push({ name: '角色維護' });
-          }
-        });
+      this.$http.post(api, dataJS).then((res) => {
+        if (res.data.success) {
+          this.$message({ type: 'success', center: true, message: this.$t('editCompleted') });
+          this.$router.push({ name: 'RoleManagement' });
+        }
+      });
     },
-    all(target) {
-      const t = target;
-      if (!t.all) {
-        t.num = 3;
-        t.read = true;
-        t.create = true;
-        t.edit = true;
-        t.delete = true;
+    all(row) {
+      const r = row;
+      if (r.all) {
+        r.num = 3;
+        r.read = true;
+        r.edit = true;
+        r.create = true;
+        r.delete = true;
       } else {
-        t.num = 0;
-        t.read = false;
-        t.create = false;
-        t.edit = false;
-        t.delete = false;
+        r.num = 0;
+        r.read = false;
+        r.edit = false;
+        r.create = false;
+        r.delete = false;
       }
     },
-    check(target) {
+    check(row, target) {
+      const r = row;
       const t = target;
-      if (t.read === false) {
-        window.event.preventDefault();
-        this.$message({
-          type: 'warning',
-          center: true,
-          message: '請先勾選讀取選項',
-        });
+      if (!r.read) {
+        r.num = 0;
+        r[t] = null;
+        this.$message({ type: 'warning', center: true, message: this.$t('readOptionReq') });
       }
-      if (window.event.target.checked && t.read !== false) {
-        t.num += 1;
-      } else if (t.read === true) {
-        t.num -= 1;
+      if (r.read && window.event.target.checked) {
+        r.num += 1;
+      } else if (r.read) {
+        r.num -= 1;
       }
-      if (t.num === 3) {
-        t.all = true;
+      if (r.num === 3) {
+        r.all = true;
       } else {
-        t.all = false;
+        r.all = false;
+      }
+      /* only for setting */
+      if (r.name === 'Setting' && r.read && r.num === 1) {
+        r.all = true;
+      } else if (r.name === 'Setting' && r.num === 0) {
+        r.all = false;
       }
     },
-    cancel(target) {
-      const t = target;
-      if (t.read) {
-        t.all = false;
-        t.edit = false;
-        t.create = false;
-        t.delete = false;
-        t.num = 0;
+    cancel(row) {
+      const r = row;
+      if (!r.read) {
+        r.num = 0;
+        r.all = false;
+        r.edit = false;
+        r.create = false;
+        r.delete = false;
       }
     },
-    back() {
+    previousPage() {
       this.$router.go(-1);
     },
   },
   created() {
+    const { href } = window.location;
+    this.id = href.substring(href.indexOf('=') + 1, href.length);
     this.$store.commit('VERIFY');
-    this.id = window.location.href;
     this.getPageAll();
   },
 };
@@ -241,68 +264,5 @@ export default {
 
 .el-input {
   width: 10rem;
-}
-
-.form-header {
-  padding: 1rem;
-  margin-top: 1rem;
-  font-size: 0.875rem;
-  background-color: #f5f5f5;
-  border-bottom: 0.0625rem solid #e2e2e2;
-
-  .el-row {
-    width: 30%;
-  }
-}
-
-.category-title {
-  padding: 1rem;
-  font-size: 0.875rem;
-  border-bottom: 0.0625rem solid #e2e2e2;
-
-  > i {
-    margin: 0 1rem;
-    cursor: pointer;
-    font-weight: bold;
-  }
-}
-
-.category-content {
-  padding: 1rem;
-  background-color: #f5f5f5;
-  border-bottom: 0.0625rem solid #e2e2e2;
-
-  .fuck {
-    margin-left: 2.5rem;
-
-    > label {
-      cursor: pointer;
-      font-size: 0.875rem;
-    }
-
-    > input {
-      margin-right: 1rem;
-    }
-  }
-
-  .el-row {
-    width: 30%;
-
-    > input {
-      cursor: pointer;
-      zoom: 150%;
-    }
-
-    > label {
-      margin-right: unset;
-    }
-  }
-}
-
-.el-icon-back {
-  cursor: pointer;
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-right: 1rem;
 }
 </style>

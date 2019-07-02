@@ -7,11 +7,11 @@
     <div class="form">
       <div class="form-inside">
         <div class="inside-item">
-          <p>Room No</p>
+          <p class="required">Room No</p>
           <el-tag>{{ data.roomNo }}</el-tag>
         </div>
         <div class="inside-item">
-          <p>Room Name</p>
+          <p class="required">Room Name</p>
           <el-input v-model="data.roomName"></el-input>
         </div>
         <div class="inside-item">
@@ -59,6 +59,7 @@ export default {
       this.$store.commit('LOADING', true);
       const api = `http://${this.domain}.upis.info/Api/Room/Edit/${this.id}`;
       this.$http.get(api).then((res) => {
+        console.log(res);
         if (res.data.success) {
           this.data = res.data.content;
           /* find same */

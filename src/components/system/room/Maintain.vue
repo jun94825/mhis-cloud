@@ -55,7 +55,7 @@ export default {
       search: {
         dept: '',
         keyword: '',
-        orderBy: 'id',
+        orderBy: 'roomName',
         orderByDesc: true,
       },
       currentPage: 1,

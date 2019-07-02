@@ -1,24 +1,48 @@
 module.exports = {
-  /* Register */
-  Register: '註冊',
-  Language: '語言',
-  TimeZone: '時區',
-  HospitalNo: '醫院編號',
-  HospitalName: '醫院名稱',
-  Email: '電子郵件',
-  ContactPerson: '聯絡人',
-  Captcha: '驗證碼',
+  /* 常用 */
+  edit: '編輯',
+  reset: '重置',
+  create: '新增',
+  delete: '刪除',
+  search: '搜尋',
+  cancel: '取消',
+  confirm: '確認',
+  keyword: '關鍵字',
+  loading: '加載中 ...',
+  selectAnOption: '請選擇',
 
-  /* Login */
-  Account: '帳號',
-  Password: '密碼',
-  RememberMe: '記住我',
+  /* 訊息彈框 */
+  tooltip: '提示',
+  message: '此操作將永久刪除該文件，是否繼續？',
+  undelete: '取消刪除',
+  sucdelete: '刪除成功',
+  sucAdded: '新增成功',
+  editCompleted: '編輯完成',
+  readOptionReq: '請先勾選讀取選項',
+  timeOut: '連線逾時，請重新登入',
+  roleReqMes: '角色名稱是必須的',
 
-  /* Header */
+  /* 註冊 */
+  register: '註冊',
+  timeZone: '時區',
+  hospitalNo: '醫院編號',
+  hospitalName: '醫院名稱',
+  email: '電子郵件',
+  contactPerson: '聯絡人',
+  captcha: '驗證碼',
+
+  /* 登入 */
+  login: '登入',
+  account: '帳號',
+  password: '密碼',
+  rememberMe: '記住我',
+
+  /* 頁眉 */
   SignOut: '登出',
 
-  /* Sidebar */
-  Home: '首頁',
+  /* 側邊欄 */
+  home: '首頁',
+  language: '語言',
 
   Patient: '病患',
   PatientManagement: '病患管理',
@@ -33,45 +57,59 @@ module.exports = {
   UserManagement: '使用者維護',
   Room: '診間維護',
   Department: '科別',
-  Category: '分類設定',
+  Category: '分類',
   HealthEducation: '衛教宣導',
-  ICD10: 'ICD 10 設定',
+  ICD10: 'ICD10 管理',
   Setting: '系統設定',
 
-  /* Setting */
-  Save: '儲存變更',
-  MailSetting: '郵件設定',
-  HosptialInformation: '醫院簡介',
-  FingerPrint: '指紋機',
-  BackgroundImage: '背景圖',
-  OfficialBannerImage: '官方橫幅圖',
-  OfficialLogo: '官網商標',
-  Partner: '贊助商',
-  VisitingTime: '看診時段',
-  Morning: '早上',
-  Afternoon: '下午',
-  Night: '晚上',
-  To: '至',
-  Select: '選擇檔案',
-  Start: '起始時間',
-  End: '結束時間',
+  /* 系統設定 */
+  save: '儲存',
+  fingerPrint: '指紋機',
+  backgroundImage: '背景圖',
+  officialBannerImage: '官方橫幅圖',
+  officialLogo: '官網商標',
+  partner: '贊助商',
+  visitingTime: '看診時段',
+  morning: '早上',
+  afternoon: '下午',
+  night: '晚上',
+  to: '至',
+  select: '選擇檔案',
+  start: '起始時間',
+  end: '結束時間',
 
-  UserAcc: '登入帳號',
-  UserPwd: '登入密碼',
-  Port: '埠',
-  HostUrl: '郵件主機網址',
-  ContactMail: '聯絡人郵件',
-  ContactBccMail: '聯絡人副本郵件',
+  mailSetting: '郵件設定',
+  userAcc: '登入帳號',
+  userPwd: '登入密碼',
+  port: '埠',
+  hostUrl: '郵件主機網址',
+  contactMail: '聯絡人郵件',
+  contactBccMail: '聯絡人副本郵件',
 
-  HosptialNo: '醫院編號',
-  HosptialName: '醫院名稱',
-  HosptialTel: '醫院電話',
-  HosptialAdd: '醫院地址',
-  HospitalContactNamel: '聯絡人姓名',
-  HospitalContactTel: '聯絡人電話',
-  HospitalSlogan: '口號',
-  HospitalEnvironment: '醫院環境',
+  hosptialInformation: '醫院簡介',
+  hosptialNo: '醫院編號',
+  hosptialName: '醫院名稱',
+  hosptialTel: '醫院電話',
+  hosptialAdd: '醫院地址',
+  hospitalContactNamel: '聯絡人姓名',
+  hospitalContactTel: '聯絡人電話',
+  hospitalSlogan: '口號',
+  hospitalAbout: '關於醫院',
+  hospitalEnvironment: '醫院環境',
+
+  /* 角色 */
+  createRole: '新增角色',
+  editRole: '編輯角色',
+
+  /* 科別 */
+  createDept: '新增科別',
+  editDept: '編輯科別',
+
+  /* 分類 */
+  createCat: '新增分類',
+  editCat: '編輯分類',
 
   /* ICD10 */
-  ICD10Setting: 'ICD10 Setting',
+  createICD10: '新增 ICD10',
+  editICD10: '編輯 ICD10',
 };

@@ -1,13 +1,13 @@
 <template>
   <div>
     <el-row class="sys-header" type="flex" align="middle" justify="space-between">
-      <p>分類設定</p>
-      <el-button size="mini" type="success" @click="toCreatePage">新增</el-button>
+      <p>{{ $t('Category') }}</p>
+      <el-button size="small" type="primary" @click="toCreatePage">{{ $t('create') }}</el-button>
     </el-row>
     <div class="form">
       <div class="form-inside">
         <el-row class="mb-8 mr-auto" type="flex">
-          <el-select size="small" v-model="search.parentId" placeholder="Category">
+          <el-select size="small" v-model="search.parentId" :placeholder="$t('Category')">
             <el-option
               v-for="(item, index) in selectList"
               :key="index"
@@ -15,9 +15,19 @@
               :value="item.id"
             ></el-option>
           </el-select>
-          <el-input class="ml-16" size="small" v-model="search.keyword" placeholder="Keyword"></el-input>
-          <el-button class="ml-16" type="primary" size="small" @click="getList">搜尋</el-button>
-          <el-button class="ml-16" type="info" size="small" @click="getList('reset')">重置</el-button>
+          <el-input
+            class="ml-16"
+            size="small"
+            v-model="search.keyword"
+            :placeholder="$t('keyword')"
+          ></el-input>
+          <el-button class="ml-16" type="warning" size="small" @click="getList">{{ $t('search') }}</el-button>
+          <el-button
+            class="ml-16"
+            type="info"
+            size="small"
+            @click="getList('reset')"
+          >{{ $t('reset') }}</el-button>
         </el-row>
         <el-table :data="data.list">
           <el-table-column label="Category" width="200">
@@ -35,19 +45,19 @@
               <span>{{ scope.row.desc }}</span>
             </template>
           </el-table-column>
-          <el-table-column width="75" align="right">
+          <el-table-column width="100" align="right">
             <template slot-scope="scope">
-              <el-button size="mini" @click="toEditPage(scope.$index, scope.row)">编辑</el-button>
+              <el-button size="mini" @click="toEditPage(scope.$index, scope.row)">{{ $t('edit') }}</el-button>
             </template>
           </el-table-column>
-          <el-table-column width="75" align="right">
+          <el-table-column width="100" align="right">
             <template slot-scope="scope">
               <el-button
                 size="mini"
                 type="danger"
                 @click="del(scope.$index, scope.row)"
                 :disabled="scope.row.locked"
-              >刪除</el-button>
+              >{{ $t('delete') }}</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -101,11 +111,11 @@ export default {
           this.getSelectList();
           this.$store.commit('LOADING', false);
           if (val === 'del') {
-            this.$message({ type: 'success', center: 'center', message: '刪除成功!' });
+            this.$message({ type: 'success', center: 'center', message: this.$t('sucdelete') });
           }
         }
       }).catch(() => {
-        this.$message({ type: 'warning', center: 'center', message: '連線逾時，請重新登入' });
+        this.$message({ type: 'warning', center: 'center', message: this.$t('timeOut') });
         this.$store.commit('LOADING', false);
         this.$router.push({ name: 'Login' });
       });
@@ -126,12 +136,12 @@ export default {
       if (row.childrenCnt > 0) {
         message = `此文件包含 ${row.childrenCnt} 個子項目，如確定刪除，關聯將被斷開，是否繼續？`;
       } else {
-        message = '此操作將永久刪除該文件，是否繼續？';
+        message = this.$t('message');
       }
-      this.$confirm(message, '提示', {
+      this.$confirm(message, this.$t('tooltip'), {
         type: 'warning',
-        confirmButtonText: '確定',
-        cancelButtonText: '取消',
+        confirmButtonText: this.$t('confirm'),
+        cancelButtonText: this.$t('cancel'),
       }).then(() => {
         this.$store.commit('LOADING', true);
         const api = `http://${this.domain}.upis.info/Api/Category/Delete/${row.id}`;
@@ -142,7 +152,7 @@ export default {
           }
         });
       }).catch(() => {
-        this.$message({ type: 'info', center: 'center', message: '已取消刪除' });
+        this.$message({ type: 'info', center: 'center', message: this.$t('undelete') });
       });
     },
     handleCurrentChange(val) {

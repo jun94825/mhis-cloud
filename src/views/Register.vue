@@ -1,10 +1,10 @@
 <template>
   <el-row class="reg-bg" type="flex" align="middle" justify="center">
-    <img class="advmeds-logo" src="../assets/images/advmeds-long.png" alt>
+    <img class="advmeds-logo" src="../assets/images/advmeds-long.png" alt />
     <el-col class="form-bg" :xl="6" :lg="8" :md="10" :sm="14" :xs="22">
       <el-row class="form-header" type="flex" align="middle" justify="center">
-        <img src="../assets/images/mhis-blue.png" alt>
-        <p>{{ $t('Register') }}</p>
+        <img src="../assets/images/mhis-blue.png" alt />
+        <p>{{ $t('register') }}</p>
       </el-row>
       <el-row type="flex" align="middle" justify="center">
         <el-form
@@ -14,13 +14,13 @@
           :rules="rules"
           @keyup.enter.native="submitForm('data')"
         >
-          <el-form-item class="mb-8" :label="$t('Language')">
+          <el-form-item class="mb-8" :label="$t('language')">
             <el-select class="w-250" v-model="data.local" @change="changeLanguage">
               <el-option label="繁體中文" value="zh-tw"></el-option>
               <el-option label="English" value="en-us"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item class="mb-8" :label="$t('TimeZone')">
+          <el-form-item class="mb-8" :label="$t('timeZone')">
             <el-select class="w-250" v-model="data.timeZone">
               <el-option label="GMT+6" value="6"></el-option>
               <el-option label="GMT+7" value="7"></el-option>
@@ -29,23 +29,23 @@
               <el-option label="GMT+10" value="10"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item class="mb-8" :label="$t('HospitalNo')" prop="hospitalNo">
+          <el-form-item class="mb-8" :label="$t('hospitalNo')" prop="hospitalNo">
             <el-input class="w-250" v-model="data.hospitalNo"></el-input>
           </el-form-item>
-          <el-form-item class="mb-8" :label="$t('HospitalName')" prop="hospitalName">
+          <el-form-item class="mb-8" :label="$t('hospitalName')" prop="hospitalName">
             <el-input class="w-250" v-model="data.hospitalName"></el-input>
           </el-form-item>
-          <el-form-item class="mb-8" :label="$t('Email')" prop="email">
+          <el-form-item class="mb-8" :label="$t('email')" prop="email">
             <el-input class="w-250" v-model="data.email"></el-input>
           </el-form-item>
-          <el-form-item class="mb-8" :label="$t('ContactPerson')" prop="contactPerson">
+          <el-form-item class="mb-8" :label="$t('contactPerson')" prop="contactPerson">
             <el-input class="w-250" v-model="data.contactPerson"></el-input>
           </el-form-item>
           <el-row class="mb-8" type="flex" align="middle" justify="space-between">
-            <el-form-item class="mb-0" :label="$t('Captcha')" prop="captcha">
+            <el-form-item class="mb-0" :label="$t('captcha')" prop="captcha">
               <el-input class="w-90" v-model="data.captcha" maxlength="4"></el-input>
             </el-form-item>
-            <img :src="captchaUrl" class="mt-40" width="90" height="40" alt>
+            <img :src="captchaUrl" class="mt-40" width="90" height="40" alt />
             <el-button
               class="mt-40"
               circle
@@ -58,7 +58,7 @@
             class="w-250 mt-16"
             type="primary"
             @click="submitForm('data')"
-          >{{ $t('Register') }}</el-button>
+          >{{ $t('register') }}</el-button>
         </el-form>
       </el-row>
     </el-col>

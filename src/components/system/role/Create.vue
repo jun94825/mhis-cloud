@@ -3,13 +3,13 @@
     <el-row class="sys-header" type="flex" align="middle" justify="space-between">
       <el-row type="flex" align="middle">
         <i class="el-icon-back" @click="previousPage"></i>
-        <p>新增角色</p>
+        <p>{{ $t('createRole') }}</p>
       </el-row>
-      <el-button size="mini" type="success" @click="create">新增</el-button>
+      <el-button size="small" type="success" @click="create">{{ $t('confirm') }}</el-button>
     </el-row>
     <div class="form">
       <div class="form-inside">
-        <el-input class="mb-8" size="small" v-model="roleName" placeholder="角色名稱"></el-input>
+        <el-input class="mb-8" size="small" v-model="roleName" placeholder="Role Name"></el-input>
         <el-table
           stripe
           row-key="id"
@@ -18,50 +18,50 @@
           v-if="JSON.stringify(data) !== '{}'"
           :tree-props="{children: 'pages', hasChildren: 'hasChildren'}"
         >
-          <el-table-column prop="name" label="功能分類" min-width="250">
+          <el-table-column prop="name" label="Finctional" min-width="250">
             <template slot-scope="scope">
               <el-checkbox
-                v-model="scope.row.all"
                 v-if="scope.row.id > 5"
+                v-model="scope.row.all"
                 @change="all(scope.row)"
-              >{{ scope.row.name }}</el-checkbox>
-              <p v-else style="display: inline;">{{ scope.row.name }}</p>
+              >{{ $t(scope.row.name) }}</el-checkbox>
+              <p v-else style="display: inline;">{{ $t(scope.row.name) }}</p>
             </template>
           </el-table-column>
-          <el-table-column label="讀取" width="125" align="center">
+          <el-table-column label="Read" width="125" align="center">
             <template slot-scope="scope">
               <el-checkbox
-                v-model="scope.row.read"
                 v-if="scope.row.id > 5"
+                v-model="scope.row.read"
                 @change="cancel(scope.row)"
               ></el-checkbox>
             </template>
           </el-table-column>
-          <el-table-column label="新增" width="125" align="center">
+          <el-table-column label="Create" width="125" align="center">
             <template slot-scope="scope">
               <el-checkbox
                 :class="scope.row.name"
-                v-model="scope.row.create"
                 v-if="scope.row.id > 5"
+                v-model="scope.row.create"
                 @change="check(scope.row, 'create')"
               ></el-checkbox>
             </template>
           </el-table-column>
-          <el-table-column label="修改" width="125" align="center">
+          <el-table-column label="Modify" width="125" align="center">
             <template slot-scope="scope">
               <el-checkbox
-                v-model="scope.row.edit"
                 v-if="scope.row.id > 5"
+                v-model="scope.row.edit"
                 @change="check(scope.row, 'edit')"
               ></el-checkbox>
             </template>
           </el-table-column>
-          <el-table-column label="刪除" width="125" align="center">
+          <el-table-column label="Delete" width="125" align="center">
             <template slot-scope="scope">
               <el-checkbox
                 :class="scope.row.name"
-                v-model="scope.row.delete"
                 v-if="scope.row.id > 5"
+                v-model="scope.row.delete"
                 @change="check(scope.row, 'delete')"
               ></el-checkbox>
             </template>
@@ -140,7 +140,7 @@ export default {
       if (!r.read) {
         r.num = 0;
         r[t] = null;
-        this.$message({ type: 'warning', center: true, message: '請先勾選讀取選項' });
+        this.$message({ type: 'warning', center: true, message: this.$t('readOptionReq') });
       }
       if (r.read && window.event.target.checked) {
         r.num += 1;
@@ -171,7 +171,7 @@ export default {
     },
     create() {
       if (this.roleName === '') {
-        this.$message({ type: 'warning', center: true, message: '請輸入角色名稱' });
+        this.$message({ type: 'warning', center: true, message: this.$t('roleReqMes') });
       } else {
         this.$store.commit('LOADING', true);
         const api = `http://${this.domain}.upis.info/Api/Role/Create`;
@@ -194,7 +194,7 @@ export default {
         });
         this.$http.post(api, dataJS).then((res) => {
           if (res.data.success) {
-            this.$message({ type: 'success', center: true, message: '新增成功' });
+            this.$message({ type: 'success', center: true, message: this.$t('sucAdded') });
             this.$router.push({ name: 'RoleManagement' });
           }
         });
@@ -217,68 +217,5 @@ export default {
 
 .el-input {
   width: 10rem;
-}
-
-.form-header {
-  padding: 1rem;
-  margin-top: 1rem;
-  font-size: 0.875rem;
-  background-color: #f5f5f5;
-  border-bottom: 0.0625rem solid #e2e2e2;
-
-  .el-row {
-    width: 30%;
-  }
-}
-
-.category-title {
-  padding: 1rem;
-  font-size: 0.875rem;
-  border-bottom: 0.0625rem solid #e2e2e2;
-
-  > i {
-    margin: 0 1rem;
-    cursor: pointer;
-    font-weight: bold;
-  }
-}
-
-.category-content {
-  padding: 1rem;
-  background-color: #f5f5f5;
-  border-bottom: 0.0625rem solid #e2e2e2;
-
-  .fuck {
-    margin-left: 2.5rem;
-
-    > label {
-      cursor: pointer;
-      font-size: 0.875rem;
-    }
-
-    > input {
-      margin-right: 1rem;
-    }
-  }
-
-  .el-row {
-    width: 30%;
-
-    > input {
-      cursor: pointer;
-      zoom: 150%;
-    }
-
-    > label {
-      margin-right: unset;
-    }
-  }
-}
-
-.el-icon-back {
-  cursor: pointer;
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-right: 1rem;
 }
 </style>

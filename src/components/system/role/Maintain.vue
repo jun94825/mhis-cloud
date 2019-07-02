@@ -1,25 +1,29 @@
 <template>
   <div>
     <el-row class="sys-header" type="flex" align="middle" justify="space-between">
-      <p>角色維護</p>
-      <el-button type="success" size="mini" @click="toCreatePage">新增</el-button>
+      <p>{{ $t('RoleManagement') }}</p>
+      <el-button type="primary" size="small" @click="toCreatePage">{{ $t('create') }}</el-button>
     </el-row>
     <el-row class="form">
       <div class="form-inside">
         <el-table :data="roles">
-          <el-table-column label="角色名稱" min-width="150">
+          <el-table-column label="Role Name" min-width="150">
             <template slot-scope="scope">
               <p size="medium">{{ scope.row.name }}</p>
             </template>
           </el-table-column>
-          <el-table-column width="75" align="right">
+          <el-table-column width="100" align="right">
             <template slot-scope="scope">
-              <el-button size="mini" @click="toEditPage(scope.$index, scope.row)">編輯</el-button>
+              <el-button size="mini" @click="toEditPage(scope.$index, scope.row)">{{ $t('edit') }}</el-button>
             </template>
           </el-table-column>
-          <el-table-column width="75" align="right">
+          <el-table-column width="100" align="right">
             <template slot-scope="scope">
-              <el-button size="mini" type="danger" @click="del(scope.$index, scope.row)">刪除</el-button>
+              <el-button
+                size="mini"
+                type="danger"
+                @click="del(scope.$index, scope.row)"
+              >{{ $t('delete') }}</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -48,15 +52,15 @@ export default {
         this.roles = res.data.content.roles;
         this.$store.commit('LOADING', false);
         if (val === 'del') {
-          this.$message({ type: 'success', center: true, message: '删除成功!' });
+          this.$message({ type: 'success', center: true, message: this.$t('sucdelete') });
         }
       });
     },
     del(index, row) {
-      this.$confirm('此操作將永久刪除該文件，是否繼續？', '提示', {
+      this.$confirm(this.$t('message'), this.$t('tooltip'), {
         type: 'warning',
-        confirmButtonText: '確定',
-        cancelButtonText: '取消',
+        confirmButtonText: this.$t('confirm'),
+        cancelButtonText: this.$t('cancel'),
       }).then(() => {
         this.$store.commit('LOADING', true);
         const api = `http://${this.domain}.upis.info/Api/Role/Delete/${row.id}`;
@@ -66,7 +70,7 @@ export default {
           }
         });
       }).catch(() => {
-        this.$message({ type: 'info', center: true, message: '已取消删除' });
+        this.$message({ type: 'info', center: true, message: this.$t('undelete') });
       });
     },
     toCreatePage() {

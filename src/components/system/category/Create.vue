@@ -2,7 +2,7 @@
   <div>
     <el-row class="sys-header" type="flex" align="middle">
       <i class="el-icon-back" @click="previousPage"></i>
-      <p>新增分類</p>
+      <p>{{ $t('createCat') }}</p>
     </el-row>
     <div class="form">
       <div class="form-inside">
@@ -34,7 +34,7 @@
           <p class="required">Description</p>
           <el-input v-model="data.desc"></el-input>
         </div>
-        <el-button type="primary" size="small" @click="create">送出</el-button>
+        <el-button type="success" size="small" @click="create">{{ $t('confirm') }}</el-button>
       </div>
     </div>
   </div>

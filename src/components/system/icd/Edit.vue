@@ -2,7 +2,7 @@
   <div>
     <el-row class="sys-header" type="flex" align="middle">
       <i class="el-icon-back" @click="previousPage"></i>
-      <p>編輯 ICD10</p>
+      <p>{{ $t('editICD10') }}</p>
     </el-row>
     <div class="form">
       <div class="form-inside">
@@ -21,7 +21,7 @@
         <div class="inside-item">
           <el-checkbox v-model="data.alert">Reportable</el-checkbox>
         </div>
-        <el-button type="primary" size="small" @click="edit">修改</el-button>
+        <el-button type="success" size="small" @click="edit">{{ $t('confirm') }}</el-button>
       </div>
     </div>
   </div>

@@ -2,7 +2,7 @@
   <div>
     <el-row class="sys-header" type="flex" align="middle">
       <i class="el-icon-back" @click="previousPage"></i>
-      <p>新增 ICD10</p>
+      <p>{{ $t('createICD10') }}</p>
     </el-row>
     <el-row class="form">
       <div class="form-inside">
@@ -16,14 +16,14 @@
         </div>
         <div class="inside-item">
           <p class="required">Type</p>
-          <el-select v-model="data.type" placeholder="請選擇">
+          <el-select v-model="data.type" :placeholder="$t('selectAnOption')">
             <el-option v-for="(item, index) in options" :key="index" :value="item"></el-option>
           </el-select>
         </div>
         <div class="inside-item">
           <el-checkbox v-model="data.alert">Reportable</el-checkbox>
         </div>
-        <el-button type="primary" size="small" @click="create">送出</el-button>
+        <el-button type="success" size="small" @click="create">{{ $t('confirm') }}</el-button>
       </div>
     </el-row>
   </div>

@@ -20,7 +20,7 @@
         </div>
         <div class="inside-item">
           <p>Allow Dept.</p>
-          <el-select v-model="select" multiple placeholder="請選擇">
+          <el-select v-model="data.depts" multiple placeholder="請選擇">
             <el-option
               v-for="(item, index) in selectList"
               :key="index"

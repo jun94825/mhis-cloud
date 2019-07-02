@@ -1,15 +1,20 @@
 <template>
   <div>
     <el-row class="sys-header" type="flex" align="middle" justify="space-between">
-      <p>ICD10 設定</p>
-      <el-button size="mini" type="success" @click="toCreatePage">新增</el-button>
+      <p>{{ $t('ICD10') }}</p>
+      <el-button size="small" type="primary" @click="toCreatePage">{{ $t('create') }}</el-button>
     </el-row>
     <el-row class="form">
       <div class="form-inside">
         <el-row class="mb-8 mr-auto" type="flex">
-          <el-input size="small" v-model="search.keyword" placeholder="Keyword"></el-input>
-          <el-button class="ml-16" type="primary" size="small" @click="getList">搜尋</el-button>
-          <el-button class="ml-16" type="info" size="small" @click="getList('reset')">重置</el-button>
+          <el-input size="small" v-model="search.keyword" :placeholder="$t('keyword')"></el-input>
+          <el-button class="ml-16" type="warning" size="small" @click="getList">{{ $t('search') }}</el-button>
+          <el-button
+            class="ml-16"
+            type="info"
+            size="small"
+            @click="getList('reset')"
+          >{{ $t('reset') }}</el-button>
         </el-row>
         <el-table :data="data.list">
           <el-table-column label="ICD10 Code" width="150">
@@ -35,12 +40,16 @@
           </el-table-column>
           <el-table-column width="100" align="right">
             <template slot-scope="scope">
-              <el-button size="mini" @click="toEditPage(scope.$index, scope.row)">編輯</el-button>
+              <el-button size="mini" @click="toEditPage(scope.$index, scope.row)">{{ $t('edit') }}</el-button>
             </template>
           </el-table-column>
-          <el-table-column width="75" align="right">
+          <el-table-column width="100" align="right">
             <template slot-scope="scope">
-              <el-button size="mini" type="danger" @click="del(scope.$index, scope.row)">刪除</el-button>
+              <el-button
+                size="mini"
+                type="danger"
+                @click="del(scope.$index, scope.row)"
+              >{{ $t('delete') }}</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -90,16 +99,16 @@ export default {
           this.data = res.data.content;
           this.$store.commit('LOADING', false);
           if (val === 'del') {
-            this.$message({ type: 'success', center: 'center', message: '刪除成功!' });
+            this.$message({ type: 'success', center: 'center', message: this.$t('sucdelete') });
           }
         }
       });
     },
     del(index, row) {
-      this.$confirm('此操作將永久刪除該文件，是否繼續？', '提示', {
+      this.$confirm(this.$t('message'), this.$t('tooltip'), {
         type: 'warning',
-        confirmButtonText: '確定',
-        cancelButtonText: '取消',
+        confirmButtonText: this.$t('confirm'),
+        cancelButtonText: this.$t('cancel'),
       }).then(() => {
         this.$store.commit('LOADING', true);
         const api = `http://${this.domain}.upis.info/Api/ICD10/Delete/${row.id}`;
@@ -110,7 +119,7 @@ export default {
           }
         });
       }).catch(() => {
-        this.$message({ type: 'info', center: 'center', message: '已取消刪除' });
+        this.$message({ type: 'info', center: 'center', message: this.$t('undelete') });
       });
     },
     handleCurrentChange(val) {

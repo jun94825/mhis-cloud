@@ -2,7 +2,7 @@
   <div>
     <el-row class="sys-header" type="flex" align="middle">
       <i class="el-icon-back" @click="previousPage"></i>
-      <p>編輯分類</p>
+      <p>{{ $t('editCat') }}</p>
     </el-row>
     <div class="form">
       <div class="form-inside">
@@ -27,7 +27,7 @@
           <p>Description</p>
           <el-input v-model="data.desc" :placeholder="data.desc"></el-input>
         </div>
-        <el-button type="primary" size="small" @click="edit">修改</el-button>
+        <el-button type="success" size="small" @click="edit">{{ $t('confirm') }}</el-button>
       </div>
     </div>
   </div>

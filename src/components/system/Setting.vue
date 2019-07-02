@@ -2,25 +2,25 @@
   <div>
     <el-row class="header" type="flex" align="middle" justify="space-between">
       <p>{{ $t('Setting') }}</p>
-      <el-button type="primary" size="small" @click="checkRmove">{{ $t('Save') }}</el-button>
+      <el-button type="primary" size="small" @click="checkRmove">{{ $t('save') }}</el-button>
     </el-row>
     <el-row class="slide" type="flex" align="middle">
       <a href="javascript:;" @click="scroll(0)">{{ $t('Setting') }}</a>
-      <a href="javascript:;" @click="scroll(1)">{{ $t('MailSetting') }}</a>
-      <a href="javascript:;" @click="scroll(2)">{{ $t('HosptialInformation') }}</a>
+      <a href="javascript:;" @click="scroll(1)">{{ $t('mailSetting') }}</a>
+      <a href="javascript:;" @click="scroll(2)">{{ $t('hosptialInformation') }}</a>
     </el-row>
     <el-row class="main" v-if="JSON.stringify(data) !== '{}'">
       <p class="mark">{{ $t('Setting') }}</p>
       <div class="main-item">
         <div class="item-row">
-          <p class="row-p">{{ $t('FingerPrint') }}</p>
+          <p class="row-p">{{ $t('fingerPrint') }}</p>
           <el-switch active-color="#0b7dd1" inactive-color="#ccc" v-model="data.fingerPrint.value"></el-switch>
         </div>
         <div class="item-row">
-          <p class="row-p">{{ $t('BackgroundImage') }}</p>
+          <p class="row-p">{{ $t('backgroundImage') }}</p>
           <label class="el-button el-button--primary el-button--small">
-            <input type="file" size="small" class="d-none" @change="singleFile('backgroundImage')">
-            {{ $t('Select') }}
+            <input type="file" size="small" class="d-none" @change="singleFile('backgroundImage')" />
+            {{ $t('select') }}
           </label>
         </div>
         <div class="item-row" v-if="data.backgroundImage.value !== null">
@@ -29,22 +29,22 @@
             @mouseenter="switchDeleteBg('bgImg')"
             @mouseleave="switchDeleteBg('bgImg')"
           >
-            <img :src="data.backgroundImage.value.url" alt>
+            <img :src="data.backgroundImage.value.url" alt />
             <div id="bgImg" class="remove" style="display: none;">
               <i class="el-icon-delete" @click="removeLocalImg('backgroundImage')"></i>
             </div>
           </div>
         </div>
         <div class="item-row">
-          <p class="row-p">{{ $t('OfficialBannerImage') }}</p>
+          <p class="row-p">{{ $t('officialBannerImage') }}</p>
           <label class="el-button el-button--primary el-button--small">
             <input
               type="file"
               size="small"
               class="d-none"
               @change="singleFile('officialBannerImg')"
-            >
-            {{ $t('Select') }}
+            />
+            {{ $t('select') }}
           </label>
         </div>
         <div class="item-row" v-if="data.officialBannerImg.value !== null">
@@ -53,31 +53,31 @@
             @mouseenter="switchDeleteBg('obImg')"
             @mouseleave="switchDeleteBg('obImg')"
           >
-            <img :src="data.officialBannerImg.value.url" alt>
+            <img :src="data.officialBannerImg.value.url" alt />
             <div id="obImg" class="remove" style="display: none;">
               <i class="el-icon-delete" @click="removeLocalImg('officialBannerImg')"></i>
             </div>
           </div>
         </div>
         <div class="item-row">
-          <p class="row-p mb-auto">{{ $t('OfficialLogo') }}</p>
+          <p class="row-p mb-auto">{{ $t('officialLogo') }}</p>
           <label
             class="el-button el-button--primary el-button--small"
             @click="multipleFiles('partners')"
           >
-            <input type="file" size="small" class="d-none">
-            {{ $t('Select') }}
+            <input type="file" size="small" class="d-none" />
+            {{ $t('select') }}
           </label>
         </div>
         <div class="item-row">
-          <p class="row-p mb-auto">{{ $t('Partner') }}</p>
+          <p class="row-p mb-auto">{{ $t('partner') }}</p>
           <div v-for="(item, index) in data.partners.values" :key="index">
             <div
               class="multiple-img p-rel"
               @mouseenter="switchDeleteBg(item.id)"
               @mouseleave="switchDeleteBg(item.id)"
             >
-              <img :src="item.url" alt>
+              <img :src="item.url" alt />
               <div :id="item.id" class="remove" style="display: none;">
                 <i class="el-icon-delete" @click="removeLocalImg('partners', index)"></i>
               </div>
@@ -90,106 +90,106 @@
               class="d-none"
               @change="multipleFiles('partners')"
               multiple
-            >
+            />
             <i class="el-icon-plus"></i>
           </label>
         </div>
         <div class="item-row">
-          <p class="row-p">{{ $t('VisitingTime') }}</p>
-          <p>{{ $t('Morning') }}</p>
+          <p class="row-p">{{ $t('visitingTime') }}</p>
+          <p>{{ $t('morning') }}</p>
           <el-time-select
             class="row-time-picker"
             :picker-options="pickerSetting"
-            :placeholder="$t('Start')"
+            :placeholder="$t('start')"
             v-model="data.morningShiftStart.value"
           ></el-time-select>
-          <p style="margin-left: 1rem;">{{ $t('To') }}</p>
+          <p style="margin-left: 1rem;">{{ $t('to') }}</p>
           <el-time-select
             class="row-time-picker"
             :picker-options="pickerSetting"
-            :placeholder="$t('End')"
+            :placeholder="$t('end')"
             v-model="data.morningShiftEnd.value"
           ></el-time-select>
         </div>
         <div class="item-row">
           <p class="row-p"></p>
-          <p>{{ $t('Afternoon') }}</p>
+          <p>{{ $t('afternoon') }}</p>
           <el-time-select
             class="row-time-picker"
             :picker-options="pickerSetting"
-            :placeholder="$t('Start')"
+            :placeholder="$t('start')"
             v-model="data.afternoonShiftStart.value"
           ></el-time-select>
-          <p style="margin-left: 1rem;">{{ $t('To') }}</p>
+          <p style="margin-left: 1rem;">{{ $t('to') }}</p>
           <el-time-select
             class="row-time-picker"
             :picker-options="pickerSetting"
-            :placeholder="$t('End')"
+            :placeholder="$t('end')"
             v-model="data.afternoonShiftEnd.value"
           ></el-time-select>
         </div>
         <div class="item-row">
           <p class="row-p"></p>
-          <p>{{ $t('Night') }}</p>
+          <p>{{ $t('night') }}</p>
           <el-time-select
             class="row-time-picker"
             :picker-options="pickerSetting"
-            :placeholder="$t('Start')"
+            :placeholder="$t('start')"
             v-model="data.eveningShiftStart.value"
           ></el-time-select>
-          <p style="margin-left: 1rem;">{{ $t('To') }}</p>
+          <p style="margin-left: 1rem;">{{ $t('to') }}</p>
           <el-time-select
             class="row-time-picker"
             :picker-options="pickerSetting"
-            :placeholder="$t('End')"
+            :placeholder="$t('end')"
             v-model="data.eveningShiftEnd.value"
           ></el-time-select>
         </div>
       </div>
-      <p class="mark">{{ $t('MailSetting') }}</p>
+      <p class="mark">{{ $t('mailSetting') }}</p>
       <div class="main-item">
         <div class="item-row">
-          <p class="row-p">{{ $t('UserAcc') }}</p>
+          <p class="row-p">{{ $t('userAcc') }}</p>
           <el-input class="row-input" v-model="data.mailUserName.value"></el-input>
         </div>
         <div class="item-row">
-          <p class="row-p">{{ $t('UserPwd') }}</p>
+          <p class="row-p">{{ $t('userPwd') }}</p>
           <el-input class="row-input" v-model="data.mailUserPassword.value"></el-input>
         </div>
         <div class="item-row">
-          <p class="row-p">{{ $t('Port') }}</p>
+          <p class="row-p">{{ $t('port') }}</p>
           <el-input class="row-input" v-model="data.mailPort.value"></el-input>
         </div>
         <div class="item-row">
-          <p class="row-p">{{ $t('HostUrl') }}</p>
+          <p class="row-p">{{ $t('hostUrl') }}</p>
           <el-input class="row-input" v-model="data.mailUrl.value"></el-input>
         </div>
         <div class="item-row">
-          <p class="row-p">{{ $t('ContactMail') }}</p>
+          <p class="row-p">{{ $t('contactMail') }}</p>
           <el-input class="row-input" v-model="data.mailContactMail.value"></el-input>
         </div>
         <div class="item-row">
-          <p class="row-p">{{ $t('ContactBccMail') }}</p>
+          <p class="row-p">{{ $t('contactBccMail') }}</p>
           <el-input class="row-input" v-model="data.mailContactBccMail.value"></el-input>
         </div>
       </div>
-      <p class="mark">{{ $t('HosptialInformation') }}</p>
+      <p class="mark">{{ $t('hosptialInformation') }}</p>
       <div class="main-item">
         <div class="item-row">
-          <p class="row-p">{{ $t('HosptialNo') }}</p>
+          <p class="row-p">{{ $t('hosptialNo') }}</p>
           <p>{{ data.hospitalNo }}</p>
         </div>
         <div class="item-row">
-          <p class="row-p">{{ $t('HosptialName') }}</p>
+          <p class="row-p">{{ $t('hosptialName') }}</p>
           <el-input class="row-input" v-model="data.hospitalName.value"></el-input>
         </div>
         <div class="item-row">
-          <p class="row-p">{{ $t('HosptialTel') }}</p>
+          <p class="row-p">{{ $t('hosptialTel') }}</p>
           <el-input class="row-input" v-model="data.hospitalTel.value"></el-input>
         </div>
         <!-- Google Maps -->
         <div class="item-row">
-          <p class="row-p">{{ $t('HosptialAdd') }}</p>
+          <p class="row-p">{{ $t('hosptialAdd') }}</p>
           <p>{{ data.hospitalAddress.value }}</p>
         </div>
         <div class="item-row">
@@ -213,19 +213,19 @@
         </div>
         <!-- Google Maps -->
         <div class="item-row">
-          <p class="row-p">{{ $t('HospitalContactNamel') }}</p>
+          <p class="row-p">{{ $t('hospitalContactNamel') }}</p>
           <el-input class="row-input" v-model="data.hospitalContactName.value"></el-input>
         </div>
         <div class="item-row">
-          <p class="row-p">{{ $t('HospitalContactTel') }}</p>
+          <p class="row-p">{{ $t('hospitalContactTel') }}</p>
           <el-input class="row-input" v-model="data.hospitalContactTel.value"></el-input>
         </div>
         <div class="item-row">
-          <p class="row-p">{{ $t('HospitalSlogan') }}</p>
+          <p class="row-p">{{ $t('hospitalSlogan') }}</p>
           <el-input class="row-input" v-model="data.hospitalSlogan.value"></el-input>
         </div>
         <div class="item-row">
-          <p class="row-p" style="margin-bottom: auto;">關於醫院</p>
+          <p class="row-p" style="margin-bottom: auto;">{{ $t('hospitalAbout') }}</p>
           <!-- Vue2 Editor -->
           <vue-editor
             class="editor-area"
@@ -235,14 +235,14 @@
           <!-- Vue2 Editor -->
         </div>
         <div class="item-row">
-          <p class="row-p mb-auto">{{ $t('HospitalEnvironment') }}</p>
+          <p class="row-p mb-auto">{{ $t('hospitalEnvironment') }}</p>
           <div v-for="(item, index) in data.hospitalEnvironmentPhotos.values" :key="index">
             <div
               class="multiple-img p-rel"
               @mouseenter="switchDeleteBg(item.id)"
               @mouseleave="switchDeleteBg(item.id)"
             >
-              <img :src="item.url" alt>
+              <img :src="item.url" alt />
               <div :id="item.id" class="remove" style="display: none;">
                 <i
                   class="el-icon-delete"
@@ -258,7 +258,7 @@
               class="d-none"
               @change="multipleFiles('hospitalEnvironmentPhotos')"
               multiple
-            >
+            />
             <i class="el-icon-plus"></i>
           </label>
         </div>

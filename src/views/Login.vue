@@ -1,7 +1,7 @@
 <template>
   <div class="h-100">
     <el-row class="header" type="flex" align="middle" justify="center">
-      <img src="../assets/images/mhis-white.png" alt>
+      <img src="../assets/images/mhis-white.png" alt />
       <p>{{ info.hosptialName }}</p>
     </el-row>
     <el-row class="main" type="flex" align="middle" :style="{ backgroundImage: `url(${bgUrl})` }">
@@ -19,13 +19,13 @@
           </el-select>
         </el-form-item>
         <el-form-item class="mb-20" prop="userName">
-          <el-input class="w-250" v-model="data.userName" :placeholder="$t('Account')"></el-input>
+          <el-input class="w-250" v-model="data.userName" :placeholder="$t('account')"></el-input>
         </el-form-item>
         <el-form-item class="mb-20" prop="password">
           <el-input
             class="w-250"
             v-model="data.password"
-            :placeholder="$t('Password')"
+            :placeholder="$t('password')"
             type="password"
           ></el-input>
         </el-form-item>
@@ -34,17 +34,17 @@
             <el-input
               class="w-90"
               v-model="data.captcha"
-              :placeholder="$t('Captcha')"
+              :placeholder="$t('captcha')"
               maxlength="4"
             ></el-input>
           </el-form-item>
-          <img :src="captchaUrl" width="90" height="40" alt>
+          <img :src="captchaUrl" width="90" height="40" alt />
           <el-button class="mhis-primary" icon="el-icon-refresh" circle @click="getCaptcha"></el-button>
         </el-row>
         <el-row class="mb-20" type="flex">
-          <el-checkbox v-model="data.remember">{{ $t('RememberMe') }}</el-checkbox>
+          <el-checkbox v-model="data.remember">{{ $t('rememberMe') }}</el-checkbox>
         </el-row>
-        <el-button class="w-250 mhis-primary" @click="submitForm('data')">{{ $t('Register') }}</el-button>
+        <el-button class="w-250 mhis-primary" @click="submitForm('data')">{{ $t('login') }}</el-button>
       </el-form>
       <div class="img-area">
         <img
@@ -54,7 +54,7 @@
           :key="index"
           :src="item.url"
           alt
-        >
+        />
       </div>
     </el-row>
   </div>
