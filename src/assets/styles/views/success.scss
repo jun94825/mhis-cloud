@@ -23,7 +23,7 @@
         color: $primary-light;
       }
 
-      > i {
+      .check {
         color: green;
         font-size: 2rem;
         margin-top: 2rem;
@@ -34,8 +34,21 @@
         border: 0.25rem green solid;
       }
 
+      .warning {
+        color: #e6a23c;
+        font-size: 3.75rem;
+        margin: 2rem 0;
+      }
+
+      .success {
+        color: #67c23a;
+        font-size: 3.75rem;
+        margin: 2rem 0;
+      }
+
       p:nth-of-type(2) {
         color: #333;
+        font-weight: bold;
         font-size: 1.25rem;
       }
 

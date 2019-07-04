@@ -41,6 +41,8 @@ export default {
       });
     },
     signOut() {
+      localStorage.removeItem('cookie');
+      localStorage.removeItem('menuGrp');
       this.$router.push({ name: 'Login' });
     },
     switchCollapse() {

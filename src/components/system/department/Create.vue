@@ -8,7 +8,7 @@
       <div class="form-inside">
         <div class="inside-item">
           <p>Category Name</p>
-          <el-select v-model="data.parentId" placeholder="請選擇">
+          <el-select v-model="data.parentId" :placeholder="$t('select')">
             <el-option
               v-for="(item, index) in selectList"
               :label="item.label"

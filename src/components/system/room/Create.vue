@@ -2,7 +2,7 @@
   <div>
     <el-row class="sys-header" type="flex" align="middle">
       <i class="el-icon-back" @click="previousPage"></i>
-      <p>新增診間</p>
+      <p>{{ $t('createRoom') }}</p>
     </el-row>
     <div class="form">
       <div class="form-inside">
@@ -20,19 +20,18 @@
         </div>
         <div class="inside-item">
           <p>Allow Dept.</p>
-          <el-select v-model="data.depts" multiple placeholder="請選擇">
-            <el-option
-              v-for="(item, index) in selectList"
-              :key="index"
-              :label="item.label"
-              :value="item.id"
-            ></el-option>
-          </el-select>
+          <el-cascader
+            :placeholder="$t('select')"
+            :options="deptOptions"
+            :show-all-levels="false"
+            :props="{ multiple: true, expandTrigger: 'hover' }"
+            @change="handleChange"
+          ></el-cascader>
         </div>
         <div class="inside-item">
           <el-checkbox v-model="data.status">Status</el-checkbox>
         </div>
-        <el-button type="primary" size="small" @click="create">送出</el-button>
+        <el-button type="success" size="small" @click="create">{{ $t('confirm') }}</el-button>
       </div>
     </div>
   </div>
@@ -51,6 +50,7 @@ export default {
       select: [],
       selectList: [],
       canBeRegister: -1,
+      deptOptions: [],
     };
   },
   computed: {
@@ -66,6 +66,26 @@ export default {
         if (res.data.success) {
           this.selectList = res.data.content.list;
           this.$store.commit('LOADING', false);
+          this.getOptions();
+        }
+      });
+    },
+    getOptions() {
+      const api = `http://${this.domain}.upis.info/Api/Dept/GetSelect/${this.canBeRegister}`;
+      this.$http.get(api).then((res) => {
+        if (res.data.success) {
+          const r = res.data.content.list;
+          r.forEach((item) => {
+            const i = item;
+            i.value = i.label;
+            i.children = i.list;
+            delete i.list;
+            i.children.forEach((value) => {
+              const v = value;
+              v.value = v.label;
+            });
+          });
+          this.deptOptions = r;
         }
       });
     },
@@ -78,6 +98,18 @@ export default {
           this.$message({ type: 'success', center: true, message: '新增成功' });
           this.$router.push({ name: 'Room' });
         }
+      });
+    },
+    handleChange(array) {
+      this.data.depts = [];
+      this.deptOptions.forEach((item) => {
+        item.children.forEach((i) => {
+          array.forEach((value) => {
+            if (i.label === value[1]) {
+              this.data.depts.push(i.id);
+            }
+          });
+        });
       });
     },
     previousPage() {

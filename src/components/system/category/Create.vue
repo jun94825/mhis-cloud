@@ -8,7 +8,7 @@
       <div class="form-inside">
         <div class="inside-item">
           <p>Category</p>
-          <el-select v-model="data.categoryId" placeholder="請選擇">
+          <el-select v-model="data.categoryId" :placeholder="$t('select')">
             <el-option
               v-for="(item, index) in categoryList"
               :label="item.label"
@@ -23,7 +23,7 @@
             :options="parentList"
             :props="{ expandTrigger: 'hover' }"
             @change="handleChange"
-            placeholder="請選擇"
+            :placeholder="$t('select')"
           ></el-cascader>
         </div>
         <div class="inside-item">

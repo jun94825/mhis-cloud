@@ -2,7 +2,7 @@
   <div>
     <el-row class="sys-header" type="flex" align="middle">
       <i class="el-icon-back" @click="previousPage"></i>
-      <p>編輯診間</p>
+      <p>{{ $t('editRoom') }}</p>
     </el-row>
     <div class="form">
       <div class="form-inside">
@@ -21,15 +21,18 @@
         <div class="inside-item">
           <p>Allow Dept.</p>
           <el-cascader
-            v-model="test2"
-            placeholder="請選擇"
-            :options="allowDeptOptions"
+            v-model="reverseBinding"
+            :placeholder="$t('select')"
+            :options="deptOptions"
             :show-all-levels="false"
             :props="{ multiple: true, expandTrigger: 'hover' }"
             @change="handleChange"
           ></el-cascader>
         </div>
-        <el-button type="primary" size="small" @click="edit">修改</el-button>
+        <div class="inside-item">
+          <el-checkbox v-model="data.status">Status</el-checkbox>
+        </div>
+        <el-button type="success" size="small" @click="edit">{{ $t('confirm') }}</el-button>
       </div>
     </div>
   </div>
@@ -42,11 +45,10 @@ export default {
       id: '',
       data: {},
       canBeRegister: -1,
-      allowDeptSelect: [],
-      allowDeptOptions: [],
-      // test: [['Taipei', 'Banciao'], ['Kaohsiung', 'Nanzih']],
-      test2: [],
-      test3: [],
+      deptOptions: [],
+      deptSelected: [],
+      reverseBinding: [],
+      // test3: [],
     };
   },
   computed: {
@@ -59,13 +61,11 @@ export default {
       this.$store.commit('LOADING', true);
       const api = `http://${this.domain}.upis.info/Api/Room/Edit/${this.id}`;
       this.$http.get(api).then((res) => {
-        console.log(res);
         if (res.data.success) {
           this.data = res.data.content;
-          /* find same */
-          res.data.content.selectedDepts.forEach((item) => {
+          this.data.selectedDepts.forEach((item) => {
             item.children.forEach((i) => {
-              this.allowDeptSelect.push(i);
+              this.deptSelected.push(i);
             });
           });
           this.getOptions();
@@ -87,30 +87,31 @@ export default {
               v.value = v.label;
             });
           });
-          this.allowDeptOptions = r;
-          /* find same step 1 */
+          this.deptOptions = r;
+          /* 利用 id 尋找相同父項目，若有即取出 label */
           this.data.selectedDepts.forEach((item) => {
-            this.allowDeptOptions.forEach((i) => {
+            this.deptOptions.forEach((i) => {
               if (item.id === i.id) {
                 for (let x = 0; x < item.children.length; x += 1) {
-                  this.test2.push([i.label]);
+                  this.reverseBinding.push([i.label]);
                 }
               }
             });
           });
-          /* find same step 2 */
-          this.allowDeptSelect.forEach((item) => {
-            this.allowDeptOptions.forEach((value) => {
+          /* 利用 id 尋找相同子項目，若有即取出 label */
+          const children = [];
+          this.deptSelected.forEach((item) => {
+            this.deptOptions.forEach((value) => {
               value.children.forEach((v) => {
                 if (item === v.id) {
-                  this.test3.push(v.label);
+                  children.push(v.label);
                 }
               });
             });
           });
-          /* find same step 3 */
-          this.test2.forEach((item, index) => {
-            item.push(this.test3[index]);
+          /* 將兩者合併 */
+          this.reverseBinding.forEach((item, index) => {
+            item.push(children[index]);
           });
           this.$store.commit('LOADING', false);
         }
@@ -123,27 +124,27 @@ export default {
       delete this.data.depts;
       delete this.data.roomNo;
       delete this.data.selectedDepts;
-      this.data.depts = this.allowDeptSelect;
+      this.data.depts = this.deptSelected;
       /* 重整資料結構 */
       const dataJS = JSON.stringify(this.data);
       this.$http.post(api, dataJS).then((res) => {
         if (res.data.success) {
-          this.$store.commit('LOADING', false);
+          this.$message({ type: 'success', center: true, message: '修改成功' });
           this.$router.push({ name: 'Room' });
         }
       });
     },
     handleChange(array) {
-      this.allowDeptSelect = [];
+      this.deptSelected = [];
       this.data.selectedDepts = [];
       array.forEach((item) => {
         this.data.selectedDepts.push(item[1]);
       });
-      this.allowDeptOptions.forEach((item) => {
+      this.deptOptions.forEach((item) => {
         item.children.forEach((i) => {
           this.data.selectedDepts.forEach((value) => {
             if (value === i.label) {
-              this.allowDeptSelect.push(i.id);
+              this.deptSelected.push(i.id);
             }
           });
         });

@@ -7,6 +7,12 @@ export default new Router({
   mode: 'history',
   routes: [
     {
+      /* 測試 Promise */
+      name: 'Test',
+      path: '/test',
+      component: () => import('./views/Test.vue'),
+    },
+    {
       /* 登入 */
       name: 'Login',
       path: '/',
@@ -23,13 +29,19 @@ export default new Router({
       name: 'Success',
       path: '/success',
       component: () => import('./views/Success.vue'),
-      beforeEnter: (to, from, next) => {
-        if (from.path === '/register' && to.query.key) {
-          next();
-        } else {
-          next({ name: '登入' });
-        }
-      },
+      // beforeEnter: (to, from, next) => {
+      //   if (from.path === '/register' && to.query.key) {
+      //     next();
+      //   } else {
+      //     next({ name: 'Login' });
+      //   }
+      // },
+    },
+    {
+      /* 啟用 */
+      name: 'Activate',
+      path: '/activate',
+      component: () => import('./views/Activate.vue'),
     },
     {
       /* 系統 */

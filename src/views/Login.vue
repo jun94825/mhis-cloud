@@ -99,6 +99,10 @@ export default {
         password: '',
         remember: false,
       },
+      info: {},
+      bgUrl: '',
+      local: 'zh-tw',
+      captchaUrl: '',
       rules: {
         userName: [
           { required: true, trigger: 'blur', validator: validateUserName },
@@ -110,10 +114,6 @@ export default {
           { required: true, trigger: 'blur', validator: validateCaptcha },
         ],
       },
-      info: {},
-      bgUrl: '',
-      local: 'zh-tw',
-      captchaUrl: '',
     };
   },
   computed: {
@@ -153,16 +153,7 @@ export default {
     changeLanguage() {
       this.$store.commit('LANGUAGE', this.local.substr(3, 2));
       localStorage.setItem('language', this.local.substr(3, 2));
-      // this.submitForm('data');
-    },
-    submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          this.login();
-        } else {
-          return false;
-        }
-      });
+      // this.submitForm('data'); // 會觸發驗證 ...
     },
     login() {
       const api = `http://${this.domain}.upis.info/Api/Login`;
@@ -170,31 +161,38 @@ export default {
       const dataJS = JSON.stringify(this.data);
       this.$store.commit('LOADING', true);
       this.$http.post(api, dataJS).then((res) => {
-        if (res.data.success === true) {
-          this.$store.commit('LOADING', false);
+        if (res.data.success) {
           localStorage.setItem('cookie', res.data.content.access_token);
           localStorage.setItem('menuGrp', JSON.stringify(res.data.content.info.menu.menuGrp));
+          this.$store.commit('LOADING', false);
           this.$router.push({ name: 'System' });
         } else {
           this.$store.commit('LOADING', false);
           this.$refs.data.resetFields();
           this.getCaptcha();
-          this.$message({
-            type: 'error',
-            center: true,
-            message: '帳號或密碼錯誤',
-          });
+          this.$message({ type: 'error', center: true, message: '帳號或密碼錯誤' });
         }
       });
     },
     getInfo() {
       const api = `http://${this.domain}.upis.info/Api/Login/Info`;
       this.$http.get(api).then((res) => {
-        this.info = res.data.content;
-        if (res.data.content.bg === null) {
-          this.bgUrl = localImg;
+        if (res.data.success) {
+          this.info = res.data.content;
+          if (res.data.content.bg === null) {
+            this.bgUrl = localImg;
+          } else {
+            this.bgUrl = res.data.content.bg.url;
+          }
+        }
+      });
+    },
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.login();
         } else {
-          this.bgUrl = res.data.content.bg.url;
+          return false;
         }
       });
     },

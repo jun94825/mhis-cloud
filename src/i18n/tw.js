@@ -9,7 +9,7 @@ module.exports = {
   confirm: '確認',
   keyword: '關鍵字',
   loading: '加載中 ...',
-  selectAnOption: '請選擇',
+  select: '請選擇',
 
   /* 訊息彈框 */
   tooltip: '提示',
@@ -62,6 +62,26 @@ module.exports = {
   ICD10: 'ICD10 管理',
   Setting: '系統設定',
 
+  /* 角色 */
+  editRole: '編輯角色',
+  createRole: '新增角色',
+
+  /* Room */
+  editRoom: '編輯診間',
+  createRoom: '新增診間',
+
+  /* 科別 */
+  editDept: '編輯科別',
+  createDept: '新增科別',
+
+  /* 分類 */
+  editCat: '編輯分類',
+  createCat: '新增分類',
+
+  /* ICD10 */
+  editICD10: '編輯 ICD10',
+  createICD10: '新增 ICD10',
+
   /* 系統設定 */
   save: '儲存',
   fingerPrint: '指紋機',
@@ -74,7 +94,6 @@ module.exports = {
   afternoon: '下午',
   night: '晚上',
   to: '至',
-  select: '選擇檔案',
   start: '起始時間',
   end: '結束時間',
 
@@ -96,20 +115,4 @@ module.exports = {
   hospitalSlogan: '口號',
   hospitalAbout: '關於醫院',
   hospitalEnvironment: '醫院環境',
-
-  /* 角色 */
-  createRole: '新增角色',
-  editRole: '編輯角色',
-
-  /* 科別 */
-  createDept: '新增科別',
-  editDept: '編輯科別',
-
-  /* 分類 */
-  createCat: '新增分類',
-  editCat: '編輯分類',
-
-  /* ICD10 */
-  createICD10: '新增 ICD10',
-  editICD10: '編輯 ICD10',
 };

@@ -197,14 +197,14 @@ export default {
       });
     },
     register() {
+      this.$store.commit('LOADING', true);
       const api = 'http://advmeds.upis.info/Api/Registration';
       this.data.timeZone = Number(this.data.timeZone);
       const dataJS = JSON.stringify(this.data);
-      this.$store.commit('LOADING', true);
       this.$http.post(api, dataJS).then((res) => {
-        if (res.data.success === true) {
+        if (res.data.success) {
           this.$store.commit('LOADING', false);
-          this.$router.push({ name: '註冊成功', query: { key: `${this.randomNumber()}` } });
+          this.$router.push({ name: 'Success', query: { key: `${this.randomNumber()}` } });
         } else {
           this.$store.commit('LOADING', false);
           this.$message({

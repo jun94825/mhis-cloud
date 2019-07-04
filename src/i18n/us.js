@@ -9,7 +9,7 @@ module.exports = {
   confirm: 'Confirm',
   keyword: 'Keyword',
   loading: 'Loading ...',
-  selectAnOption: 'Select an option',
+  select: 'Select',
 
   /* MessageBox */
   tooltip: 'Tooltip',
@@ -62,6 +62,26 @@ module.exports = {
   ICD10: 'ICD10 Management',
   Setting: 'Configuration',
 
+  /* Role */
+  editRole: 'Edit Role',
+  createRole: 'Create Role',
+
+  /* Room */
+  editRoom: 'Edit Room',
+  createRoom: 'Create Room',
+
+  /* Department */
+  editDept: 'Edit Department',
+  createDept: 'Create Department',
+
+  /* Category */
+  editCat: 'Edit Category',
+  createCat: 'Create Category',
+
+  /* ICD10 */
+  editICD10: 'Edit ICD10',
+  createICD10: 'Create ICD10',
+
   /* Setting */
   save: 'Save',
   fingerPrint: 'Finger Print',
@@ -74,7 +94,6 @@ module.exports = {
   afternoon: 'Afternoon',
   night: 'Night',
   to: 'To',
-  select: 'Select',
   start: 'Start',
   end: 'End',
 
@@ -96,20 +115,4 @@ module.exports = {
   hospitalSlogan: 'Hospital Slogan',
   hospitalAbout: 'Hospital About',
   hospitalEnvironment: 'Hospital Environment',
-
-  /* Role */
-  createRole: 'Create Role',
-  editRole: 'Edit Role',
-
-  /* Department */
-  createDept: 'Create Department',
-  editDept: 'Edit Department',
-
-  /* Category */
-  createCat: 'Create Category',
-  editCat: 'Edit Category',
-
-  /* ICD10 */
-  createICD10: 'Create ICD10',
-  editICD10: 'Edit ICD10',
 };

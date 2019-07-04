@@ -1,15 +1,20 @@
 <template>
   <div>
     <el-row class="sys-header" type="flex" align="middle" justify="space-between">
-      <p>編輯科別</p>
-      <el-button size="mini" type="success" @click="toCreatePage">新增</el-button>
+      <p>{{ $t('Room') }}</p>
+      <el-button size="small" type="primary" @click="toCreatePage">{{ $t('create') }}</el-button>
     </el-row>
     <div class="form">
       <div class="form-inside">
         <el-row class="mb-8 mr-auto" type="flex">
-          <el-input size="small" v-model="search.keyword" placeholder="Keyword"></el-input>
-          <el-button class="ml-16" type="primary" size="small" @click="getList">搜尋</el-button>
-          <el-button class="ml-16" type="info" size="small" @click="getList('reset')">重置</el-button>
+          <el-input size="small" v-model="search.keyword" :placeholder="$t('keyword')"></el-input>
+          <el-button class="ml-16" type="warning" size="small" @click="getList">{{ $t('search') }}</el-button>
+          <el-button
+            class="ml-16"
+            type="info"
+            size="small"
+            @click="getList('reset')"
+          >{{ $t('reset') }}</el-button>
         </el-row>
         <el-table :data="data.list">
           <el-table-column label="Room No" width="175">
@@ -17,19 +22,28 @@
               <span>{{ scope.row.roomNo }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="Room Name" min-width="175">
+          <el-table-column label="Room Name" width="175">
             <template slot-scope="scope">
               <span>{{ scope.row.roomName }}</span>
             </template>
           </el-table-column>
-          <el-table-column width="75" align="right">
+          <el-table-column label="Allow Departments" min-width="350">
             <template slot-scope="scope">
-              <el-button size="mini" @click="toEditPage(scope.$index, scope.row)">編輯</el-button>
+              <span>{{ scope.row.usedByDepartments }}</span>
             </template>
           </el-table-column>
-          <el-table-column width="75" align="right">
+          <el-table-column width="100" align="right">
             <template slot-scope="scope">
-              <el-button size="mini" type="danger" @click="del(scope.$index, scope.row)">刪除</el-button>
+              <el-button size="mini" @click="toEditPage(scope.$index, scope.row)">{{ $t('edit') }}</el-button>
+            </template>
+          </el-table-column>
+          <el-table-column width="100" align="right">
+            <template slot-scope="scope">
+              <el-button
+                size="mini"
+                type="danger"
+                @click="del(scope.$index, scope.row)"
+              >{{ $t('delete') }}</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -55,7 +69,7 @@ export default {
       search: {
         dept: '',
         keyword: '',
-        orderBy: 'roomName',
+        orderBy: 'roomNo',
         orderByDesc: true,
       },
       currentPage: 1,

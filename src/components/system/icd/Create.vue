@@ -16,7 +16,7 @@
         </div>
         <div class="inside-item">
           <p class="required">Type</p>
-          <el-select v-model="data.type" :placeholder="$t('selectAnOption')">
+          <el-select v-model="data.type" :placeholder="$t('select')">
             <el-option v-for="(item, index) in options" :key="index" :value="item"></el-option>
           </el-select>
         </div>

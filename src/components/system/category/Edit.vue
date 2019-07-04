@@ -13,6 +13,7 @@
             :props="{ expandTrigger: 'hover' }"
             @change="handleChange"
             v-model="showParentCat[0]"
+            :placeholder="$t('select')"
           ></el-cascader>
         </div>
         <div class="inside-item">
