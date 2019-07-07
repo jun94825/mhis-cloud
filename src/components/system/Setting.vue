@@ -331,54 +331,44 @@ export default {
     },
   },
   methods: {
-    getList(bol = false) {
+    getList(val) {
+      this.$store.commit('LOADING', true);
       const api = `http://${this.domain}.upis.info/Api/Setting/List`;
-      this.$store.commit('LOADING', true);
-      this.$http.get(api)
-        .then((res) => {
-          if (res.data.success === true) {
-            const r = res.data.content;
-            this.data = r;
-            this.center.lat = r.lat.value;
-            this.center.lng = r.lng.value;
-            this.$store.commit('LOADING', false);
-            if (bol) {
-              this.$message({
-                type: 'success',
-                center: true,
-                message: '儲存成功',
-              });
-            }
-          }
-        })
-        .catch(() => {
+      this.$http.get(api).then((res) => {
+        if (res.data.success) {
+          const r = res.data.content;
+          this.data = r;
+          this.center.lat = r.lat.value;
+          this.center.lng = r.lng.value;
           this.$store.commit('LOADING', false);
-          this.$router.push({ name: 'Setting' });
-          this.$message({
-            type: 'warning',
-            center: true,
-            message: '離線逾時，請重新登入',
-          });
-        });
+          if (val === 'edit') {
+            this.$message({ type: 'success', center: true, message: '儲存成功' });
+          }
+        }
+      }).catch(() => {
+        this.$store.commit('LOADING', false);
+        this.$router.push({ name: 'Login' });
+        this.$message({ type: 'warning', center: true, message: '離線逾時，請重新登入' });
+      });
     },
-    saveEdit() {
+    edit() {
       const api = `http://${this.domain}.upis.info/Api/Setting/Edit`;
-      this.$store.commit('LOADING', true);
-      const data = {};
-      const notRequire = ['backgroundImage', 'hospitalEnvironmentPhotos', 'hospitalNo', 'hospitalTimeZone', 'officialBannerImg', 'officialLogoImg', 'partners'];
-      notRequire.forEach((item) => {
+      const notRequired = ['backgroundImage', 'hospitalEnvironmentPhotos', 'hospitalNo', 'hospitalTimeZone', 'officialBannerImg', 'officialLogoImg', 'partners'];
+      notRequired.forEach((item) => {
         delete this.data[item];
       });
-      const require = Object.keys(this.data);
-      require.forEach((item) => {
+      const required = Object.keys(this.data);
+      const data = {};
+      required.forEach((item) => {
         data[item] = this.data[item].value;
       });
       const dataJS = JSON.stringify(data);
       this.$http.post(api, dataJS).then((res) => {
-        if (res.data.success === true) {
-          setTimeout(() => {
-            this.getList(true);
-          }, 1500);
+        if (res.data.success) {
+          this.getList('edit');
+          // setTimeout(() => {
+          //   this.getList('edit');
+          // }, 1500);
         }
       });
     },
@@ -416,10 +406,12 @@ export default {
       window.event.target.value = '';
     },
     checkUpload() {
+      const fuckList = [];
       const single = ['backgroundImage', 'officialBannerImg'];
       single.forEach((item) => {
         if (this[item].data !== null) {
-          this.upload(item, this[item].data);
+          // this.upload(item, this[item].data);
+          fuckList.push([item, this[item].data]);
           this[item].data = null;
         }
       });
@@ -429,26 +421,37 @@ export default {
           this[item].data.forEach((i) => {
             const fd = new FormData();
             fd.append('uploadedFiles', i);
-            this.upload(item, fd);
+            // this.upload(item, fd);
+            fuckList.push([item, fd]);
           });
           this[item].data = [];
         }
       });
-      this.saveEdit();
+      this.fuckUpload(fuckList);
+      // this.edit();
     },
-    upload(target, data) {
+    async fuckUpload(fuckList) {
+      for (const item of fuckList) {
+        await this.upload(item[0], item[1]);
+        console.log(item);
+      }
+      console.log('All done!');
+      this.edit();
+    },
+    async upload(target, data) {
       const api = `http://${this.domain}.upis.info/Api/Setting/Upload/${target}`;
-      this.$http.post(api, data).then((res) => {
-        if (res.data.success === false) {
-          alert('Error!');
-        }
+      await this.$http.post(api, data).then((res) => {
+        console.log(res);
       });
     },
     checkRmove() {
+      this.$store.commit('LOADING', true);
+      const fuckList = [];
       const single = ['backgroundImage', 'officialBannerImg'];
       single.forEach((item) => {
         if (this[item].id !== '' && this[item].id.length > 8) {
-          this.remove(this[item].id);
+          // this.remove(this[item].id);
+          fuckList.push(this[item].id);
           this[item].id = '';
         }
       });
@@ -456,23 +459,32 @@ export default {
       multiple.forEach((item) => {
         if (this[item].id.length !== 0) {
           this[item].id.forEach((i) => {
-            this.remove(i);
+            fuckList.push(i);
+            // this.remove(i);
           });
           this[item].id = [];
         }
       });
+      console.log(fuckList);
+      this.fuck(fuckList);
+      // this.checkUpload();
+    },
+    async fuck(fuckList) {
+      for (const item of fuckList) {
+        await this.remove(item);
+        console.log(item);
+      }
+      console.log('All done!');
       this.checkUpload();
     },
-    remove(id) {
+    async remove(id) {
       const api = `http://${this.domain}.upis.info/Api/Setting/Remove`;
       const data = {
         ids: [id],
       };
       const dataJS = JSON.stringify(data);
-      this.$http.post(api, dataJS).then((res) => {
-        if (res.data.success === false) {
-          alert('Error!');
-        }
+      await this.$http.post(api, dataJS).then((res) => {
+        console.log(res);
       });
     },
     switchDeleteBg(id) {
