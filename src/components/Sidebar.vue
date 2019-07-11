@@ -10,7 +10,7 @@
     background-color="#333"
     active-text-color="#ffd04b"
   >
-    <el-menu-item index="1">
+    <el-menu-item index="1" :route="{ name: 'Home' }">
       <i class="el-icon-s-home"></i>
       <span>{{ $t('home') }}</span>
     </el-menu-item>

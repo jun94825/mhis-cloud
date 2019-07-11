@@ -7,8 +7,8 @@
       </el-row>
       <el-button size="small" type="success" @click="edit">{{ $t('confirm') }}</el-button>
     </el-row>
-    <div class="form">
-      <div class="form-inside">
+    <div class="sys-main">
+      <div class="main-inside">
         <el-tag>{{ roleName }}</el-tag>
         <el-table
           stripe

@@ -1,9 +1,9 @@
 <template>
   <div>
-    <Header/>
+    <Header />
     <el-row type="flex">
       <div class="sidebar">
-        <Sidebar/>
+        <Sidebar />
       </div>
       <div class="main">
         <router-view></router-view>

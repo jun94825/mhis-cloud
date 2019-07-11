@@ -202,6 +202,7 @@ export default {
       this.data.timeZone = Number(this.data.timeZone);
       const dataJS = JSON.stringify(this.data);
       this.$http.post(api, dataJS).then((res) => {
+        console.log(res);
         if (res.data.success) {
           this.$store.commit('LOADING', false);
           this.$router.push({ name: 'Success', query: { key: `${this.randomNumber()}` } });

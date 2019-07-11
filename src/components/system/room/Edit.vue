@@ -4,8 +4,8 @@
       <i class="el-icon-back" @click="previousPage"></i>
       <p>{{ $t('editRoom') }}</p>
     </el-row>
-    <div class="form">
-      <div class="form-inside">
+    <div class="sys-main">
+      <div class="main-inside">
         <div class="inside-item">
           <p class="required">Room No</p>
           <el-tag>{{ data.roomNo }}</el-tag>

@@ -375,6 +375,7 @@ export default {
     /* About Images */
     singleFile(target) {
       const { files } = window.event.target;
+      console.log(files[0]);
       const fr = new FileReader();
       const fd = new FormData();
       fd.append('uploadedFiles', files[0]);

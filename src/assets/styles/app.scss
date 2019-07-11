@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Lato&display=swap');
+@import url('https://fonts.googleapis.com/css?family=PT+Serif&display=swap');
 
 * {
   box-sizing: border-box;
@@ -8,15 +8,16 @@ html,
 body,
 #app {
   height: 100% !important;
-  font-family: 'Lato', sans-serif;
-}
-
-body {
-  margin: 0 !important;
+  font-family: 'PT Serif', serif;
 }
 
 p {
   margin: 0;
+  font-size: 0.875rem;
+}
+
+body {
+  margin: 0 !important;
 }
 
 .el-loading-mask {

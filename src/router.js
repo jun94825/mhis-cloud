@@ -7,7 +7,7 @@ export default new Router({
   mode: 'history',
   routes: [
     {
-      /* 測試 Promise */
+      /* 測試 Promise / async 用 */
       name: 'Test',
       path: '/test',
       component: () => import('./views/Test.vue'),
@@ -38,7 +38,7 @@ export default new Router({
       // },
     },
     {
-      /* 啟用 */
+      /* 驗證 */
       name: 'Activate',
       path: '/activate',
       component: () => import('./views/Activate.vue'),
@@ -49,7 +49,13 @@ export default new Router({
       path: '/system',
       component: () => import('./views/System.vue'),
       children: [
-        /* Role */
+        /* 首頁 */
+        {
+          name: 'Home',
+          path: 'home',
+          component: () => import('./components/Home.vue'),
+        },
+        /* 角色 */
         {
           name: 'RoleManagement',
           path: 'role/maintain',
@@ -65,7 +71,7 @@ export default new Router({
           path: 'role/edit',
           component: () => import('./components/system/role/Edit.vue'),
         },
-        /* Room */
+        /* 診間 */
         {
           name: 'Room',
           path: 'room/maintain',
@@ -81,7 +87,7 @@ export default new Router({
           path: 'room/edit',
           component: () => import('./components/system/room/Edit.vue'),
         },
-        /* Department */
+        /* 科別 */
         {
           name: 'Department',
           path: 'dept/maintain',
@@ -97,7 +103,7 @@ export default new Router({
           path: 'dept/edit',
           component: () => import('./components/system/department/Edit.vue'),
         },
-        /* Category */
+        /* 類別 */
         {
           name: 'Category',
           path: 'category/maintain',
@@ -112,6 +118,12 @@ export default new Router({
           name: 'CategoryEdit',
           path: 'category/edit',
           component: () => import('./components/system/category/Edit.vue'),
+        },
+        /* 衛教 */
+        {
+          name: 'HealthEducation',
+          path: 'health/maintain',
+          component: () => import('./components/system/health/Maintain.vue'),
         },
         /* ICD10 */
         {
@@ -129,7 +141,7 @@ export default new Router({
           path: 'icd/edit',
           component: () => import('./components/system/icd/Edit.vue'),
         },
-        /* Setting */
+        /* 設定 */
         {
           name: 'Setting',
           path: 'setting',

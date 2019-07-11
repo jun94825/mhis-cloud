@@ -4,8 +4,8 @@
       <i class="el-icon-back" @click="previousPage"></i>
       <p>{{ $t('createICD10') }}</p>
     </el-row>
-    <el-row class="form">
-      <div class="form-inside">
+    <el-row class="sys-main">
+      <div class="main-inside">
         <div class="inside-item">
           <p class="required">ICD10 Code</p>
           <el-input v-model="data.code"></el-input>

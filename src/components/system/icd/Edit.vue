@@ -4,8 +4,8 @@
       <i class="el-icon-back" @click="previousPage"></i>
       <p>{{ $t('editICD10') }}</p>
     </el-row>
-    <div class="form">
-      <div class="form-inside">
+    <div class="sys-main">
+      <div class="main-inside">
         <div class="inside-item">
           <p>ICD10 Code</p>
           <el-tag>{{ data.icd10Code }}</el-tag>

@@ -165,7 +165,7 @@ export default {
           localStorage.setItem('cookie', res.data.content.access_token);
           localStorage.setItem('menuGrp', JSON.stringify(res.data.content.info.menu.menuGrp));
           this.$store.commit('LOADING', false);
-          this.$router.push({ name: 'System' });
+          this.$router.push({ name: 'Home' });
         } else {
           this.$store.commit('LOADING', false);
           this.$refs.data.resetFields();

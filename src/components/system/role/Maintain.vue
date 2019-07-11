@@ -4,8 +4,8 @@
       <p>{{ $t('RoleManagement') }}</p>
       <el-button type="primary" size="small" @click="toCreatePage">{{ $t('create') }}</el-button>
     </el-row>
-    <el-row class="form">
-      <div class="form-inside">
+    <el-row class="sys-main">
+      <div class="main-inside">
         <el-table :data="roles">
           <el-table-column label="Role Name" min-width="150">
             <template slot-scope="scope">

@@ -4,8 +4,8 @@
       <p>{{ $t('Department') }}</p>
       <el-button size="small" type="primary" @click="toCreatePage">{{ $t('create') }}</el-button>
     </el-row>
-    <div class="form">
-      <div class="form-inside">
+    <div class="sys-main">
+      <div class="main-inside">
         <el-row class="mb-8 mr-auto" type="flex">
           <el-input size="small" v-model="search.keyword" :placeholder="$t('keyword')"></el-input>
           <el-button class="ml-16" type="warning" size="small" @click="getList">{{ $t('search') }}</el-button>
@@ -145,7 +145,7 @@ export default {
 <style lang="scss" scoped>
 @import "../../../assets/styles/helpers.scss";
 
-.form-inside {
+.main-inside {
   display: flex;
   align-items: center;
   flex-direction: column;

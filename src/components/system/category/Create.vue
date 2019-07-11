@@ -4,8 +4,8 @@
       <i class="el-icon-back" @click="previousPage"></i>
       <p>{{ $t('createCat') }}</p>
     </el-row>
-    <div class="form">
-      <div class="form-inside">
+    <div class="sys-main">
+      <div class="main-inside">
         <div class="inside-item">
           <p>Category</p>
           <el-select v-model="data.categoryId" :placeholder="$t('select')">

@@ -7,8 +7,8 @@
       </el-row>
       <el-button size="small" type="success" @click="create">{{ $t('confirm') }}</el-button>
     </el-row>
-    <div class="form">
-      <div class="form-inside">
+    <div class="sys-main">
+      <div class="main-inside">
         <el-input class="mb-8" size="small" v-model="roleName" placeholder="Role Name"></el-input>
         <el-table
           stripe

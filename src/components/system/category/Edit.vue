@@ -4,8 +4,8 @@
       <i class="el-icon-back" @click="previousPage"></i>
       <p>{{ $t('editCat') }}</p>
     </el-row>
-    <div class="form">
-      <div class="form-inside">
+    <div class="sys-main">
+      <div class="main-inside">
         <div class="inside-item">
           <p>Parent Cat</p>
           <el-cascader

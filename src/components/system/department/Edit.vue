@@ -4,8 +4,8 @@
       <i class="el-icon-back" @click="previousPage"></i>
       <p>{{ $t('editDept') }}</p>
     </el-row>
-    <div class="form">
-      <div class="form-inside">
+    <div class="sys-main">
+      <div class="main-inside">
         <div class="inside-item">
           <p>Category Name</p>
           <el-tag>{{ data.parentDept }}</el-tag>
