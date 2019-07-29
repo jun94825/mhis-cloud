@@ -78,6 +78,10 @@ module.exports = {
   editCat: 'Edit Category',
   createCat: 'Create Category',
 
+  /* Health Education */
+  editHealthEducation: 'Edit Health Education',
+  createHealthEducation: 'Create Health Education',
+
   /* ICD10 */
   editICD10: 'Edit ICD10',
   createICD10: 'Create ICD10',

@@ -1,15 +1,38 @@
 <template>
   <div>
-    <el-row class="sys-header" type="flex" align="middle" justify="space-between">
-      <p>{{ $t('HealthEducation') }}</p>
-      <el-button size="small" type="primary">{{ $t('create') }}</el-button>
+    <el-row
+      class="sys-header"
+      type="flex"
+      align="middle"
+      justify="space-between"
+    >
+      <p>{{ $t("HealthEducation") }}</p>
+      <el-button size="small" type="primary" @click="toCreatePage">{{
+        $t("create")
+      }}</el-button>
     </el-row>
     <div class="sys-main">
       <div class="main-inside">
         <el-row class="mb-8 mr-auto" type="flex">
-          <el-input size="small" :placeholder="$t('keyword')"></el-input>
-          <el-button class="ml-16" type="warning" size="small">{{ $t('search') }}</el-button>
-          <el-button class="ml-16" type="info" size="small">{{ $t('reset') }}</el-button>
+          <el-input
+            size="small"
+            v-model="search.keyword"
+            :placeholder="$t('keyword')"
+          ></el-input>
+          <el-button
+            class="ml-16"
+            type="warning"
+            size="small"
+            @click="getList"
+            >{{ $t("search") }}</el-button
+          >
+          <el-button
+            class="ml-16"
+            type="info"
+            size="small"
+            @click="getList('reset')"
+            >{{ $t("reset") }}</el-button
+          >
         </el-row>
         <el-table :data="data.list">
           <el-table-column label="Health Education Category" width="250">
@@ -36,12 +59,18 @@
           </el-table-column>
           <el-table-column width="100" align="right">
             <template slot-scope="scope">
-              <el-button size="mini">{{ $t('edit') }}</el-button>
+              <el-button
+                size="mini"
+                @click="toEditPage(scope.$index, scope.row)"
+                >{{ $t("edit") }}</el-button
+              >
             </template>
           </el-table-column>
           <el-table-column width="100" align="right">
             <template slot-scope="scope">
-              <el-button size="mini" type="danger">{{ $t('delete') }}</el-button>
+              <el-button size="mini" type="danger">{{
+                $t("delete")
+              }}</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -72,11 +101,26 @@ export default {
     },
   },
   methods: {
-    getList() {
+    getList(val) {
+      this.$store.commit('LOADING', true);
+      if (val === 'reset') {
+        this.search.keyword = '';
+        this.currentPage = 1;
+      }
       const api = `http://${this.domain}.upis.info/Api/HealthEdu/List/${this.currentPage}`;
       const dataJS = JSON.stringify(this.search);
       this.$http.post(api, dataJS).then((res) => {
         this.data = res.data.content;
+        this.$store.commit('LOADING', false);
+      });
+    },
+    toCreatePage() {
+      this.$router.push({ name: 'HealthEducationCreate' });
+    },
+    toEditPage(index, row) {
+      this.$router.push({
+        name: 'HealthEducationEdit',
+        query: { key: row.id },
       });
     },
   },

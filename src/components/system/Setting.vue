@@ -269,7 +269,7 @@
 </template>
 
 <script>
-import { setTimeout } from 'timers';
+// import { setTimeout } from 'timers';
 import { VueEditor } from 'vue2-editor';
 
 const customToolbar = [

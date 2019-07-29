@@ -2,7 +2,7 @@
   <div>
     <el-row class="sys-header" type="flex" align="middle">
       <i class="el-icon-back" @click="previousPage"></i>
-      <p>{{ $t('editICD10') }}</p>
+      <p>{{ $t("editICD10") }}</p>
     </el-row>
     <div class="sys-main">
       <div class="main-inside">
@@ -21,7 +21,9 @@
         <div class="inside-item">
           <el-checkbox v-model="data.alert">Reportable</el-checkbox>
         </div>
-        <el-button type="success" size="small" @click="edit">{{ $t('confirm') }}</el-button>
+        <el-button type="success" size="small" @click="edit">{{
+          $t("confirm")
+        }}</el-button>
       </div>
     </div>
   </div>
@@ -59,7 +61,11 @@ export default {
       const dataJS = JSON.stringify(this.data);
       this.$http.post(api, dataJS).then((res) => {
         if (res.data.success) {
-          this.$message({ type: 'success', center: 'center', message: '刪除成功!' });
+          this.$message({
+            type: 'success',
+            center: 'center',
+            message: '編輯成功!',
+          });
           this.$router.push({ name: 'ICD10' });
         }
       });

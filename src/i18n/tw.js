@@ -78,6 +78,10 @@ module.exports = {
   editCat: '編輯分類',
   createCat: '新增分類',
 
+  /* 衛教宣導 */
+  editHealthEducation: '編輯衛教宣導',
+  createHealthEducation: '新增衛教宣導',
+
   /* ICD10 */
   editICD10: '編輯 ICD10',
   createICD10: '新增 ICD10',

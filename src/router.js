@@ -91,7 +91,8 @@ export default new Router({
         {
           name: 'Department',
           path: 'dept/maintain',
-          component: () => import('./components/system/department/Maintain.vue'),
+          component: () =>
+            import('./components/system/department/Maintain.vue'),
         },
         {
           name: 'DepartmentCreate',
@@ -124,6 +125,16 @@ export default new Router({
           name: 'HealthEducation',
           path: 'health/maintain',
           component: () => import('./components/system/health/Maintain.vue'),
+        },
+        {
+          name: 'HealthEducationCreate',
+          path: 'health/create',
+          component: () => import('./components/system/health/Create.vue'),
+        },
+        {
+          name: 'HealthEducationEdit',
+          path: 'health/edit',
+          component: () => import('./components/system/health/Edit.vue'),
         },
         /* ICD10 */
         {
